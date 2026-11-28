@@ -1,5 +1,4 @@
 ---
-layout: default
 title: MAD — Documento Analítico Móvel (Mobile Analytics Document)
 description: >-
   Um formato aberto e uma engine embarcável para relatórios relacionais — MAD Designer e MAD Viewer para macOS nativo (AppKit) e iOS, a CLI headless mad para Linux e Windows, e a especificação aberta .mad.
@@ -9,7 +8,7 @@ lang: pt-BR
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>Um formato aberto e uma engine embarcável para relatórios relacionais — onde cada relatório é um grafo de consulta portável, uma tabela SQLite materializada e um layout paramétrico.</strong></p>
 
-O MAD é uma plataforma embarcada de relatórios relacionais para consultas ad hoc, geração de relatórios e design: os aplicativos **MAD Designer** e **MAD Viewer** para iOS e macOS nativo (`AppKit`), a engine headless que os executa em Linux e Windows, e o formato aberto de documento `.mad`. Um arquivo `.mad` armazena toda a definição de um relatório — o snapshot do esquema do banco de dados, o grafo de consulta (tabelas, joins, predicados, agrupamentos) e o layout em bandas de seus elementos — em menos de 100 KB, claramente separado da tabela SQLite materializada (`.maddb` + `.mdcache`) que ele produz ao atualizar os dados.
+O MAD é uma plataforma embarcada de relatórios relacionais para consultas ad hoc, geração de relatórios e design: os aplicativos **MAD Designer** e **MAD Viewer** para iOS e macOS nativo (`AppKit`), a engine headless que os executa em Linux e Windows, e o formato aberto de documento `.mad`. Um arquivo `.mad` armazena toda a definição de um relatório — o snapshot do esquema do banco de dados, o grafo de consulta (tabelas, joins, predicados, agrupamentos) e o layout em bandas de seus elementos — em menos de 100 KB, claramente separado da tabela SQLite materializada (`.maddb` + `.mdcache`) que ele produz ao atualizar os dados. Um **Relatório de Composição** pode combinar vários relatórios — cada um mantendo sua própria consulta, layout e dados — em um único documento, unindo MySQL, PostgreSQL, SQL Server e SQLite sem um servidor de federação.
 
 O código está em
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), sob licença MIT;
@@ -94,6 +93,9 @@ Leia primeiro a [introdução à especificação](README.html), ou vá diretamen
 * [MAD Designer para macOS](macos.html) — o aplicativo desktop nativo em `AppKit`:
   canvas visual de consultas, designer de relatórios em bandas com minimapa e inspetor,
   visualizador paginado e instruções de como compilar ou empacotar a partir do código-fonte.
+* [Relatórios de Composição](composition.html) — combine relatórios de vários
+  bancos de dados em um único documento `.mad` portátil; cada fonte mantém seu layout
+  e seus dados, e o Resultado os une.
 * [Compilação e testes](https://github.com/mthomason/MAD#build-and-test) —
   os comandos exatos para as suítes do iOS, as suítes nativas do macOS e o build do Linux.
 * [A CLI `mad`](https://github.com/mthomason/MAD#try-it) — inspecione,

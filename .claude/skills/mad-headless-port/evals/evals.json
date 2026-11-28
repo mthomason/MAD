@@ -1,0 +1,17 @@
+{
+	"skill_name": "mad-headless-port",
+	"evals": [
+		{
+			"id": 1,
+			"prompt": "I am adding MAD/Source/MADNewThing.m to the MAD framework. It uses only NSDate and NSUUID, with no UIKit. Walk me through making it compile on Linux and Windows, and tell me what to run.",
+			"expected_output": "Adds the file to both source inventories, runs the parity checker, confirms the file is portable, mentions the test port and registration, and orders a fast per-target compile before the full Linux gate at PR time.",
+			"files": []
+		},
+		{
+			"id": 2,
+			"prompt": "MADNewThing.m compiles on macOS but the Linux image fails with 'MADNewThing.h: no such file or directory', even though the header is in the same directory. What should I check?",
+			"expected_output": "Checks case-exact imports, self-contained header imports, source-inventory membership, and any unguarded UIKit/AppKit dependency; suggests the one-line translation-unit check and the fast per-target compile.",
+			"files": []
+		}
+	]
+}

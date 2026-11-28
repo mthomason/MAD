@@ -14,6 +14,7 @@
 #import "MADReportExporterJSON.h"
 
 #import "MADReportExportSource.h"
+#import <MAD/RptqQuery.h>
 #import "MADReportExportWriter.h"
 #import "MADReportExporterRegistry.h"
 
@@ -65,10 +66,26 @@ static NSString * const MADReportExporterJSONFormat = @"mad.report/1";
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
-
+	// Build the root source here, not through the query variant: a subclass that
+	// overrides the query variant (json-report) must not re-enter this method.
 	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document error: error];
 	if (source == nil) return NO;
+	return [self writeJSONWithSource: source toURL: url error: error];
+}
 
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+				 query:(nullable RptqQuery *)query
+				 toURL:(NSURL *)url
+			   options:(MADReportExportOptions)options
+				 error:(NSError * _Nullable __autoreleasing *)error {
+	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document query: query error: error];
+	if (source == nil) return NO;
+	return [self writeJSONWithSource: source toURL: url error: error];
+}
+
+- (BOOL)writeJSONWithSource:(MADReportExportSource *)source
+					  toURL:(NSURL *)url
+					  error:(NSError * _Nullable __autoreleasing *)error {
 	NSMutableString *json = [[NSMutableString alloc] init];
 	[json appendString: @"{\n"];
 	[self appendEntriesToJSON: json source: source];

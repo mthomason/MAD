@@ -19,6 +19,8 @@
 #import "MADReportPageBuilder.h"
 
 #import <MAD/MADDocumentRenderProtocol.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
 #import <MAD/MADReportLineRepresentation.h>
 #import <MAD/MADReportPageRepresentation.h>
 #import <MAD/MADReportSectionRepresentation.h>
@@ -77,6 +79,23 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 // The CLI checks +isAvailable before it asks, but a direct caller must not get the
 // data half's bytes under this format's name from a document that cannot render.
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+				 query:(RptqQuery *)query
+				 toURL:(NSURL *)url
+			   options:(MADReportExportOptions)options
+				 error:(NSError * _Nullable __autoreleasing *)error {
+	if (query == nil || [query isLayoutRootInDocument: document.activeDocumentModel]) {
+		return [self exportDocument: document toURL: url options: options error: error];
+	}
+	// json-report cannot render a specific node's pages and rows yet: it would write
+	// the root's rows for a non-root query.  Error rather than silently do that.
+	if (error != NULL) {
+		*error = [NSError errorWithDomain: @"MADReportExport" code: 3 userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"json-report cannot export a specific node.", @"Error when json-report is asked for a non-root node.") }];
+	}
+	return NO;
+}
+
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
@@ -95,11 +114,30 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 }
 
 - (void)appendEntriesToJSON:(NSMutableString *)json source:(MADReportExportSource *)source {
+	// One snapshot for the rows and the pages: the export source already pinned the
+	// result it was created with, and the page walk below must read the same one, so
+	// a refresh that publishes mid-export cannot pair one generation's rows with
+	// another's pages.  Pin the render data source explicitly (the format's own pin
+	// then leaves it alone) and clear it when the export is done.
+	id <MADDocumentRenderProtocol> renderDocument = nil;
+	if ([source.document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+		renderDocument = (id <MADDocumentRenderProtocol>)source.document;
+	}
+	BOOL pinned = NO;
+	if ([renderDocument respondsToSelector: @selector(pinRenderResult:)]) {
+		[renderDocument pinRenderResult: source.result];
+		pinned = YES;
+	}
+
 	[super appendEntriesToJSON: json source: source];
 
 	[json appendString: @",\n  \"report\": {\n"];
 	[self appendPagesToJSON: json document: source.document];
 	[json appendString: @"  }"];
+
+	if (pinned) {
+		[renderDocument unpinRenderResult];
+	}
 }
 
 // The pages, in order: the same walk the PDF draws from and the HTML formats read

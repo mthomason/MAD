@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaTable *databaseSchemaTable;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryField *> *hasQueryFields;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;
+@property (nullable, nonatomic, retain) RptqQuery *upstreamQuery;
 
 @end
 

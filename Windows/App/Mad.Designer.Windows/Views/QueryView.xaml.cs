@@ -54,6 +54,14 @@ public partial class QueryView : UserControl
         }
     }
 
+    private async void SourcesList_OnDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (_query != null && SourcesList.SelectedItem is QueryInfo query)
+        {
+            await _query.AddUpstreamAsync(query.Id);
+        }
+    }
+
     private void ToggleFilters(object sender, RoutedEventArgs e)
     {
         FiltersPopup.PlacementTarget = sender as UIElement;
@@ -64,5 +72,11 @@ public partial class QueryView : UserControl
     {
         GroupsPopup.PlacementTarget = sender as UIElement;
         GroupsPopup.IsOpen = !GroupsPopup.IsOpen;
+    }
+
+    private void ToggleOutputs(object sender, RoutedEventArgs e)
+    {
+        OutputsPopup.PlacementTarget = sender as UIElement;
+        OutputsPopup.IsOpen = !OutputsPopup.IsOpen;
     }
 }

@@ -128,6 +128,9 @@ static void testTopologicalSortWithCycle(void) {
 	MTLinkedList *result = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDAG];
 	MAD_PASS(!isDAG, "a cycle is not a DAG");
 	MAD_PASS([result count] == 3, "the sort still returns every vertex");
+	MAD_PASS(error != nil, "a cycle reports an error");
+	MAD_PASS_EQUAL(error.domain, @"MTGraphErrorDomain", "the error names the graph domain");
+	MAD_PASS_EQUAL(@(error.code), @(100), "the error carries the cycle code");
 }
 
 static void testEmptyGraphOperations(void) {

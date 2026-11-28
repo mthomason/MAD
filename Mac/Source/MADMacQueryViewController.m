@@ -7,7 +7,10 @@
 
 #import "MADMacQueryViewController.h"
 #import "MADMacDocument.h"
+#import "MADMacDocumentController.h"
 #import "MADMacWindowController.h"
+#import "MADMacConnectionWindowController.h"
+#import "MADMacTipBar.h"
 
 #import <MAD/MAD.h>
 #import "MADSQLQueryCompiler.h"
@@ -20,6 +23,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kTopBarHeight = 38.0;
+static const CGFloat kDesignerTipBarHeight = 30.0;
 static const CGFloat kDefaultSidebarWidth = 200.0;
 static const CGFloat kMinSidebarWidth = 150.0;
 static const CGFloat kMaxSidebarWidth = 420.0;
@@ -133,6 +137,8 @@ static const CGFloat kCardFieldRowHeight = 20.0;
 - (void)dismissActiveLinkPopover;
 - (NSMenu *)contextMenuForQueryLink:(RptqQueryLinks *)link;
 - (NSMenu *)contextMenuForQueryField:(RptqQueryField *)field inCard:(MADMacQueryTableCardView *)card;
+- (NSString *)displayTableNameForQueryTable:(RptqQueryTable *)queryTable;
+- (NSString *)displayLabelForQueryField:(RptqQueryField *)field;
 @end
 
 #pragma mark - MADMacQueryFieldTableView Implementation
@@ -374,7 +380,7 @@ static const CGFloat kCardFieldRowHeight = 20.0;
 	[titleLine stroke];
 
 	// Title text (alias)
-	NSString *title = _queryTable.alias.length > 0 ? _queryTable.alias : (_queryTable.databaseSchemaTable.name ?: @"Table");
+	NSString *title = [_controller displayTableNameForQueryTable:_queryTable];
 	NSFont *titleFont = _isRootTable
 		? [NSFont monospacedDigitSystemFontOfSize:12.0 weight:NSFontWeightSemibold]
 		: [NSFont monospacedDigitSystemFontOfSize:11.5 weight:NSFontWeightMedium];
@@ -495,11 +501,12 @@ static const CGFloat kCardFieldRowHeight = 20.0;
 - (nullable NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(nullable NSTableColumn *) __unused tableColumn row:(NSInteger)row {
 	if (row < 0 || (NSUInteger)row >= _orderedFields.count) return nil;
 	RptqQueryField *qf = _orderedFields[(NSUInteger)row];
-	NSString *fieldName = qf.databaseSchemaField.name ?: @"Field";
+	NSString *fieldName = qf.outputKey.length > 0 ? qf.outputKey : (qf.databaseSchemaField.name ?: @"Field");
 
 	BOOL isLinked = [_controller isQueryFieldLinked:qf];
 	BOOL isGrouped = [_controller isQueryFieldGrouped:qf];
 	BOOL isFiltered = [_controller isQueryFieldFiltered:qf];
+	BOOL isOutput = (qf.outputKey.length > 0);
 	BOOL isDropTarget = (row == _highlightedTargetRow);
 
 	NSTableCellView *cell = [tableView makeViewWithIdentifier:@"FieldCell" owner:self];
@@ -527,9 +534,10 @@ static const CGFloat kCardFieldRowHeight = 20.0;
 	NSMutableString *display = [NSMutableString stringWithFormat:@"%@  %@", isLinked ? @"●" : @"○", fieldName];
 	if (isGrouped) [display appendString:@"  [GRP]"];
 	if (isFiltered) [display appendString:@"  [WHERE]"];
+	if (isOutput) [display appendString:@"  [OUT]"];
 	label.stringValue = display;
 	label.toolTip = [NSString stringWithFormat:@"%@.%@ — Drag to a field in another table to create a Left Outer Join",
-					 _queryTable.alias ?: _queryTable.databaseSchemaTable.name ?: @"", fieldName];
+					 [_controller displayTableNameForQueryTable:_queryTable], fieldName];
 
 	if (isDropTarget) {
 		cell.layer.backgroundColor = [[[NSColor controlAccentColor] colorWithAlphaComponent:0.25] CGColor];
@@ -1064,20 +1072,33 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 @property (nonatomic, assign, readwrite) MADMacQueryWorkspaceMode workspaceMode;
 @property (nonatomic, assign, readwrite) CGFloat schemaSidebarWidth;
+@property (nonatomic, assign) BOOL schemaSidebarHidden;
 
 // Top bar controls
 @property (nonatomic, strong) NSView *topBarView;
 @property (nonatomic, strong) NSSegmentedControl *modeSegmentedControl;
+@property (nonatomic, strong) NSPopUpButton *querySelectorPopup;
+@property (nonatomic, strong) NSPopUpButton *addMenuButton;
+@property (nonatomic, strong) NSPopUpButton *queryMenuButton;
+@property (nonatomic, strong) NSButton *connectionButton;
+@property (nonatomic, strong, nullable) NSMenuItem *addTableMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *createRootMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *outputsMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *filtersMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *groupsMenuItem;
 @property (nonatomic, strong) NSStackView *designerHeaderControls;
-@property (nonatomic, strong) NSButton *filtersButton;
-@property (nonatomic, strong) NSButton *groupsButton;
-@property (nonatomic, strong) NSButton *arrangeButton;
 @property (nonatomic, strong) NSStackView *sqlHeaderControls;
+@property (nonatomic, strong) MADMacTipBar *tipBar;
+@property (nonatomic, strong) NSLayoutConstraint *tipBarHeightConstraint;
 
 // Mode 0: Visual Query Designer (NSSplitView: 200px Schema Sidebar + Visual Canvas)
 @property (nonatomic, strong) NSSplitView *designerSplitView;
 @property (nonatomic, strong) NSView *schemaSidebarView;
 @property (nonatomic, strong) NSTableView *schemaTablesTable;
+@property (nonatomic, strong) NSScrollView *schemaTablesScrollView;
+@property (nonatomic, strong) NSTextField *schemaSidebarHeaderLabel;
+@property (nonatomic, strong) NSButton *addTableButton;
+@property (nonatomic, strong, nullable) NSTextField *composingNodeNoteLabel;
 @property (nonatomic, strong) NSView *canvasContainerView;
 @property (nonatomic, strong) NSScrollView *canvasScrollView;
 @property (nonatomic, strong) MADMacQueryCanvasView *canvasView;
@@ -1089,9 +1110,16 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 @property (nonatomic, strong) NSTextField *sqlStatusLabel;
 
 // Popovers for Link Type Editing, Filters (WHERE), and Groupings (GROUP BY)
+@property (nonatomic, strong, nullable) MADMacConnectionWindowController *activeConnectionSheetController;
 @property (nonatomic, strong, nullable) NSPopover *activeLinkPopover;
 @property (nonatomic, strong, nullable) NSPopover *filtersPopover;
 @property (nonatomic, strong, nullable) NSPopover *groupsPopover;
+@property (nonatomic, strong, nullable) NSPopover *outputsPopover;
+
+// Outputs popover controls (composed root)
+@property (nonatomic, strong, nullable) NSTableView *outputsTable;
+@property (nonatomic, strong, nullable) NSPopUpButton *outputFieldPopup;
+@property (nonatomic, strong, nullable) NSTextField *outputKeyField;
 
 // Popover tables & controls
 @property (nonatomic, strong, nullable) NSTableView *predicatesTable;
@@ -1105,6 +1133,9 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 // Model snapshots
 @property (nonatomic, copy) NSArray<RptqDatabaseSchemaTable *> *schemaTables;
+@property (nonatomic, copy) NSArray<RptqQuery *> *upstreamQueries;
+@property (nonatomic, assign) BOOL editingRoot;
+@property (nonatomic, assign) BOOL editingComposingNode;
 @property (nonatomic, copy) NSArray<RptqQueryTable *> *queryTables;
 @property (nonatomic, copy) NSArray<RptqQueryField *> *queryFields;
 @property (nonatomic, copy) NSArray<RptqQueryLinks *> *queryLinks;
@@ -1195,39 +1226,140 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[root addSubview:_topBarView];
 	[root addSubview:topDivider];
 
+	_tipBar = [MADMacTipBar tipBarWithIdentifier:@"query"
+											text:NSLocalizedString(@"Start here: choose a table in the list on the left, then use Add to place it on the canvas. Drag between fields to create a join.", @"First-run tip in the query workspace.")];
+	_tipBar.translatesAutoresizingMaskIntoConstraints = NO;
+	[root addSubview:_tipBar];
+	[NSLayoutConstraint activateConstraints:@[
+		[_tipBar.leadingAnchor constraintEqualToAnchor:_canvasContainerView.leadingAnchor],
+		[_tipBar.trailingAnchor constraintEqualToAnchor:root.trailingAnchor],
+		[_tipBar.topAnchor constraintEqualToAnchor:_topBarView.bottomAnchor],
+		[_tipBar.heightAnchor constraintEqualToConstant:kDesignerTipBarHeight],
+	]];
+
 	self.view = root;
+}
+
+- (NSPopUpButton *)menuButtonWithTitle:(NSString *)title
+							symbolName:(NSString *)symbolName
+								 items:(NSArray<NSMenuItem *> *)items
+							   toolTip:(NSString *)toolTip {
+	NSPopUpButton *button = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:YES];
+	[button addItemWithTitle:title];
+	button.controlSize = NSControlSizeRegular;
+	button.font = [NSFont systemFontOfSize:12.0];
+	button.toolTip = toolTip;
+	button.accessibilityLabel = title;
+	button.translatesAutoresizingMaskIntoConstraints = NO;
+	if (@available(macOS 11.0, *)) {
+		NSImage *image = [NSImage imageWithSystemSymbolName:symbolName accessibilityDescription:title];
+		if (image != nil) {
+			button.image = image;
+			button.imagePosition = NSImageLeading;
+		}
+	}
+	for (NSMenuItem *item in items) {
+		if (item.isSeparatorItem) {
+			[button.menu addItem:[NSMenuItem separatorItem]];
+		} else {
+			item.target = self;
+			[button.menu addItem:item];
+		}
+	}
+	button.menu.autoenablesItems = YES;
+	return button;
+}
+
+- (NSMenuItem *)menuItemWithTitle:(NSString *)title action:(SEL)action symbol:(NSString *)symbol {
+	NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title action:action keyEquivalent:@""];
+	item.target = self;
+	if (@available(macOS 11.0, *)) {
+		NSImage *image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:title];
+		if (image != nil) item.image = image;
+	}
+	return item;
 }
 
 - (void)populateTopBar:(NSView *)bar {
 	_modeSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-		NSLocalizedString(@"Query Designer", @"Query workspace segment that shows the visual table designer."),
-		NSLocalizedString(@"SQL Query", @"Query workspace segment that shows the SQL text editor.")
+		NSLocalizedString(@"Designer", @"Query workspace segment that shows the visual table designer."),
+		NSLocalizedString(@"SQL", @"Query workspace segment that shows the SQL text editor.")
 	]
 															  trackingMode:NSSegmentSwitchTrackingSelectOne
 																	target:self
 																	action:@selector(modeSegmentChanged:)];
 	_modeSegmentedControl.selectedSegment = MADMacQueryWorkspaceModeDesigner;
 	_modeSegmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
+	_modeSegmentedControl.toolTip = NSLocalizedString(@"Switch between the visual query designer and the SQL editor.", @"Tooltip for the query mode switcher.");
+	[_modeSegmentedControl setToolTip:NSLocalizedString(@"Design the query by adding tables and joins.", @"Tooltip on the visual query designer segment.")
+						   forSegment:MADMacQueryWorkspaceModeDesigner];
+	[_modeSegmentedControl setToolTip:NSLocalizedString(@"Write or paste a SQL statement.", @"Tooltip on the SQL editor segment.")
+						   forSegment:MADMacQueryWorkspaceModeSQL];
 
-	_filtersButton = [NSButton buttonWithTitle:NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.")
-										target:self
-										action:@selector(toggleFiltersPopover:)];
-	_groupsButton = [NSButton buttonWithTitle:NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.")
-									   target:self
-									   action:@selector(toggleGroupsPopover:)];
-	_arrangeButton = [NSButton buttonWithTitle:NSLocalizedString(@"Arrange Tables", @"Query toolbar button that lays the table cards out automatically.")
-										target:self
-										action:@selector(autoArrangeTablesAction:)];
-	NSButton *connectionBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Database Connection…", @"Query toolbar button that edits the database connection.")
-												 target:self
-												 action:@selector(editDatabaseConnectionAction:)];
-	if (@available(macOS 11.0, *)) {
-		connectionBtn.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-										accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
-		connectionBtn.imagePosition = NSImageLeft;
-	}
+	// The query selector is the workspace's anchor: everything to its right acts on the
+	// query it names.
+	_querySelectorPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+	_querySelectorPopup.target = self;
+	_querySelectorPopup.action = @selector(querySelectorChanged:);
+	_querySelectorPopup.toolTip = NSLocalizedString(@"The query being edited. The composed root joins the source queries below it.", @"Tooltip for the query selector popup.");
+	_querySelectorPopup.accessibilityLabel = NSLocalizedString(@"Query", @"Accessibility label for the query selector popup.");
+	_querySelectorPopup.translatesAutoresizingMaskIntoConstraints = NO;
 
-	_designerHeaderControls = [NSStackView stackViewWithViews:@[_filtersButton, _groupsButton, _arrangeButton, connectionBtn]];
+	NSMenuItem *addTable = [self menuItemWithTitle:NSLocalizedString(@"Add Table to Query", @"Add menu item that adds the selected database table.")
+											action:@selector(addSelectedSchemaTable:)
+											symbol:@"tablecells.badge.ellipsis"];
+	_addTableMenuItem = addTable;
+	NSMenuItem *addSource = [self menuItemWithTitle:NSLocalizedString(@"Add Source Query…", @"Add menu item that adds a source query from a connection.")
+											 action:@selector(addSourceQueryAction:)
+											 symbol:@"plus.rectangle.on.folder"];
+	NSMenuItem *importReport = [self menuItemWithTitle:NSLocalizedString(@"Import Report…", @"Add menu item that imports an existing report as a child.")
+												action:@selector(importChildQueryAction:)
+												symbol:@"square.and.arrow.down.on.square"];
+	NSMenuItem *createRoot = [self menuItemWithTitle:NSLocalizedString(@"Create Root Query", @"Add menu item that creates the composed root query.")
+											  action:@selector(addRootQueryAction:)
+											  symbol:@"rectangle.stack.badge.plus"];
+	_createRootMenuItem = createRoot;
+	_addMenuButton = [self menuButtonWithTitle:NSLocalizedString(@"Add", @"Query add menu button title.")
+									symbolName:@"plus"
+										 items:@[addTable, [NSMenuItem separatorItem], addSource, importReport, createRoot]
+									   toolTip:NSLocalizedString(@"Add a table, a source query, an imported report, or the composed root.", @"Tooltip for the query add menu.")];
+
+	NSMenuItem *outputs = [self menuItemWithTitle:NSLocalizedString(@"Outputs…", @"Query actions menu item that edits the composed root's outputs.")
+										   action:@selector(toggleOutputsPopover:)
+										   symbol:@"list.bullet.rectangle"];
+	_outputsMenuItem = outputs;
+	NSMenuItem *filters = [self menuItemWithTitle:NSLocalizedString(@"Filters…", @"Query actions menu item that edits the WHERE filters.")
+										   action:@selector(toggleFiltersPopover:)
+										   symbol:@"line.3.horizontal.decrease.circle"];
+	_filtersMenuItem = filters;
+	NSMenuItem *groups = [self menuItemWithTitle:NSLocalizedString(@"Groupings…", @"Query actions menu item that edits the GROUP BY groupings.")
+										  action:@selector(toggleGroupsPopover:)
+										  symbol:@"rectangle.3.group"];
+	_groupsMenuItem = groups;
+	NSMenuItem *rename = [self menuItemWithTitle:NSLocalizedString(@"Rename Query…", @"Query actions menu item that renames the selected query.")
+										  action:@selector(renameQueryAction:)
+										  symbol:@"pencil"];
+	NSMenuItem *arrange = [self menuItemWithTitle:NSLocalizedString(@"Arrange Tables", @"Query actions menu item that lays the table cards out automatically.")
+											action:@selector(autoArrangeTablesAction:)
+											symbol:@"square.grid.3x3"];
+	_queryMenuButton = [self menuButtonWithTitle:NSLocalizedString(@"Query", @"Query actions menu button title.")
+									  symbolName:@"ellipsis.circle"
+										   items:@[outputs, filters, groups, [NSMenuItem separatorItem], rename, arrange]
+										 toolTip:NSLocalizedString(@"Actions for the selected query: outputs, filters, groupings, name, and layout.", @"Tooltip for the query actions menu.")];
+
+	NSImage *connectionImage = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
+										  accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
+	if (connectionImage == nil) connectionImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0, 16.0)];
+	_connectionButton = [NSButton buttonWithImage:connectionImage
+										   target:self
+										   action:@selector(editDatabaseConnectionAction:)];
+	_connectionButton.bezelStyle = NSBezelStyleTexturedRounded;
+	_connectionButton.imagePosition = NSImageOnly;
+	_connectionButton.toolTip = NSLocalizedString(@"Edit the database connection for the selected query", @"Tooltip for the query workspace's connection button.");
+	_connectionButton.accessibilityLabel = NSLocalizedString(@"Database Connection", @"Accessibility label for the connection button.");
+	_connectionButton.translatesAutoresizingMaskIntoConstraints = NO;
+
+	_designerHeaderControls = [NSStackView stackViewWithViews:@[_addMenuButton, _queryMenuButton]];
 	_designerHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	_designerHeaderControls.spacing = 8.0;
 	_designerHeaderControls.translatesAutoresizingMaskIntoConstraints = NO;
@@ -1235,13 +1367,16 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSButton *revertSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Revert to Generated SQL", @"SQL toolbar button that replaces the text with the SQL generated from the visual query.")
 												target:self
 												action:@selector(syncSQLFromVisualQuery:)];
+	revertSQLBtn.toolTip = NSLocalizedString(@"Replace the SQL text with the statement generated from the visual query.", @"Tooltip for the revert SQL button.");
 	NSButton *validateSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Validate SQL", @"SQL toolbar button that checks the statement without applying it.")
 												  target:self
 												  action:@selector(validateSQLAction:)];
+	validateSQLBtn.toolTip = NSLocalizedString(@"Check the statement without applying it.", @"Tooltip for the validate SQL button.");
 	NSButton *applySQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Compile & Apply SQL", @"SQL toolbar button that parses the statement and applies it to the query.")
 											   target:self
 											   action:@selector(compileAndApplySQL:)];
 	applySQLBtn.bezelColor = [NSColor controlAccentColor];
+	applySQLBtn.toolTip = NSLocalizedString(@"Parse the statement and apply it to the query.", @"Tooltip for the compile and apply SQL button.");
 
 	_sqlHeaderControls = [NSStackView stackViewWithViews:@[revertSQLBtn, validateSQLBtn, applySQLBtn]];
 	_sqlHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -1250,25 +1385,61 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_sqlHeaderControls.hidden = YES;
 
 	[bar addSubview:_modeSegmentedControl];
+	[bar addSubview:_querySelectorPopup];
 	[bar addSubview:_designerHeaderControls];
 	[bar addSubview:_sqlHeaderControls];
+	[bar addSubview:_connectionButton];
 
+	NSLayoutConstraint *selectorWidth = [_querySelectorPopup.widthAnchor constraintEqualToConstant:190.0];
+	selectorWidth.priority = NSLayoutPriorityDefaultHigh;
 	[NSLayoutConstraint activateConstraints:@[
 		[_modeSegmentedControl.leadingAnchor constraintEqualToAnchor:bar.leadingAnchor constant:12.0],
 		[_modeSegmentedControl.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
 
-		[_designerHeaderControls.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
-		[_designerHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_querySelectorPopup.leadingAnchor constraintEqualToAnchor:_modeSegmentedControl.trailingAnchor constant:12.0],
+		[_querySelectorPopup.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		selectorWidth,
+		[_querySelectorPopup.widthAnchor constraintGreaterThanOrEqualToConstant:150.0],
+		[_querySelectorPopup.widthAnchor constraintLessThanOrEqualToConstant:240.0],
 
-		[_sqlHeaderControls.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
+		[_designerHeaderControls.leadingAnchor constraintEqualToAnchor:_querySelectorPopup.trailingAnchor constant:8.0],
+		[_designerHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_designerHeaderControls.trailingAnchor constraintLessThanOrEqualToAnchor:_connectionButton.leadingAnchor constant:-12.0],
+
+		[_sqlHeaderControls.trailingAnchor constraintEqualToAnchor:_connectionButton.leadingAnchor constant:-12.0],
 		[_sqlHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_sqlHeaderControls.leadingAnchor constraintGreaterThanOrEqualToAnchor:_querySelectorPopup.trailingAnchor constant:8.0],
+
+		[_connectionButton.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
+		[_connectionButton.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_connectionButton.widthAnchor constraintEqualToConstant:30.0],
 	]];
 }
 
-- (void)editDatabaseConnectionAction:(id)sender {
-	NSWindowController *wc = self.view.window.windowController;
-	if ([wc isKindOfClass:[MADMacWindowController class]]) {
-		[(MADMacWindowController *)wc editDatabaseConnectionAction:sender];
+- (void)editDatabaseConnectionAction:(id) __unused sender {
+	if (_editingRoot) {
+		// The composed root has no connection of its own; its sources do.
+		return;
+	}
+	RptqQuery *selected = self.selectedQuery;
+	if (selected == nil) return;
+	MADMacConnectionWindowController *connWC =
+		[[MADMacConnectionWindowController alloc] initWithDocument:_document statusPrompt:nil];
+	connWC.targetQuery = selected;
+	self.activeConnectionSheetController = connWC;
+	__weak typeof(self) weakSelf = self;
+	connWC.onConnectionUpdated = ^(MADDatabaseConnection * __unused conn, MADCredential * __unused creds) {
+		__strong typeof(weakSelf) strongSelf = weakSelf;
+		if (strongSelf == nil) return;
+		strongSelf.activeConnectionSheetController = nil;
+		[strongSelf reloadFromDocument];
+	};
+	if (self.view.window != nil && self.view.window.isVisible) {
+		[self.view.window beginSheet:connWC.window completionHandler:^(NSModalResponse __unused returnCode) {
+			weakSelf.activeConnectionSheetController = nil;
+		}];
+	} else {
+		[connWC showWindow:self];
 	}
 }
 
@@ -1277,13 +1448,25 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	CGFloat headerH = 26.0;
 	CGFloat footerH = 30.0;
 
-	NSTextField *headerLabel = [NSTextField labelWithString:NSLocalizedString(@"Database Tables", @"Schema sidebar heading.")];
-	headerLabel.font = [NSFont boldSystemFontOfSize:12.0];
-	headerLabel.frame = NSMakeRect(10.0, b.size.height - headerH + 3.0, b.size.width - 20.0, 20.0);
-	headerLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
-	[sidebar addSubview:headerLabel];
+	_schemaSidebarHeaderLabel = [NSTextField labelWithString:NSLocalizedString(@"Database Tables", @"Schema sidebar heading.")];
+	_schemaSidebarHeaderLabel.font = [NSFont boldSystemFontOfSize:12.0];
+	_schemaSidebarHeaderLabel.frame = NSMakeRect(10.0, b.size.height - headerH + 3.0, b.size.width - 20.0, 20.0);
+	_schemaSidebarHeaderLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
+	[sidebar addSubview:_schemaSidebarHeaderLabel];
+
+	// Shown only when a source that is itself a composition is selected: its tables are
+	// its own sources, read-only here (nested authoring is a separate piece of work).
+	_composingNodeNoteLabel = [NSTextField wrappingLabelWithString:
+		NSLocalizedString(@"This source is itself a composition. Its tables are the sources it joins.", @"Note in the query sidebar when a source that is itself a composition is selected.")];
+	_composingNodeNoteLabel.font = [NSFont systemFontOfSize:10.5];
+	_composingNodeNoteLabel.textColor = [NSColor secondaryLabelColor];
+	_composingNodeNoteLabel.frame = NSMakeRect(10.0, b.size.height - headerH - 46.0, b.size.width - 20.0, 40.0);
+	_composingNodeNoteLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
+	_composingNodeNoteLabel.hidden = YES;
+	[sidebar addSubview:_composingNodeNoteLabel];
 
 	NSScrollView *scroll = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, footerH, b.size.width, b.size.height - headerH - footerH)];
+	_schemaTablesScrollView = scroll;
 	scroll.hasVerticalScroller = YES;
 	scroll.hasHorizontalScroller = NO;
 	scroll.autohidesScrollers = YES;
@@ -1315,14 +1498,14 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	footerSep.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
 	[sidebar addSubview:footerSep];
 
-	NSButton *addBtn = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add Table to Query", @"Schema sidebar button that adds the selected table to the query.")
+	_addTableButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add Table to Query", @"Schema sidebar button that adds the selected table to the query.")
 										  target:self
 										  action:@selector(addSelectedSchemaTable:)];
-	addBtn.controlSize = NSControlSizeSmall;
-	addBtn.font = [NSFont systemFontOfSize:11.5];
-	addBtn.frame = NSMakeRect(8.0, 4.0, b.size.width - 16.0, 22.0);
-	addBtn.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
-	[sidebar addSubview:addBtn];
+	_addTableButton.controlSize = NSControlSizeSmall;
+	_addTableButton.font = [NSFont systemFontOfSize:11.5];
+	_addTableButton.frame = NSMakeRect(8.0, 4.0, b.size.width - 16.0, 22.0);
+	_addTableButton.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
+	[sidebar addSubview:_addTableButton];
 }
 
 - (void)populateCanvasContainer:(NSView *)container {
@@ -1411,6 +1594,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 											 selector:@selector(handleDocumentNotification:)
 												 name:MADMacDocumentDidRefreshNotification
 											   object:_document];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(handleDocumentNotification:)
+												 name:MADMacDocumentDidSelectQueryNotification
+											   object:_document];
 	[self reloadFromDocument];
 }
 
@@ -1425,6 +1612,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)switchToMode:(MADMacQueryWorkspaceMode)mode {
+	if (mode == MADMacQueryWorkspaceModeSQL && (_editingRoot || _editingComposingNode)) {
+		// A composing node is authored visually, not as a single SQL statement.
+		mode = MADMacQueryWorkspaceModeDesigner;
+	}
 	_workspaceMode = mode;
 	_modeSegmentedControl.selectedSegment = mode;
 
@@ -1434,6 +1625,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	_sqlEditorContainerView.hidden = isDesigner;
 	_sqlHeaderControls.hidden = isDesigner;
+	if (isDesigner) {
+		[_tipBar showIfNeeded];
+	} else {
+		_tipBar.hidden = YES;
+	}
 
 	[self dismissActiveLinkPopover];
 	if (!isDesigner) {
@@ -1443,12 +1639,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 #pragma mark - NSSplitViewDelegate (Fixed 200px Left Sidebar on Window Resize, User-Resizable Divider)
 
-- (BOOL)splitView:(NSSplitView *) __unused splitView canCollapseSubview:(NSView *) __unused subview {
-	return NO;
+- (BOOL)splitView:(NSSplitView *) __unused splitView canCollapseSubview:(NSView *)subview {
+	return subview == _schemaSidebarView && _schemaSidebarHidden;
 }
 
 - (CGFloat)splitView:(NSSplitView *) __unused splitView constrainMinCoordinate:(CGFloat) __unused proposedMinimumPosition ofSubviewAt:(NSInteger) __unused dividerIndex {
-	return kMinSidebarWidth;
+	return _schemaSidebarHidden ? 0.0 : kMinSidebarWidth;
 }
 
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat) __unused proposedMaximumPosition ofSubviewAt:(NSInteger) __unused dividerIndex {
@@ -1466,7 +1662,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSRect b = splitView.bounds;
 	CGFloat divider = splitView.dividerThickness;
 	CGFloat maxLeft = MAX(kMinSidebarWidth, MIN(kMaxSidebarWidth, b.size.width - divider - 320.0));
-	CGFloat leftW = MIN(MAX(_schemaSidebarWidth, kMinSidebarWidth), maxLeft);
+	CGFloat leftW = _schemaSidebarHidden ? 0.0 : MIN(MAX(_schemaSidebarWidth, kMinSidebarWidth), maxLeft);
 	CGFloat rightW = MAX(0.0, b.size.width - leftW - divider);
 
 	_schemaSidebarView.frame = NSMakeRect(0.0, 0.0, leftW, b.size.height);
@@ -1476,7 +1672,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 - (void)splitViewDidResizeSubviews:(NSNotification *) __unused notification {
 	CGFloat currentLeftWidth = NSWidth(_schemaSidebarView.frame);
-	if (currentLeftWidth >= kMinSidebarWidth - 1.0 && currentLeftWidth <= kMaxSidebarWidth + 1.0) {
+	if (!_schemaSidebarHidden &&
+		currentLeftWidth >= kMinSidebarWidth - 1.0 && currentLeftWidth <= kMaxSidebarWidth + 1.0) {
 		_schemaSidebarWidth = currentLeftWidth;
 	}
 	[_canvasView ensureCanvasSizeFitsCards];
@@ -1545,14 +1742,126 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	if (rootsOut) *rootsOut = roots;
 }
 
+- (RptqQuery *)selectedQuery {
+	return _document.selectedQuery;
+}
+
+- (RptqDatabase *)selectedDatabase {
+	return [_document databaseForQuery:self.selectedQuery];
+}
+
+- (NSString *)displayTableNameForQueryTable:(RptqQueryTable *)queryTable {
+	if (queryTable == nil) return @"Table";
+	if (queryTable.alias.length > 0) return queryTable.alias;
+	if (queryTable.databaseSchemaTable.name.length > 0) return queryTable.databaseSchemaTable.name;
+	if (queryTable.upstreamQuery.name.length > 0) return queryTable.upstreamQuery.name;
+	return NSLocalizedString(@"Table", @"Generic table name when none is recorded.");
+}
+
+- (NSString *)displayLabelForQueryField:(RptqQueryField *)field {
+	if (field == nil) return @"Field";
+	// A composed root field is keyed by its output key; a source field by table.field.
+	if (field.outputKey.length > 0) {
+		NSString *source = field.inQueryTable.upstreamQuery.name;
+		return source.length > 0
+			? [[NSString alloc] initWithFormat:@"%@.%@", source, field.outputKey]
+			: field.outputKey;
+	}
+	NSString *table = [self displayTableNameForQueryTable:field.inQueryTable];
+	NSString *column = field.databaseSchemaField.name ?: @"Field";
+	return [[NSString alloc] initWithFormat:@"%@.%@", table, column];
+}
+
+- (void)refreshQuerySelector {
+	NSArray<RptqQuery *> *queries = [_document allQueries];
+	[_querySelectorPopup removeAllItems];
+	for (RptqQuery *query in queries) {
+		NSString *title = query.name.length > 0 ? query.name : NSLocalizedString(@"Query", @"Default query name in the selector.");
+		[_querySelectorPopup addItemWithTitle:title];
+		_querySelectorPopup.lastItem.representedObject = query;
+	}
+	RptqQuery *selected = self.selectedQuery;
+	for (NSInteger i = 0; i < _querySelectorPopup.numberOfItems; i++) {
+		if (_querySelectorPopup.itemArray[i].representedObject == selected) {
+			[_querySelectorPopup selectItemAtIndex:i];
+			break;
+		}
+	}
+	BOOL hasRoot = (_document.rootQuery != nil);
+	_createRootMenuItem.hidden = hasRoot;
+	[self updateSchemaSidebarHeader];
+}
+
+- (void)updateSchemaSidebarHeader {
+	// The sidebar lists source queries when editing a composer (the root, or a source
+	// that is itself a composition), schema tables otherwise.
+	BOOL listsUpstream = (_editingRoot || _editingComposingNode);
+	_schemaSidebarHeaderLabel.stringValue = listsUpstream
+		? NSLocalizedString(@"Source Queries", @"Schema sidebar heading when the composed root is being edited.")
+		: NSLocalizedString(@"Database Tables", @"Schema sidebar heading.");
+	_addTableButton.title = _editingRoot
+		? NSLocalizedString(@"+ Add Source to Root", @"Schema sidebar button that adds a source query to the composed root.")
+		: NSLocalizedString(@"+ Add Table to Query", @"Schema sidebar button that adds the selected table to the query.");
+	_addTableButton.hidden = _editingComposingNode;
+
+	// A nested composer's tables are read-only structure; leave room for its note.
+	_composingNodeNoteLabel.hidden = !_editingComposingNode;
+	NSView *sidebar = _schemaSidebarView;
+	if (_schemaTablesScrollView != nil && sidebar != nil) {
+		const CGFloat headerH = 26.0, footerH = 30.0, noteH = 44.0;
+		CGFloat width = NSWidth(sidebar.bounds);
+		CGFloat height = NSHeight(sidebar.bounds) - headerH - footerH - (_editingComposingNode ? noteH : 0.0);
+		_schemaTablesScrollView.frame = NSMakeRect(0.0, footerH, width, MAX(40.0, height));
+	}
+}
+
 - (void)reloadFromDocument {
-	RptqDatabase *db = _document.rptqDatabase;
-	RptqQuery *query = _document.rptqQuery;
+	RptqQuery *query = self.selectedQuery;
+	_editingRoot = (query != nil && query == _document.rootQuery);
+	// A source that joins its own upstream tables is a composition too: SQL editing is
+	// refused and its tables are read-only structure, exactly as for the root.
+	_editingComposingNode = (query != nil && !_editingRoot && [query isComposing]);
+	_outputsMenuItem.hidden = !_editingRoot;
+	// The composed root has no connection of its own; its sources do.
+	_connectionButton.enabled = !_editingRoot;
+	_connectionButton.toolTip = _editingRoot
+		? NSLocalizedString(@"The Result has no connection of its own; connect each source instead.", @"Tooltip on the disabled connection button while the composed Result is selected.")
+		: NSLocalizedString(@"Edit the database connection for the selected query", @"Tooltip for the query workspace's connection button.");
+
+	BOOL sqlAvailable = !(_editingRoot || _editingComposingNode);
+	if (_modeSegmentedControl != nil) {
+		[_modeSegmentedControl setEnabled:sqlAvailable forSegment:MADMacQueryWorkspaceModeSQL];
+		[_modeSegmentedControl setToolTip:(sqlAvailable
+			? nil
+			: NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node."))
+								 forSegment:MADMacQueryWorkspaceModeSQL];
+	}
+	if (!sqlAvailable && _workspaceMode == MADMacQueryWorkspaceModeSQL) {
+		[self switchToMode:MADMacQueryWorkspaceModeDesigner];
+	}
+
+	[self refreshQuerySelector];
 
 	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name"
 															 ascending:YES
 															  selector:@selector(localizedCaseInsensitiveCompare:)];
-	_schemaTables = [db.hasTables sortedArrayUsingDescriptors:@[byName]] ?: @[];
+
+	if (_editingRoot || _editingComposingNode) {
+		// A composer's "tables" are its upstream source queries (already added).
+		NSMutableArray<RptqQuery *> *upstream = [[NSMutableArray alloc] init];
+		for (RptqQueryTable *qt in query.hasQueryTables) {
+			if (qt.upstreamQuery != nil && ![upstream containsObject:qt.upstreamQuery]) {
+				[upstream addObject:qt.upstreamQuery];
+			}
+		}
+		[upstream sortUsingDescriptors:@[byName]];
+		_upstreamQueries = upstream;
+		_schemaTables = @[];
+	} else {
+		RptqDatabase *db = [self selectedDatabase];
+		_schemaTables = [db.hasTables sortedArrayUsingDescriptors:@[byName]] ?: @[];
+		_upstreamQueries = @[];
+	}
 
 	NSSortDescriptor *byAlias = [NSSortDescriptor sortDescriptorWithKey:@"alias"
 															  ascending:YES
@@ -1594,16 +1903,155 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	[_canvasView rebuildCanvasWithTables:topoTables links:_queryLinks rootTableID:rootTableIDs];
 
-	// Update top bar button badges
-	_filtersButton.title = _queryPredicates.count > 0
-		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Filters (%lu)", @"Query toolbar button with the active filter count. %lu is the count."), (unsigned long)_queryPredicates.count]
-		: NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.");
-	_groupsButton.title = _queryGroups.count > 0
-		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Groupings (%lu)", @"Query toolbar button with the active grouping count. %lu is the count."), (unsigned long)_queryGroups.count]
-		: NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.");
+	// Update the actions menu's counts.
+	_filtersMenuItem.title = _queryPredicates.count > 0
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Filters (%lu)…", @"Query actions menu item with the active filter count. %lu is the count."), (unsigned long)_queryPredicates.count]
+		: NSLocalizedString(@"Filters…", @"Query actions menu item that edits the WHERE filters.");
+	_groupsMenuItem.title = _queryGroups.count > 0
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Groupings (%lu)…", @"Query actions menu item with the active grouping count. %lu is the count."), (unsigned long)_queryGroups.count]
+		: NSLocalizedString(@"Groupings…", @"Query actions menu item that edits the GROUP BY groupings.");
 
 	[self refreshClausePopoverControls];
 	[self syncSQLFromVisualQuery:nil];
+}
+
+#pragma mark - Query Selection & Authoring Actions
+
+- (void)querySelectorChanged:(NSPopUpButton *)sender {
+	RptqQuery *query = sender.selectedItem.representedObject;
+	if ([query isKindOfClass:[RptqQuery class]]) {
+		// The selection notification reloads this workspace (and the Designer/Viewer).
+		_document.selectedQuery = query;
+	}
+}
+
+- (void)addSourceQueryAction:(id) __unused sender {
+	MADMacConnectionWindowController *picker = [[MADMacConnectionWindowController alloc] init];
+	picker.sourcePickerMode = YES;
+	__weak typeof(self) weakSelf = self;
+	picker.onSourceConnectionBuilt = ^(MADDatabaseConnection *connection, MADCredential * _Nullable credentials, NSError * _Nullable error) {
+		__strong typeof(weakSelf) strongSelf = weakSelf;
+		if (strongSelf == nil) return;
+		if (connection == nil || error != nil) {
+			if (error != nil) {
+				NSAlert *errAlert = [[NSAlert alloc] init];
+				errAlert.messageText = NSLocalizedString(@"Could not connect to the source", @"Alert title when a source connection fails.");
+				errAlert.informativeText = error.localizedDescription ?: @"";
+				[errAlert runModal];
+			}
+			return;
+		}
+		[strongSelf promptForSourceQueryNameWithConnection:connection credentials:credentials];
+	};
+
+	if (self.view.window != nil && self.view.window.isVisible) {
+		[self.view.window beginSheet:picker.window completionHandler:nil];
+	} else {
+		[picker showWindow:self];
+	}
+}
+
+- (void)importChildQueryAction:(id) __unused sender {
+	// The child is added to the composed root; ensure one exists first.
+	if (_document.rootQuery == nil) {
+		NSError *rootError = nil;
+		if ([_document addRootQueryNamed:NSLocalizedString(@"root", @"Default name of the composed root query.") error:&rootError] == nil) {
+			NSAlert *errAlert = [[NSAlert alloc] init];
+			errAlert.messageText = NSLocalizedString(@"Could not create the root query", @"Alert title when the root query cannot be created.");
+			errAlert.informativeText = rootError.localizedDescription ?: @"";
+			[errAlert runModal];
+			return;
+		}
+	}
+
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	panel.title = NSLocalizedString(@"Choose a Report to Import", @"Import-child picker title.");
+	panel.prompt = NSLocalizedString(@"Import", @"Import-child picker confirm button.");
+	panel.allowsMultipleSelection = NO;
+	panel.canChooseDirectories = NO;
+	panel.canChooseFiles = YES;
+	panel.allowedContentTypes = [MADMacDocumentController allowedMadContentTypes];
+	if ([panel runModal] != NSModalResponseOK) return;
+	NSURL *sourceURL = panel.URL;
+	if (sourceURL == nil) return;
+
+	NSError *error = nil;
+	NSString *name = sourceURL.lastPathComponent.stringByDeletingPathExtension;
+	RptqQuery *child = [_document importChildFromURL:sourceURL name:name error:&error];
+	if (child == nil || [_document addChildQuery:child error:&error] == nil) {
+		NSAlert *errAlert = [[NSAlert alloc] init];
+		errAlert.messageText = NSLocalizedString(@"Could not import the report", @"Alert title when a child import fails.");
+		errAlert.informativeText = error.localizedDescription ?: @"";
+		[errAlert runModal];
+		return;
+	}
+	_document.selectedQuery = _document.rootQuery;
+	[self reloadFromDocument];
+}
+
+- (void)promptForSourceQueryNameWithConnection:(MADDatabaseConnection *)connection
+								   credentials:(nullable MADCredential *)credentials {
+	NSAlert *alert = [[NSAlert alloc] init];
+	alert.messageText = NSLocalizedString(@"Name the source query", @"Alert title for naming a source query.");
+	alert.informativeText = NSLocalizedString(@"Give this source a name you will recognise when building the root join.", @"Alert body for naming a source query.");
+	[alert addButtonWithTitle:NSLocalizedString(@"Add Source", @"Button that adds the named source query.")];
+	[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Alert cancel button.")];
+
+	NSTextField *field = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 220, 24)];
+	field.placeholderString = NSLocalizedString(@"e.g. invoices", @"Placeholder for the source query name.");
+	field.stringValue = NSLocalizedString(@"source", @"Default source query name.");
+	alert.accessoryView = field;
+
+	if ([alert runModal] != NSAlertFirstButtonReturn) return;
+	NSString *name = [field.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if (name.length == 0) name = NSLocalizedString(@"source", @"Default source query name.");
+
+	NSError *error = nil;
+	RptqQuery *query = [_document addSourceQueryNamed:name
+									   withConnection:connection
+										  credentials:credentials
+												error:&error];
+	if (query == nil) {
+		NSAlert *errAlert = [[NSAlert alloc] init];
+		errAlert.messageText = NSLocalizedString(@"Could not add the source query", @"Alert title when a source query cannot be added.");
+		errAlert.informativeText = error.localizedDescription ?: NSLocalizedString(@"The connection could not be imported.", @"Alert body for a failed source import.");
+		[errAlert runModal];
+		return;
+	}
+	_document.selectedQuery = query;
+	[self reloadFromDocument];
+}
+
+- (void)addRootQueryAction:(id) __unused sender {
+	if (_document.rootQuery != nil) return;
+	NSError *error = nil;
+	RptqQuery *root = [_document addRootQueryNamed:NSLocalizedString(@"root", @"Default name of the composed root query.") error:&error];
+	if (root == nil) {
+		NSAlert *errAlert = [[NSAlert alloc] init];
+		errAlert.messageText = NSLocalizedString(@"Could not create the root query", @"Alert title when the root query cannot be created.");
+		errAlert.informativeText = error.localizedDescription ?: @"";
+		[errAlert runModal];
+		return;
+	}
+	_document.selectedQuery = root;
+	[self reloadFromDocument];
+}
+
+- (void)renameQueryAction:(id) __unused sender {
+	RptqQuery *query = self.selectedQuery;
+	if (query == nil) return;
+	NSAlert *alert = [[NSAlert alloc] init];
+	alert.messageText = NSLocalizedString(@"Rename Query", @"Alert title for renaming a query.");
+	[alert addButtonWithTitle:NSLocalizedString(@"Rename", @"Button that applies the new query name.")];
+	[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Alert cancel button.")];
+	NSTextField *field = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 220, 24)];
+	field.stringValue = query.name ?: @"";
+	alert.accessoryView = field;
+	if ([alert runModal] != NSAlertFirstButtonReturn) return;
+	NSString *name = [field.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if (name.length == 0) return;
+	[_document renameQuery:query to:name];
+	[self reloadFromDocument];
 }
 
 #pragma mark - Field State Queries
@@ -1645,28 +2093,73 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 - (void)handleDoubleClickSchemaTable:(id) __unused sender {
 	NSInteger row = _schemaTablesTable.clickedRow;
 	if (row < 0) row = _schemaTablesTable.selectedRow;
+	if (_editingRoot) {
+		if (row < 0 || (NSUInteger)row >= _upstreamQueries.count) return;
+		[self addUpstreamQueryToRoot:_upstreamQueries[(NSUInteger)row]];
+		return;
+	}
+	if (_editingComposingNode) return; // structure only; nested authoring is separate work
 	if (row < 0 || (NSUInteger)row >= _schemaTables.count) return;
 	[self addSchemaTableToQuery:_schemaTables[(NSUInteger)row]];
 }
 
 - (void)addSelectedSchemaTable:(id) __unused sender {
 	NSInteger row = _schemaTablesTable.selectedRow;
+	if (_editingRoot) {
+		if (row < 0 && _upstreamQueries.count > 0) row = 0;
+		if (row < 0 || (NSUInteger)row >= _upstreamQueries.count) return;
+		[self addUpstreamQueryToRoot:_upstreamQueries[(NSUInteger)row]];
+		return;
+	}
+	if (_editingComposingNode) return; // structure only; nested authoring is separate work
 	if (row < 0 && _schemaTables.count > 0) row = 0;
 	if (row < 0 || (NSUInteger)row >= _schemaTables.count) return;
 	[self addSchemaTableToQuery:_schemaTables[(NSUInteger)row]];
 }
 
+- (nullable RptqQueryTable *)addUpstreamQueryToRoot:(RptqQuery *)sourceQuery {
+	if (sourceQuery == nil || !_editingRoot) return nil;
+	RptqQuery *root = self.selectedQuery;
+	RptqStoreContext *ctx = _document.managedObjectContext;
+	if (root == nil || ctx == nil) return nil;
+
+	for (RptqQueryTable *existing in root.hasQueryTables) {
+		if (existing.upstreamQuery == sourceQuery) return existing;
+	}
+
+	RptqQueryTable *table = (RptqQueryTable *)[ctx insertObjectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:0];
+	table.inQuery = root;
+	table.upstreamQuery = sourceQuery;
+
+	// The root table exposes the source query's projected fields; one root query field
+	// per source field.  Joins and outputs both reference these.
+	NSMutableSet<RptqQueryField *> *fields = [[NSMutableSet alloc] init];
+	for (RptqQueryTable *sourceTable in sourceQuery.hasQueryTables) {
+		for (RptqQueryField *sourceField in sourceTable.hasQueryFields) {
+			if (sourceField.databaseSchemaField == nil) continue;
+			RptqQueryField *qf = [RptqQueryField newQueryField:ctx];
+			qf.inQueryTable = table;
+			qf.databaseSchemaField = sourceField.databaseSchemaField;
+			[fields addObject:qf];
+		}
+	}
+	table.hasQueryFields = fields;
+	[root addHasQueryTablesObject:table];
+
+	[_document notifyDocumentMutated];
+	return table;
+}
+
 - (nullable RptqQueryTable *)addSchemaTableToQuery:(RptqDatabaseSchemaTable *)schemaTable {
 	if (schemaTable == nil) return nil;
-	RptqDatabase *db = _document.rptqDatabase;
-	RptqQuery *query = _document.rptqQuery;
+	RptqQuery *query = self.selectedQuery;
 	RptqStoreContext *ctx = _document.managedObjectContext;
-	if (db == nil || query == nil || ctx == nil) return nil;
+	if (query == nil || ctx == nil || _editingRoot || [query isComposing]) return nil;
 
 	// Create RptqQueryTable AND populate all RptqQueryField children (matches MADQueryViewController+BuilderDelegates.m:421-440)
 	RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable
-																	   database:db
-														forManagedObjectContext:ctx];
+																		   query:query
+															forManagedObjectContext:ctx];
 	NSMutableSet<RptqQueryField *> *newQueryFields = [[NSMutableSet alloc] initWithCapacity:schemaTable.hasFields.count];
 	for (RptqDatabaseSchemaField *schemaField in schemaTable.hasFields) {
 		RptqQueryField *qf = [RptqQueryField newQueryField:ctx];
@@ -1684,7 +2177,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 - (void)removeQueryTable:(RptqQueryTable *)qt {
 	if (qt == nil) return;
 	RptqStoreContext *ctx = _document.managedObjectContext;
-	RptqQuery *query = _document.rptqQuery;
+	RptqQuery *query = self.selectedQuery;
 	if (ctx == nil || query == nil) return;
 
 	[self dismissActiveLinkPopover];
@@ -1737,7 +2230,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	if (leftField.inQueryTable == nil || rightField.inQueryTable == nil) return nil;
 	if (leftField.inQueryTable.identifier == rightField.inQueryTable.identifier) return nil;
 
-	RptqQuery *query = _document.rptqQuery;
+	RptqQuery *query = self.selectedQuery;
 	RptqStoreContext *ctx = _document.managedObjectContext;
 	if (query == nil || ctx == nil) return nil;
 
@@ -1800,8 +2293,21 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (NSArray<NSNumber *> *)supportedJoinTypesForCurrentDatabase {
+	// The composed root joins its children in local SQLite, so it supports the same
+	// join types as a SQLite source.
+	if (_editingRoot) {
+		return @[
+			@(MADLinkTypeLeftOuterJoin),
+			@(MADLinkTypeInnerJoin),
+			@(MADLinkTypeRightOuterJoin),
+			@(MADLinkTypeFullOuterJoin),
+			@(MADLinkTypeEquiJoin),
+			@(MADLinkTypeNaturalJoin),
+		];
+	}
 	// Matches MADQueryAddLinkJoinTypeController.m driver rules, with Left Outer Join first
-	NSString *driverID = _document.rptqDatabase.ownedByUser.driverID ?: @"";
+	RptqDatabase *db = [self selectedDatabase];
+	NSString *driverID = db.ownedByUser.driverID ?: @"";
 	BOOL isMySQL = [driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]];
 	BOOL isTDS = [driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]];
 
@@ -2097,20 +2603,14 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	if (_predicateFieldPopup != nil) {
 		[_predicateFieldPopup removeAllItems];
 		for (RptqQueryField *qf in _queryFields) {
-			NSString *label = [NSString stringWithFormat:@"%@.%@",
-							   qf.inQueryTable.alias ?: qf.inQueryTable.databaseSchemaTable.name ?: @"",
-							   qf.databaseSchemaField.name ?: @""];
-			[_predicateFieldPopup addItemWithTitle:label];
+			[_predicateFieldPopup addItemWithTitle:[self displayLabelForQueryField:qf]];
 			_predicateFieldPopup.lastItem.tag = (NSInteger)qf.identifier;
 		}
 	}
 	if (_groupFieldPopup != nil) {
 		[_groupFieldPopup removeAllItems];
 		for (RptqQueryField *qf in _queryFields) {
-			NSString *label = [NSString stringWithFormat:@"%@.%@",
-							   qf.inQueryTable.alias ?: qf.inQueryTable.databaseSchemaTable.name ?: @"",
-							   qf.databaseSchemaField.name ?: @""];
-			[_groupFieldPopup addItemWithTitle:label];
+			[_groupFieldPopup addItemWithTitle:[self displayLabelForQueryField:qf]];
 			_groupFieldPopup.lastItem.tag = (NSInteger)qf.identifier;
 		}
 	}
@@ -2118,7 +2618,54 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[_groupsTable reloadData];
 }
 
-- (void)toggleFiltersPopover:(NSButton *)sender {
+/// The popovers anchor to the button that opened them, or to the actions menu when the
+/// command came from the menu bar (where the sender is an NSMenuItem, not a view).
+- (NSView *)popoverAnchorForSender:(id)sender {
+	if ([sender isKindOfClass:[NSView class]]) return sender;
+	return _queryMenuButton ?: _addMenuButton ?: _connectionButton ?: self.view;
+}
+
+#pragma mark - Menu State
+
+- (BOOL)editingRootQuery {
+	return _editingRoot;
+}
+
+- (BOOL)editingComposingNode {
+	return _editingComposingNode;
+}
+
+- (BOOL)canAddSelectedTable {
+	if (_editingComposingNode || _workspaceMode != MADMacQueryWorkspaceModeDesigner) return NO;
+	return (_editingRoot ? _upstreamQueries.count : _schemaTables.count) > 0;
+}
+
+- (BOOL)canCreateRoot {
+	return _document.rootQuery == nil && _workspaceMode == MADMacQueryWorkspaceModeDesigner;
+}
+
+- (BOOL)schemaSidebarVisible {
+	return !_schemaSidebarHidden;
+}
+
+- (void)toggleSchemaSidebarAction:(nullable id) __unused sender {
+	_schemaSidebarHidden = !_schemaSidebarHidden;
+	_schemaSidebarView.hidden = _schemaSidebarHidden;
+	CGFloat position = _schemaSidebarHidden ? 0.0 : MAX(kMinSidebarWidth, _schemaSidebarWidth);
+	[_designerSplitView setPosition:position ofDividerAtIndex:0];
+	[_designerSplitView adjustSubviews];
+	[_canvasView ensureCanvasSizeFitsCards];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	SEL action = menuItem.action;
+	if (action == @selector(addSelectedSchemaTable:)) return [self canAddSelectedTable];
+	if (action == @selector(addRootQueryAction:)) return [self canCreateRoot];
+	if (action == @selector(toggleOutputsPopover:)) return _editingRoot;
+	return YES;
+}
+
+- (void)toggleFiltersPopover:(id)sender {
 	if (_filtersPopover.isShown) {
 		[_filtersPopover close];
 		return;
@@ -2175,10 +2722,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_filtersPopover.behavior = NSPopoverBehaviorTransient;
 	}
 	[self refreshClausePopoverControls];
-	[_filtersPopover showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSRectEdgeMaxY];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_filtersPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
 }
 
-- (void)toggleGroupsPopover:(NSButton *)sender {
+- (void)toggleGroupsPopover:(id)sender {
 	if (_groupsPopover.isShown) {
 		[_groupsPopover close];
 		return;
@@ -2232,7 +2780,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_groupsPopover.behavior = NSPopoverBehaviorTransient;
 	}
 	[self refreshClausePopoverControls];
-	[_groupsPopover showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSRectEdgeMaxY];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_groupsPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
 }
 
 - (void)addPredicateAction:(id) __unused sender {
@@ -2257,7 +2806,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 																   forManagedObjectContext:_document.managedObjectContext
 																					 error:&err];
 	if (pred != nil && err == nil) {
-		[_document.rptqQuery addHasQueryPredicateObject:pred];
+		[self.selectedQuery addHasQueryPredicateObject:pred];
 		_predicateValueField.stringValue = @"";
 		[_document notifyDocumentMutated];
 	}
@@ -2267,7 +2816,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSInteger row = _predicatesTable.selectedRow;
 	if (row < 0 || (NSUInteger)row >= _queryPredicates.count) return;
 	RptqQueryPredicate *pred = _queryPredicates[(NSUInteger)row];
-	[_document.rptqQuery removeHasQueryPredicateObject:pred];
+	[self.selectedQuery removeHasQueryPredicateObject:pred];
 	[RptqQueryPredicate deletePredicate:pred];
 	[_document notifyDocumentMutated];
 }
@@ -2289,24 +2838,202 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[_document notifyDocumentMutated];
 }
 
+#pragma mark - Composed Root Outputs
+
+- (NSArray<RptqQueryField *> *)rootOutputFields {
+	NSMutableArray<RptqQueryField *> *outputs = [[NSMutableArray alloc] init];
+	for (RptqQueryField *field in _queryFields) {
+		if (field.outputKey.length > 0) [outputs addObject:field];
+	}
+	NSSortDescriptor *byIndex = [NSSortDescriptor sortDescriptorWithKey:@"outputIndex" ascending:YES];
+	return [outputs sortedArrayUsingDescriptors:@[byIndex]];
+}
+
+- (void)reindexRootOutputs {
+	NSArray<RptqQueryField *> *outputs = [self rootOutputFields];
+	for (NSUInteger i = 0; i < outputs.count; i++) {
+		outputs[i].outputIndex = (int64_t)i;
+	}
+}
+
+- (void)toggleOutputsPopover:(id)sender {
+	if (_outputsPopover.isShown) {
+		[_outputsPopover close];
+		return;
+	}
+	if (_outputsPopover == nil) {
+		NSViewController *vc = [[NSViewController alloc] initWithNibName:nil bundle:nil];
+		NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 460.0, 240.0)];
+
+		_outputFieldPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 170.0, 24.0) pullsDown:NO];
+		_outputKeyField = [[NSTextField alloc] initWithFrame:NSMakeRect(0.0, 0.0, 130.0, 24.0)];
+		_outputKeyField.placeholderString = NSLocalizedString(@"Output name", @"Placeholder for the composed output column name.");
+
+		NSButton *addBtn = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add", @"Button that adds an output column.") target:self action:@selector(addRootOutputAction:)];
+		NSButton *upBtn = [NSButton buttonWithTitle:NSLocalizedString(@"↑", @"Button that moves an output column earlier.") target:self action:@selector(moveRootOutputUpAction:)];
+		NSButton *downBtn = [NSButton buttonWithTitle:NSLocalizedString(@"↓", @"Button that moves an output column later.") target:self action:@selector(moveRootOutputDownAction:)];
+		NSButton *removeBtn = [NSButton buttonWithTitle:NSLocalizedString(@"- Remove", @"Button that removes an output column.") target:self action:@selector(removeRootOutputAction:)];
+
+		NSStackView *topRow = [NSStackView stackViewWithViews:@[_outputFieldPopup, _outputKeyField, addBtn]];
+		topRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+		topRow.spacing = 6.0;
+		topRow.translatesAutoresizingMaskIntoConstraints = NO;
+
+		NSStackView *bottomRow = [NSStackView stackViewWithViews:@[upBtn, downBtn, removeBtn]];
+		bottomRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+		bottomRow.spacing = 6.0;
+		bottomRow.translatesAutoresizingMaskIntoConstraints = NO;
+
+		_outputsTable = [[NSTableView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 436.0, 130.0)];
+		_outputsTable.usesAlternatingRowBackgroundColors = YES;
+		_outputsTable.rowHeight = 22.0;
+		_outputsTable.delegate = self;
+		_outputsTable.dataSource = self;
+		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:@"output"];
+		col.title = NSLocalizedString(@"Root Outputs (in order)", @"Composed outputs editor title.");
+		col.width = 420.0;
+		[_outputsTable addTableColumn:col];
+
+		NSScrollView *scroll = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 436.0, 130.0)];
+		scroll.hasVerticalScroller = YES;
+		scroll.borderType = NSBezelBorder;
+		scroll.documentView = _outputsTable;
+		scroll.translatesAutoresizingMaskIntoConstraints = NO;
+
+		[view addSubview:topRow];
+		[view addSubview:scroll];
+		[view addSubview:bottomRow];
+		[NSLayoutConstraint activateConstraints:@[
+			[topRow.topAnchor constraintEqualToAnchor:view.topAnchor constant:10.0],
+			[topRow.leadingAnchor constraintEqualToAnchor:view.leadingAnchor constant:10.0],
+			[topRow.trailingAnchor constraintLessThanOrEqualToAnchor:view.trailingAnchor constant:-10.0],
+			[scroll.topAnchor constraintEqualToAnchor:topRow.bottomAnchor constant:8.0],
+			[scroll.leadingAnchor constraintEqualToAnchor:view.leadingAnchor constant:10.0],
+			[scroll.trailingAnchor constraintEqualToAnchor:view.trailingAnchor constant:-10.0],
+			[scroll.bottomAnchor constraintEqualToAnchor:bottomRow.topAnchor constant:-8.0],
+			[bottomRow.leadingAnchor constraintEqualToAnchor:view.leadingAnchor constant:10.0],
+			[bottomRow.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:-10.0],
+		]];
+		vc.view = view;
+		_outputsPopover = [[NSPopover alloc] init];
+		_outputsPopover.contentViewController = vc;
+		_outputsPopover.behavior = NSPopoverBehaviorTransient;
+	}
+	[self refreshOutputPopoverControls];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_outputsPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
+}
+
+- (void)refreshOutputPopoverControls {
+	if (_outputFieldPopup == nil || _outputsTable == nil) return;
+	[_outputFieldPopup removeAllItems];
+	for (RptqQueryField *field in _queryFields) {
+		if (field.outputKey.length > 0) continue; // already an output
+		[_outputFieldPopup addItemWithTitle:[self displayLabelForQueryField:field]];
+		_outputFieldPopup.lastItem.tag = (NSInteger)field.identifier;
+	}
+	[_outputsTable reloadData];
+}
+
+- (void)addRootOutputAction:(id) __unused sender {
+	NSMenuItem *fieldItem = _outputFieldPopup.selectedItem;
+	NSString *key = [_outputKeyField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if (fieldItem == nil || key.length == 0) return;
+	RptqQueryField *field = nil;
+	for (RptqQueryField *qf in _queryFields) {
+		if (qf.identifier == fieldItem.tag) { field = qf; break; }
+	}
+	if (field == nil) return;
+	field.outputKey = key;
+	field.outputIndex = (int64_t)[self rootOutputFields].count; // appended after existing outputs
+	[_document notifyDocumentMutated];
+	_outputKeyField.stringValue = @"";
+	[self refreshOutputPopoverControls];
+}
+
+- (void)removeRootOutputAction:(id) __unused sender {
+	NSInteger row = _outputsTable.selectedRow;
+	NSArray<RptqQueryField *> *outputs = [self rootOutputFields];
+	if (row < 0 || (NSUInteger)row >= outputs.count) return;
+	RptqQueryField *field = outputs[(NSUInteger)row];
+	field.outputKey = nil;
+	field.outputIndex = 0;
+	[self reindexRootOutputs];
+	[_document notifyDocumentMutated];
+	[self refreshOutputPopoverControls];
+}
+
+- (void)moveRootOutputUpAction:(id) __unused sender {
+	NSInteger row = _outputsTable.selectedRow;
+	NSArray<RptqQueryField *> *outputs = [self rootOutputFields];
+	if (row <= 0 || (NSUInteger)row >= outputs.count) return;
+	RptqQueryField *a = outputs[(NSUInteger)(row - 1)];
+	RptqQueryField *b = outputs[(NSUInteger)row];
+	int64_t tmp = a.outputIndex; a.outputIndex = b.outputIndex; b.outputIndex = tmp;
+	[_document notifyDocumentMutated];
+	[self refreshOutputPopoverControls];
+	[_outputsTable selectRowIndexes:[NSIndexSet indexSetWithIndex:(NSUInteger)(row - 1)] byExtendingSelection:NO];
+}
+
+- (void)moveRootOutputDownAction:(id) __unused sender {
+	NSInteger row = _outputsTable.selectedRow;
+	NSArray<RptqQueryField *> *outputs = [self rootOutputFields];
+	if (row < 0 || (NSUInteger)row >= (NSInteger)outputs.count - 1) return;
+	RptqQueryField *a = outputs[(NSUInteger)row];
+	RptqQueryField *b = outputs[(NSUInteger)(row + 1)];
+	int64_t tmp = a.outputIndex; a.outputIndex = b.outputIndex; b.outputIndex = tmp;
+	[_document notifyDocumentMutated];
+	[self refreshOutputPopoverControls];
+	[_outputsTable selectRowIndexes:[NSIndexSet indexSetWithIndex:(NSUInteger)(row + 1)] byExtendingSelection:NO];
+}
+
 #pragma mark - SQL Query Mode (Sync, Validate, Compile & Apply)
 
+- (nullable MADQueryFull *)queryFullForSelectedLeaf {
+	RptqQuery *query = self.selectedQuery;
+	RptqDatabase *databaseModel = query.inDatabase;
+	if (databaseModel == nil) return nil;
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection:databaseModel.ownedByUser];
+	if (connection == nil) return nil;
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection:connection];
+	if (database == nil) return nil;
+	NSUInteger limit = self.document.headlessDocument.limitResultsDesignMode ? 50 : NSUIntegerMax;
+	MADQueryFull *full = [[MADQueryFull alloc] initWithQuery:query andQueryLimit:limit];
+	full.database = database;
+	full.dataDelegate = self.document.headlessDocument;
+	return full;
+}
+
 - (NSString *)generatedSQLString {
+	RptqQuery *query = self.selectedQuery;
+	if (query == nil || _editingRoot || _editingComposingNode || [query isComposing]) {
+		// A composing node (including an empty root, which is not `isComposing`) is
+		// compiled from its sources by the refresh coordinator; there is no single
+		// source statement to show.
+		return @"";
+	}
 	[_document.headlessDocument invalidateQueryAndModelCaches];
+	RptqStoreContext *context = _document.managedObjectContext;
+
+	// A non-root leaf compiles against its own database and dialect, not the document's
+	// default query (which may be a different source entirely).
+	MADQueryFull *compiler = [_document queryIsReportRoot:query]
+		? _document.headlessDocument.mainQuery
+		: [self queryFullForSelectedLeaf];
+
 	NSError *allFieldsErr = nil;
-	NSString *generated = [_document.headlessDocument.mainQuery SQLOnlyActiveFields:NO
-															   managedObjectContext:_document.managedObjectContext
-																			  error:&allFieldsErr];
+	NSString *generated = [compiler SQLOnlyActiveFields:NO
+								   managedObjectContext:context
+												  error:&allFieldsErr];
 	if (generated.length == 0) {
 		NSError *activeErr = nil;
-		generated = [_document.headlessDocument.mainQuery copySQLWithManagedObjectContext:_document.managedObjectContext
-																					error:&activeErr];
+		generated = [compiler copySQLWithManagedObjectContext:context error:&activeErr];
 	}
 	return generated ?: @"";
 }
 
 - (void)syncSQLFromVisualQuery:(id) __unused sender {
-	NSString *entered = _document.rptqQuery.sqlSourceText ?: @"";
+	NSString *entered = self.selectedQuery.sqlSourceText ?: @"";
 	_sqlSourceTabControl.hidden = (entered.length == 0);
 	NSString *generated = [self generatedSQLString];
 	if (_sqlSourceTabControl.selectedSegment == 1 && entered.length > 0) {
@@ -2325,7 +3052,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (NSDictionary<NSString *, NSArray<NSString *> *> *)schemaDictionaryForParser {
-	RptqDatabase *db = _document.rptqDatabase;
+	RptqDatabase *db = [self selectedDatabase];
 	NSMutableDictionary<NSString *, NSArray<NSString *> *> *schemaMap = [[NSMutableDictionary alloc] init];
 	for (RptqDatabaseSchemaTable *st in db.hasTables) {
 		if (st.name.length == 0) continue;
@@ -2339,13 +3066,19 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)validateSQLAction:(id) __unused sender {
+	RptqQuery *selected = self.selectedQuery;
+	if (_editingRoot || _editingComposingNode || (selected != nil && [selected isComposing])) {
+		_sqlStatusLabel.textColor = [NSColor systemRedColor];
+		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
+		return;
+	}
 	NSString *sql = [_sqlTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	if (sql.length == 0) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
 		_sqlStatusLabel.stringValue = NSLocalizedString(@"Enter a SELECT statement to validate.", @"Status line when Validate SQL is clicked with an empty editor.");
 		return;
 	}
-	RptqDatabase *db = _document.rptqDatabase;
+	RptqDatabase *db = [self selectedDatabase];
 	NSError *err = nil;
 	MADSQLParser *parser = [[MADSQLParser alloc] initWithSQL:sql
 								   identifierQuoteCharacters:[MADDatabase identifierQuoteCharacters]
@@ -2372,11 +3105,17 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)compileAndApplySQL:(id) __unused sender {
+	RptqQuery *selectedQuery = self.selectedQuery;
+	if (_editingRoot || _editingComposingNode || (selectedQuery != nil && [selectedQuery isComposing])) {
+		_sqlStatusLabel.textColor = [NSColor systemRedColor];
+		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
+		return;
+	}
 	NSString *sql = [_sqlTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	if (sql.length == 0) return;
 
-	RptqDatabase *db = _document.rptqDatabase;
-	RptqQuery *query = _document.rptqQuery;
+	RptqDatabase *db = [self selectedDatabase];
+	RptqQuery *query = self.selectedQuery;
 	RptqStoreContext *ctx = _document.managedObjectContext;
 	MADHeadlessDocument *headless = _document.headlessDocument;
 	if (db == nil || query == nil || ctx == nil || headless == nil) return;
@@ -2423,9 +3162,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 #pragma mark - NSTableViewDataSource & Delegate (Schema Table List + Popover Tables)
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	if (tableView == _schemaTablesTable) return (NSInteger)_schemaTables.count;
+	if (tableView == _schemaTablesTable) return (_editingRoot || _editingComposingNode) ? (NSInteger)_upstreamQueries.count : (NSInteger)_schemaTables.count;
 	if (tableView == _predicatesTable) return (NSInteger)_queryPredicates.count;
 	if (tableView == _groupsTable) return (NSInteger)_queryGroups.count;
+	if (tableView == _outputsTable) return (NSInteger)[self rootOutputFields].count;
 	return 0;
 }
 
@@ -2433,7 +3173,15 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSString *text = @"";
 	BOOL isSchemaInQuery = NO;
 
-	if (tableView == _schemaTablesTable && (NSUInteger)row < _schemaTables.count) {
+	if (tableView == _schemaTablesTable && (_editingRoot || _editingComposingNode) && (NSUInteger)row < _upstreamQueries.count) {
+		RptqQuery *source = _upstreamQueries[(NSUInteger)row];
+		BOOL added = NO;
+		for (RptqQueryTable *qt in _queryTables) {
+			if (qt.upstreamQuery == source) { added = YES; break; }
+		}
+		isSchemaInQuery = added;
+		text = added ? [NSString stringWithFormat:@"✓ %@", source.name ?: @""] : (source.name ?: @"");
+	} else if (tableView == _schemaTablesTable && !_editingRoot && (NSUInteger)row < _schemaTables.count) {
 		RptqDatabaseSchemaTable *st = _schemaTables[(NSUInteger)row];
 		NSUInteger inQueryCount = 0;
 		for (RptqQueryTable *qt in _queryTables) {
@@ -2449,16 +3197,20 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		}
 	} else if (tableView == _predicatesTable && (NSUInteger)row < _queryPredicates.count) {
 		RptqQueryPredicate *pred = _queryPredicates[(NSUInteger)row];
-		NSString *lhs = pred.hasLeftField
-			? [NSString stringWithFormat:@"%@.%@", pred.hasLeftField.inQueryTable.alias ?: @"", pred.hasLeftField.databaseSchemaField.name ?: @""]
-			: (pred.leftFieldID ?: @"");
-		NSString *rhs = pred.hasRightField
-			? [NSString stringWithFormat:@"%@.%@", pred.hasRightField.inQueryTable.alias ?: @"", pred.hasRightField.databaseSchemaField.name ?: @""]
-			: (pred.rightFieldID ?: @"");
+		NSString *lhs = pred.hasLeftField ? [self displayLabelForQueryField:pred.hasLeftField] : (pred.leftFieldID ?: @"");
+		NSString *rhs = pred.hasRightField ? [self displayLabelForQueryField:pred.hasRightField] : (pred.rightFieldID ?: @"");
 		text = [NSString stringWithFormat:@"%@ %@ %@", lhs, [pred symbolForDisplay] ?: @"==", rhs];
 	} else if (tableView == _groupsTable && (NSUInteger)row < _queryGroups.count) {
 		RptqQueryGroup *grp = _queryGroups[(NSUInteger)row];
-		text = [NSString stringWithFormat:@"%ld. %@ (%@)", (long)(row + 1), [grp fieldNameNice] ?: @"", [grp sortDisplayNice] ?: @"ASC"];
+		NSString *field = [grp fieldNameNice] ?: @"";
+		text = [NSString stringWithFormat:@"%ld. %@ (%@)", (long)(row + 1), field, [grp sortDisplayNice] ?: @"ASC"];
+	} else if (tableView == _outputsTable) {
+		NSArray<RptqQueryField *> *outputs = [self rootOutputFields];
+		if ((NSUInteger)row < outputs.count) {
+			RptqQueryField *output = outputs[(NSUInteger)row];
+			text = [[NSString alloc] initWithFormat:@"%ld. %@ ← %@", (long)(row + 1),
+					output.outputKey ?: @"", [self displayLabelForQueryField:output]];
+		}
 	}
 
 	NSTextField *cell = [tableView makeViewWithIdentifier:@"Cell" owner:self];
@@ -2473,7 +3225,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		cell.font = isSchemaInQuery
 			? [NSFont systemFontOfSize:12.0 weight:NSFontWeightSemibold]
 			: [NSFont systemFontOfSize:12.0 weight:NSFontWeightRegular];
-		cell.toolTip = NSLocalizedString(@"Double-click to add table to query", @"Tooltip on a schema table row.");
+		cell.toolTip = _editingRoot
+			? NSLocalizedString(@"Double-click to use this source as a table in the root", @"Tooltip on a source query row when editing the root.")
+			: (_editingComposingNode
+				? NSLocalizedString(@"This source is itself a composition. Its tables are the sources it joins.", @"Note in the query sidebar when a source that is itself a composition is selected.")
+				: NSLocalizedString(@"Double-click to add table to query", @"Tooltip on a schema table row."));
 	} else {
 		cell.font = [NSFont systemFontOfSize:12.0];
 	}

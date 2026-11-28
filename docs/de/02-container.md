@@ -68,3 +68,26 @@ Additional-Content-Protokolls von `UIManagedDocument`.
 
 Die Version wird als `double` geschrieben (`MADocument.m:611`) und liest sich in
 den Beispielen als Ganzzahl zurück. Konsumenten sollten beide Formen akzeptieren.
+
+### Der Kompositions-Header `1.1`
+
+Ein zusammengesetztes Dokument schreibt Formatversion **1.1** statt 1.0 und fügt
+neben `meta.plist` ein Mitglied `requirements.plist` hinzu. Der Datensatz ist eine
+kleine Plist:
+
+```xml
+{
+  "format" => 1,
+  "requiredCapabilities" => ["query-composition"]
+}
+```
+
+Ein Leser prüft jede erforderliche Fähigkeit gegen den Build, bevor er den Speicher
+öffnet; eine unbekannte Fähigkeit, ein fehlender Datensatz oder ein fehlerhafter
+Datensatz erzeugt einen umsetzbaren „upgrade MAD Designer“-Fehler statt das Dokument
+falsch zu lesen. Ein gewöhnlicher Bericht bleibt **1.0** ohne Requirements-Mitglied —
+der Datensatz ist eine Ergänzung, sodass der Rest des Containers unverändert bleibt.
+Die Versionskonstanten sind `MADFileFormatMajorVersion`,
+`MADFileFormatMinorVersion` und `MADFileFormatCompositionMinorVersion` in
+`MAD/Source/MADConstants.m`; das Archiv schreibt und prüft den Datensatz in
+`MADArchiveManager.m`.

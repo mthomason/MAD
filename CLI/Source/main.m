@@ -30,6 +30,7 @@ int main(int argc, const char *argv[]) {
 			return MADCLIExitSuccess;
 		}
 
+		if ([invocation.command isEqualToString: @"version"])	return MADCLIRunVersion(invocation);
 		if ([invocation.command isEqualToString: @"inspect"])	return MADCLIRunInspect(invocation);
 		if ([invocation.command isEqualToString: @"schema"])		return MADCLIRunSchema(invocation);
 		if ([invocation.command isEqualToString: @"query"])		return MADCLIRunQuery(invocation);

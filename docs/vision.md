@@ -6,9 +6,10 @@ description: "MAD's direction: from reports to composable data objects, an embed
 
 # The Direction: From Reports to Composable Data
 
-Updated 2026-11-22. This page states the direction MAD is designed to grow
+Updated 2026-11-27. This page states the direction MAD is designed to grow
 into. It separates what ships today from what is proposed, and it links the
 public design records rather than the internal working notes: the
+[composition guide](composition.html), the
 [data-object design](developers/data-object.html), the
 [multi-source reports](developers/multi-source.html), and the
 [format specification](README.html).
@@ -32,6 +33,11 @@ The engine already has the pieces a broader direction needs:
   returning a schema and rows as a table.
 * Local SQLite materialization (`MADDataTableFast`) that makes groupings,
   aggregates, and repeated rendering practical on a phone.
+* Same-document **composition**: a `.mad` document can hold a graph of
+  reports — a **Result** plus its **sources** — where every node keeps its
+  own query, connection, layout, and materialized table. The document
+  declares the `query-composition` capability, and MAD Designer for macOS
+  and Windows author and view every report in the graph.
 * Native iOS and macOS applications, a native Windows application, and the
   same engine running headlessly on Linux and Windows through `mad serve`
   and the `mad` CLI.
@@ -43,34 +49,38 @@ treats the two identically.
 
 ## Where it is going
 
-The directions below are proposals. They build on the architecture above,
-but none of them ships today unless this page says it does.
+The directions below build on the architecture above. Some of them ship
+today — same-document composition is in MAD Designer for macOS and Windows
+0.8 — and the sections say which parts are built and which remain proposals.
 
 ### Composable data objects
 
 In a database, you select from base tables like `employee` or `sales_data`.
 A report links multiple tables together, and its output is an ad hoc,
-materialized SQLite table. Today nothing can point a query at another
-report's output: the result cache exists, but it is keyed by a filename hash
-rather than an addressable identity.
+materialized SQLite table. **Within one document, composition now does
+exactly that:** the Result queries its sources' materialized tables, and every
+source is addressed as a table another report joins. A source is a complete
+report — query, layout, and rows — not a bare table. See the
+[composition guide](composition.html).
 
-Giving that output a stable identity would make the result of one report a
-table other reports can select from and join against. A report built on a
-report becomes a directed acyclic graph of derived tables — a portable
-semantic layer where designing a report is also designing a reusable data
-source. The [data-object design](developers/data-object.html) describes the
-model and what formalizing it takes.
+What is not built is a **stable identity shared across documents**, so a
+report in one `.mad` can point at a report in another. The result cache is
+keyed by a filename hash rather than an addressable identity, and
+cross-document composition is deferred. Giving the output that identity would
+extend the in-document graph into a portable semantic layer across files. The
+[data-object design](developers/data-object.html) describes the model and what
+formalizing it takes.
 
 ### Multi-source local materialization
 
 Every driver materializes its result set into the same local SQLite table
-representation. Once a document can hold multiple query definitions and
-address each output as a table, one report could join a PostgreSQL table to a
-SQL Server table to a MySQL table — combined locally in SQLite without a
-federation server in the middle. Each source understands its own data; MAD
-understands the resulting tables. The [multi-source
-design](developers/multi-source.html) records the architecture and the
-phases, not all of which are built.
+representation. **This ships today inside one document:** a Composition Report
+can join a PostgreSQL table to a SQL Server table to a MySQL table — combined
+locally in SQLite without a federation server in the middle. Each source
+understands its own data; MAD understands the resulting tables. The
+[multi-source design](developers/multi-source.html) records the architecture;
+same-document composition is built, while cross-document federation remains
+ahead.
 
 ### Embedded and headless use
 
@@ -199,10 +209,10 @@ platform dependencies.
 
 ## What this is not
 
-A promise, a roadmap with dates, or a claim that the proposals above ship.
-This page records a direction. Each capability still has to be designed,
-tested, and documented the way everything else in the repository is, and
-some of these directions may change as they are built.
+A promise, a roadmap with dates, or a claim that every proposal above ships.
+This page records a direction. Same-document composition is built today; the
+other directions still have to be designed, tested, and documented the way
+everything else in the repository is, and some may change as they are built.
 
 ## The guiding principle
 

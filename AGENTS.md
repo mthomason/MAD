@@ -202,6 +202,10 @@ the headless side.
   the language, the formula-element integration map, the engine alternatives, and the
   licensing surface. The engine decision is deferred by the user; when the formula-element
   work starts, the implementing agent must ask the user to choose the engine (§8).
+* `docs/project/design/MAD_QUERY_COMPOSITION.md` -- the same-document composition implementation plan:
+  the target behaviour, the audit, the recorded decisions, and the landed checkpoints (the
+  production `MADComposer`, store revision 3, container 1.1 and the capability record), plus the
+  work still open before Checkpoint E.
 * `docs/archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
   design: complete and archived 2026-10-22 (docs/project/registers/TASKS.md §15); kept for reference.
 * `docs/macos.md` -- the user and developer guide for the native macOS (`AppKit`) application, served on the documentation site (`macos.html`).

@@ -19,6 +19,10 @@
 - (BOOL)archive:(BOOL)overwrite;
 - (BOOL)unarchive;
 
+/// Like -unarchive, but an unsupported container version fills `error` with the
+/// upgrade message instead of looking like an unreadable archive.
+- (BOOL)unarchiveWithError:(NSError * __autoreleasing *)error;
+
 /// Whether the store was checkpointed before archiving, recorded as bit 0 of the v1
 /// header's flags.  The caller decides this and sets it before -archive:.
 @property (nonatomic, assign) BOOL checkpointed;
@@ -30,6 +34,17 @@
 /// the same members are then equal on any machine and on either platform, which is
 /// what the user's .mad byte-identity requirement needs (docs/project/registers/BUGS.md, that entry).
 @property (nonatomic, assign) BOOL reproducible;
+
+/// YES when the document is composed: the archive is written as container 1.1 and
+/// carries a versioned requirements record declaring `query-composition`.  Set
+/// before -archive:, the way -checkpointed is.
+@property (nonatomic, assign) BOOL composed;
+
+/// Reads the requirements record in the (already-extracted) file wrapper and
+/// checks every required capability against this build.  A missing or malformed
+/// record, or an unknown required capability, fills `error`.  Called by
+/// -unarchiveWithError: for a 1.1 container.
+- (BOOL)checkRequirementsWithError:(NSError * __autoreleasing *)error;
 
 @end
 

@@ -99,6 +99,12 @@ what to run before the Linux suite or the CLI's `--verify --live`; all three
 containers publish on every interface because the Linux image and the CLI
 fixtures reach the Mac by name (`mac`), not by loopback.
 
+The cross-database composition sample needs one extra table,
+`composition_demo`, in each server. `Samples/setup-databases.sh up` (or
+`Samples/setup-databases.ps1 -Action up` on Windows) runs the `up` above and
+seeds it; `./Samples/setup-databases.sh status` reports the row counts. See
+[`Samples/README.md`](../../../Samples/README.md).
+
 The first `up` is the slow one: MySQL pulls ~600 MB and imports ~168 MB of SQL
 (a few minutes); SQL Server pulls ~1.5 GB, starts, and restores the 8 MB
 AdventureWorks backup (a minute or two); PostgreSQL pulls ~160 MB and loads the

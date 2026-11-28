@@ -44,6 +44,40 @@ public partial class DesignerView : UserControl
         }
     }
 
+    /// <summary>Prepares the band context menu for the band under the pointer. Right-clicking a
+    /// band selects it (in the list and in the inspector), and the visibility item's label
+    /// follows the band's current state. Right-clicking empty space closes the menu.</summary>
+    private void SectionsList_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (ItemsControl.ContainerFromElement(SectionsList, e.OriginalSource as DependencyObject)
+            is not ListBoxItem item || item.DataContext is not LayoutSection section)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        SectionsList.SelectedItem = section;
+        _designer?.SelectSection(section.Id);
+        ToggleSectionVisibilityItem.Header =
+            Localizer.Get(section.Visible ? "Designer.Section.Hide" : "Designer.Section.Show");
+    }
+
+    private void SelectSection_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_designer != null && SectionsList.SelectedItem is LayoutSection section)
+        {
+            _designer.SelectSection(section.Id);
+        }
+    }
+
+    private async void ToggleSectionVisibility_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_designer != null && SectionsList.SelectedItem is LayoutSection section)
+        {
+            await _designer.ToggleSectionVisibilityAsync(section.Id);
+        }
+    }
+
     private async void FieldsList_OnDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (_designer != null && FieldsList.SelectedItem is LayoutField field)

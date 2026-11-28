@@ -28,7 +28,7 @@ Every `.mad` file created or edited on macOS is byte-compatible with the iPad/iP
 
 ## Workspaces
 
-Each open `.mad` document runs in a native `NSDocument` window (`MADMacDocument` / `MADMacWindowController`) with a centered **Workspace** segmented control in the window toolbar (`Cmd+1`, `Cmd+2`, `Cmd+3`) that switches between the three reporting stages:
+Each open `.mad` document runs in a native `NSDocument` window (`MADMacDocument` / `MADMacWindowController`) with a centered **Workspace** segmented control in the window toolbar (`Cmd+1`, `Cmd+2`, `Cmd+3`) that switches between the three reporting stages. A report opens in the Query workspace the first time and afterwards in the workspace it was last shown in; the window subtitle names its type (**Standard Report** or **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -91,6 +91,34 @@ The **MAD Viewer** workspace (`MADMacViewerViewController`) refreshes the query 
     * **JSON Full Report (`.json`)** — hierarchical sections, groups, and evaluated elements (`MADReportExporterJSONReport`)
     * **Plain Text (`.txt`)** — monospace text table (`MADReportExporterText`)
 * **Framed Page Preview & Status Bar:** Renders crisp, drop-shadowed pages inside a native `PDFView` and reports the rendered page count, cached row count, and paper dimensions in the bottom status bar.
+
+---
+
+## Composition Reports
+
+A **Composition Report** combines several reports into one `.mad` document. It is the
+desktop way to join data from different databases — MySQL, PostgreSQL, SQL Server, and
+SQLite — without a federation server. See [the composition guide](composition.html) for
+the concept and the cross-database samples.
+
+* **Toolbar Navigation picker:** a Composition Report adds a **Navigation** popup. It
+  lists the **Result** first (*Result — <name>*) and then each source.
+  Selecting a report switches the Query, Designer, and Viewer workspaces together; it
+  never changes the active workspace.
+* **Every source is a report:** selecting a source shows its own query in MAD Query, its
+  own bands and field list in MAD Designer, and its own pages in MAD Viewer. A source
+  with no layout yet is still a report of rows: the Viewer shows a row grid, and the
+  Designer offers to author its layout.
+* **Per-source credentials:** a composition asks for one password per source on refresh,
+  with driver, host, port, database, and username prefilled. Passwords stay in the
+  Keychain or the current session and are never written into the `.mad`.
+
+
+**Creating a composition:** **File ▸ New Composition…** chooses existing reports and a
+destination; **File ▸ New Document…** offers Standard and Composition Report types; **File
+▸ Convert to Composition…** converts the open standard report into a one-source
+composition. The MAD Query workspace's Add menu also adds a source query from a database
+connection or imports an existing report into the open composition.
 
 ---
 

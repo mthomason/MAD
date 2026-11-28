@@ -16,8 +16,13 @@
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
 
 #import <MAD/MADConstants.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqQuery.h>
 
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
@@ -112,10 +117,49 @@ static NSError *MADCLIDocumentError(NSString *message) {
 #pragma mark - Refresh
 
 - (BOOL)refreshWithCredentials:(MADCredential *)credentials error:(NSError **)error {
+	return [self refreshWithCredentials: credentials sourceCredentials: nil error: error];
+}
+
+- (BOOL)refreshWithCredentials:(MADCredential *)credentials
+			sourceCredentials:(NSDictionary<NSNumber *, MADCredential *> *)sourceCredentials
+						 error:(NSError **)error {
 
 	id <MADDocumentDataProtocol> document = self.document;
 	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
 	queue.maxConcurrentOperationCount = 1;
+
+	// A composed document runs its own refresh: each source, then the join.  The
+	// operation below is the same MADOperation the app's refresh would build for an
+	// ordinary document, and the composed one is the engine's, so the CLI stays a
+	// thin adapter over the shared engine work.
+	if ([MADOperationRefresh documentUsesComposedRefresh: document]) {
+		MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+		// The caller's map is keyed by query id, so pass it as-is and keep a resolved
+		// connection-string map for callers and tests that use that shape.  The query-id
+		// map is preferred, which is what lets two sources on one connection string hold
+		// different credentials; the single credential stays the last fallback.
+		refresh.credentialsByQueryIdentifier = sourceCredentials;
+		refresh.credentialsByConnectionString = [self credentialsByConnectionStringForSources: sourceCredentials];
+		if (credentials != nil) {
+			MADCLICredentialsOperation *holder = [[MADCLICredentialsOperation alloc] init];
+			holder.credentials = credentials;
+			[refresh addDependency: holder];
+			[queue addOperation: holder];
+		}
+		[queue addOperation: refresh];
+
+		while (queue.operationCount > 0) {
+			@autoreleasepool {
+				[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode
+										 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+			}
+		}
+		if (refresh.errors.count > 0) {
+			if (error) *error = refresh.errors.firstObject;
+			return NO;
+		}
+		return YES;
+	}
 
 	MADOperationRefreshInitializeMainDataTable *initializeTable =
 		[[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument: document];
@@ -154,6 +198,34 @@ static NSError *MADCLIDocumentError(NSString *message) {
 		return NO;
 	}
 	return YES;
+}
+
+/// Maps the query-id credentials a caller supplied to the connection strings the
+/// engine's composed refresh is keyed by.  A query the document does not contain, or
+/// one with no source database, is skipped: the engine reports the source that fails.
+- (NSDictionary<NSString *, MADCredential *> *)credentialsByConnectionStringForSources:
+		(NSDictionary<NSNumber *, MADCredential *> *)sourceCredentials {
+	if (sourceCredentials.count == 0) return @{};
+
+	id <MADDocumentDataProtocol> document = self.document;
+	NSURL *documentURL = [document respondsToSelector: @selector(fileURL)] ? [(id)document fileURL] : nil;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+
+	NSMutableDictionary<NSString *, MADCredential *> *byConnectionString = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			MADCredential *credential = sourceCredentials[@(query.identifier)];
+			if (credential == nil) continue;
+			RptqDatabase *queryDatabase = query.inDatabase;
+			if (queryDatabase.ownedByUser == nil) continue;
+			NSObject <MADConnectionsPropertiesProtocol> *user =
+				(NSObject <MADConnectionsPropertiesProtocol> *)queryDatabase.ownedByUser;
+			MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: user documentURL: documentURL];
+			NSString *key = connection.connectionString;
+			if (key.length > 0) byConnectionString[key] = credential;
+		}
+	}
+	return byConnectionString;
 }
 
 @end

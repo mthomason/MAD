@@ -11,14 +11,26 @@ Esta página define el objeto de datos: la definición de un informe, su esquema
 
 **Alcance:** el concepto planteado el 2026-10-16 — qué es un objeto de datos, cómo se representa en
 este código base, y qué se necesita para formalizarlo. El montaje multi-origen / subinforme descrito
-en la misma conversación se escribe aquí como consecuencia del contrato, deliberadamente
-no construido.
-**Fecha:** 2026-10-16, leído en `445794e11`.
-**Estado:** documento de diseño. Propone; no implementa nada, y nada aquí está
-programado. [la visión del proyecto](../vision.html) §1 — "un informe es una función de orígenes de datos a una tabla" — es
-la visión que este archivo hace concreta y para la que nombra el código.
+en la misma conversación se escribe aquí como consecuencia del contrato; su
+mitad dentro del mismo documento ya está construida.
+**Fecha:** 2026-10-16, leído en `445794e11`; estado actualizado el 2026-11-27.
+**Estado:** registro de diseño, parcialmente realizado. La composición dentro del mismo documento se distribuye en MAD
+Designer para macOS y Windows 0.8: un documento `.mad` contiene un grafo de informes, cada uno con
+su propia consulta, diseño y tabla materializada. El análisis siguiente se conserva como el
+registro que condujo a ello; §5 y §7 marcan lo construido y lo que sigue diferido. La guía pública
+es [Informes de composición](../composition.html). [la visión del proyecto](../vision.html) §1 —
+"un informe es una función de orígenes de datos a una tabla" — es la visión que este archivo hace
+concreta y para la que nombra el código.
 
 ---
+
+> **Decisión final sobre la composición (2026-11-26):** el esbozo de composición de §5
+> (incluida su recomendación de Diseño B, §5.1/§9.2) queda sustituido por el documento
+> normativo [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md), que
+> adopta el Diseño A (`ATTACH`, un `.maddb` por nodo). La §0 de la especificación es
+> **definitiva**: cada nodo de una composición es un informe completo con su propio diseño y
+> datos; la raíz es el informe predeterminado del documento, no el único. Combinar informes
+> conserva el diseño y el resultado de cada hijo.
 
 ## 1. La idea, y lo que no es
 
@@ -302,11 +314,16 @@ Forma mínima, recomendada:
 La alternativa más pesada — una nueva entidad `RptqDataObject` dueña de la definición, con
 `RptqQuery` degradado — tiene mejor nomenclatura y una migración más grande. Registrada como decisión 9.1.
 
-## 5. Composición — el montaje de subinformes, documentado, no construido
+## 5. Composición — el montaje de subinformes, construido dentro del mismo documento
 
-**Esta sección deliberadamente no está programada** (el usuario, 2026-10-16: *"I don't want to rig it
-up… but I want to document this idea"*). Existe para que, cuando se quiera, sea un plan
-en lugar de un descubrimiento.
+**Estado: construido dentro del mismo documento (2026-11-27).** El mecanismo de esta sección es lo que se distribuyó: una
+composición es un grafo de informes completos, materializados en orden, y el informe compuesto
+une las tablas de sus hijos localmente. La posición anterior —documentada pero deliberadamente
+sin programar (el usuario, 2026-10-16: *"I don't want to rig it up… but I want to document this
+idea"*)— es historia. La decisión normativa
+([`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md) §0) hace que cada nodo
+de una composición sea un informe completo con su propio diseño y datos. La composición entre documentos y
+una identidad estable compartida entre archivos siguen diferidas.
 
 ### 5.1 El mecanismo, con precisión
 
@@ -330,16 +347,24 @@ La versión de una línea, que es toda la razón por la que esto es un montaje y
 resultado de toda consulta ya es una tabla SQLite, y SQLite ya es un controlador.** El
 motor de federación está en la caja; actualmente se direcciona por un hash de nombre de archivo.
 
-### 5.2 Qué se construiría, si se quisiera
+### 5.2 Qué se construyó y qué queda
 
-1. El contrato de §4 (describe/execute, identidad, dirección) — un requisito previo, no una fase.
-2. El tipo de origen: `RptqQueryTable` → objeto de datos; la generación de SQL lo resuelve a la
-   tabla de materialización del objeto en lugar de `db.table`.
-3. El orden de ejecución: recorrer el DAG; actualizar objetos obsoletos; luego la consulta compuesta.
-4. El telescopaje del diseñador (palabra del usuario): en el panel Add Table, un segundo tipo de
-   origen junto a las tablas de esquema — los otros objetos de datos del documento, o una caja de subinforme que
-   lista los campos de salida del otro objeto. La interfaz de unión no cambia; ambos extremos son campos.
-5. Soporte de `ATTACH` en `MADDatabaseSqlite3` si y cuando se quiera composición entre archivos.
+Distribuido (dentro del mismo documento):
+
+1. El contrato de §4 (describe/execute, identidad, dirección).
+2. El tipo de origen: una tabla de consulta cuyo origen ascendente es otra consulta; la compilación de SQL la resuelve
+   a la tabla materializada del hijo en lugar de `db.table`.
+3. El orden de ejecución: un recorrido topológico materializa cada nodo, el informe compuesto al final.
+4. El telescopaje del diseñador (palabra del usuario): una superficie Importar informe / Agregar origen junto a
+   las tablas de esquema, con el grafo de composición y los informes por nodo en los tres espacios de trabajo.
+5. `ATTACH DATABASE` en la ruta de SQLite para una tabla materializada por nodo.
+
+Diferido:
+
+* La composición entre documentos —un origen que vive en un archivo `.mad` *diferente*, con identidad
+  de documento, resolución de rutas y política de credenciales—.
+* Una dirección estable compartida entre documentos (la etiqueta de materialización sigue indexada por el
+  hash del nombre de archivo del documento).
 
 ### 5.3 Qué hace que no sea una sola línea
 
@@ -401,18 +426,19 @@ cambio de §3 que retira.
 | 2 | **La consulta se posee a sí misma.** `MADQueryFull` toma la consulta que se le dio (sin relectura del documento); `-dataTableForQuery:` resuelve por consulta; `MADQueryActiveQueryFields` se limita a una consulta; `MADModelDocument` refleja cualquier consulta. Un documento, muchos objetos. | Los tres puntos de cableado fijo de §3.6 |
 | 3 | **Identidad y dirección.** Nombra el objeto en el almacén; etiqueta las materializaciones por identificador de objeto, no por nombre de archivo; una tabla de resultados por objeto en la caché; plist de esquema por objeto. | Materialización con hash de nombre de archivo; una tabla por documento |
 | 4 | **El enlace y las superficies.** El diseño se enlaza al esquema de un objeto de datos; la CLI gana `describe`; la forma JSON se fija una vez (exportación + API + IA). | Enlace a "la consulta del documento" |
-| 5 | **Composición** (§5), solo cuando se pida. | — |
+| 5 | **Composición** (§5): dentro del mismo documento, distribuida en 0.8. La composición entre documentos sigue diferida. | — |
 
 La fase 1 es la carga real del diseño y la más pequeña: no necesita cambio de almacén, ni cambio de interfaz,
 ni formato nuevo — reordena código que ya existe, y es demostrable por las suites actuales más una
 afirmación de esquema sobre una consulta de cero filas. Las fases 2–4 son la misma idea
-aplicada a las capas que sostienen la suposición de consulta única. La fase 5 es el montaje, documentado,
-sin programar.
+aplicada a las capas que sostienen la suposición de consulta única. La fase 5 se distribuyó como
+composición dentro del mismo documento; la composición entre documentos sigue diferida.
 
 ## 8. Qué no hacer
 
-- **No construyas el montaje multi-origen ahora.** Decisión del usuario, 2026-10-16; este documento es
-  el registro, no un elemento de cola. (Se aplican las convenciones de `TASKS.md`/`BUGS.md`: nada aquí se
+- **No construyas la composición entre documentos ahora.** La composición dentro del mismo documento ya está distribuida; una
+  referencia a un informe en otro archivo `.mad` sigue siendo una pieza de trabajo separada y diferida.
+  (Se aplican las convenciones de `TASKS.md`/`BUGS.md`: nada aquí se
   inicia por iniciativa del agente.)
 - **No comprimas ni rediseñes la caché.** Es fundamental, el diseño de dos pasadas la necesita,
   y `MAD_FORMAT.md` §5.1 es el análisis vigente.

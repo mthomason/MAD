@@ -59,6 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// The same, without the open: the accessors read the store lazily.
 - (instancetype)initWithFileURL:(NSURL *)url;
 
+/// Creates an empty `.mad` document at `url` -- the document row and its default
+/// report sections, but no database connection or schema. The composition flows
+/// import child reports into it. Returns nil with `error` when it cannot.
++ (nullable instancetype)createEmptyDocumentAtURL:(NSURL *)url
+											error:(NSError * _Nullable __autoreleasing *)outError;
+
 @property (readonly, nonatomic, copy) NSURL *fileURL;
 @property (readonly, nonatomic, copy) NSString *filename;
 
@@ -91,6 +97,21 @@ NS_ASSUME_NONNULL_BEGIN
 /// Updates both the persisted `RptqDatabaseCredentals` row in `storeContext` and
 /// the active `database` instance to reflect `databaseConnection`.
 - (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
+
+/// Updates only one query's source database, leaving the document-level connection
+/// and every sibling source untouched — how a composition edits the connection of a
+/// single source.  Answers NO, with `error`, when the query does not exist or has no
+/// source database.
+- (BOOL)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+             forQueryIdentifier:(int64_t)queryIdentifier
+                           error:(NSError * _Nullable __autoreleasing *)error;
+
+/// The publication's commit point: writes the staged column map over the
+/// document's stable one.  Overridable so a test can fail a publication after the
+/// rows are staged.
+- (BOOL)writePublishedColumnMapData:(NSData *)data
+							  toURL:(NSURL *)url
+							  error:(NSError * _Nullable __autoreleasing *)error;
 
 @end
 

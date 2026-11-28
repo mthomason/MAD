@@ -29,7 +29,7 @@ Cada arquivo `.mad` criado ou editado no macOS é compatível byte a byte com os
 
 ## Workspaces
 
-Cada documento `.mad` aberto roda em uma janela `NSDocument` nativa (`MADMacDocument` / `MADMacWindowController`) com um controle segmentado **Workspace** centralizado na barra de ferramentas da janela (`Cmd+1`, `Cmd+2`, `Cmd+3`), que alterna entre os três estágios de construção e leitura do relatório:
+Cada documento `.mad` aberto roda em uma janela `NSDocument` nativa (`MADMacDocument` / `MADMacWindowController`) com um controle segmentado **Workspace** centralizado na barra de ferramentas da janela (`Cmd+1`, `Cmd+2`, `Cmd+3`), que alterna entre os três estágios de construção e leitura do relatório. Um relatório abre no workspace Query na primeira vez e, depois, no workspace em que foi exibido por último; o subtítulo da janela indica o tipo (**Standard Report** ou **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -92,6 +92,34 @@ O workspace **MAD Viewer** (`MADMacViewerViewController`) atualiza a consulta co
     * **JSON Full Report (`.json`)** — seções hierárquicas, grupos e elementos avaliados (`MADReportExporterJSONReport`)
     * **Plain Text (`.txt`)** — tabela de texto monoespaçado (`MADReportExporterText`)
 * **Pré-visualização de Página Emoldurada e Barra de Status:** Renderiza páginas nítidas com sombra projetada dentro de um `PDFView` nativo e informa o total de páginas renderizadas, a quantidade de linhas em cache e as dimensões do papel na barra de status inferior.
+
+---
+
+## Relatórios de Composição
+
+Um **Relatório de Composição** combina vários relatórios em um único documento `.mad`. É a
+maneira desktop de unir dados de bancos de dados diferentes — MySQL, PostgreSQL, SQL Server e
+SQLite — sem um servidor de federação. Consulte [o guia de composição](../composition.html) para
+o conceito e os exemplos entre bancos de dados.
+
+* **Seletor Navigation da barra de ferramentas:** um Relatório de Composição adiciona um popup **Navegação**.
+  Ele lista o **Resultado** primeiro (*Resultado — <nome>*) e depois cada fonte.
+  Selecionar um relatório alterna os workspaces MAD Query, MAD Designer e MAD Viewer juntos; ele
+  nunca muda o workspace ativo.
+* **Toda fonte é um relatório:** selecionar uma fonte mostra sua própria consulta no MAD Query, suas
+  próprias bandas e lista de campos no MAD Designer, e suas próprias páginas no MAD Viewer. Uma fonte
+  que ainda não tem layout continua sendo um relatório de linhas: o Viewer mostra uma grade de linhas, e o
+  Designer oferece criar seu layout.
+* **Credenciais por fonte:** uma composição pede uma senha por fonte ao atualizar,
+  com driver, host, porta, banco de dados e nome de usuário já preenchidos. As senhas ficam no
+  Keychain ou na sessão atual e nunca são gravadas no `.mad`.
+
+
+**Criando uma composição:** **File ▸ New Composition…** escolhe relatórios existentes e um
+destino; **File ▸ New Document…** oferece os tipos Standard e Composition Report; **File
+▸ Convert to Composition…** converte o relatório padrão aberto em uma composição
+de uma única fonte. O menu Add do workspace MAD Query também adiciona uma consulta de origem a partir de uma
+conexão de banco de dados ou importa um relatório existente para a composição aberta.
 
 ---
 

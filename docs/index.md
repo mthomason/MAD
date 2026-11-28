@@ -7,7 +7,7 @@ image: /assets/mad-icons-banner.png
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="assets/mad-designer-macos-icon-256.png" alt="MAD Designer icon" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.</strong></p>
 
-MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS and native macOS (`AppKit`), the headless engine that runs them on Linux and Windows, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh.
+MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS and native macOS (`AppKit`), the headless engine that runs them on Linux and Windows, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh. A **Composition Report** can combine several reports — each keeping its own query, layout, and data — into one document, joining MySQL, PostgreSQL, SQL Server, and SQLite without a federation server.
 
 The code is at
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed;
@@ -92,6 +92,9 @@ Read the [introduction to the specification](README.html) first, or jump to a ch
 * [MAD Designer for macOS](macos.html) — the native `AppKit` desktop app:
   visual query canvas, banded report designer with minimap and inspector,
   paginated viewer, and how to build or package it from source.
+* [Composition Reports](composition.html) — combine reports from several
+  databases into one portable `.mad` document; each source keeps its layout
+  and data, and the Result joins them.
 * [Build and test](https://github.com/mthomason/MAD#build-and-test) —
   the exact commands for the iOS suites, the native macOS suites, and the Linux build.
 * [The `mad` CLI](https://github.com/mthomason/MAD#try-it) — inspect,

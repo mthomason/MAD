@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, MADMacQueryWorkspaceMode) {
 	MADMacQueryWorkspaceModeSQL = 1,
 };
 
-@interface MADMacQueryViewController : NSViewController
+@interface MADMacQueryViewController : NSViewController <NSMenuItemValidation>
 
 @property (nonatomic, weak, nullable) MADMacDocument *document;
 @property (nonatomic, assign, readonly) MADMacQueryWorkspaceMode workspaceMode;
@@ -35,8 +35,35 @@ typedef NS_ENUM(NSInteger, MADMacQueryWorkspaceMode) {
 - (void)reloadFromDocument;
 - (void)switchToMode:(MADMacQueryWorkspaceMode)mode;
 
+/// The query the workspace edits (the document's selection, or its report query).
+- (nullable RptqQuery *)selectedQuery;
+
+/// State used by the menu bar to enable and title its commands.
+@property (nonatomic, assign, readonly) BOOL editingRootQuery;
+@property (nonatomic, assign, readonly) BOOL editingComposingNode;
+@property (nonatomic, assign, readonly) BOOL canAddSelectedTable;
+@property (nonatomic, assign, readonly) BOOL canCreateRoot;
+@property (nonatomic, assign, readonly) BOOL schemaSidebarVisible;
+
+/// Query authoring actions (also reachable from the menu bar and the top-bar menus).
+- (void)addSelectedSchemaTable:(nullable id)sender;
+- (void)addSourceQueryAction:(nullable id)sender;
+- (void)importChildQueryAction:(nullable id)sender;
+- (void)addRootQueryAction:(nullable id)sender;
+- (void)toggleOutputsPopover:(nullable id)sender;
+- (void)toggleFiltersPopover:(nullable id)sender;
+- (void)toggleGroupsPopover:(nullable id)sender;
+- (void)renameQueryAction:(nullable id)sender;
+- (void)autoArrangeTablesAction:(nullable id)sender;
+- (void)editDatabaseConnectionAction:(nullable id)sender;
+- (void)toggleSchemaSidebarAction:(nullable id)sender;
+
 /// Adds a database schema table (and all of its schema fields) to the query and places it on the visual canvas.
 - (nullable RptqQueryTable *)addSchemaTableToQuery:(RptqDatabaseSchemaTable *)schemaTable;
+
+/// Adds a source query as a table of the composed root (creating a root query field per
+/// source field), when the root is the selected query.
+- (nullable RptqQueryTable *)addUpstreamQueryToRoot:(RptqQuery *)sourceQuery;
 
 /// Removes a query table (and any connected links, groups, predicates, and bound elements) from the query.
 - (void)removeQueryTable:(RptqQueryTable *)queryTable;

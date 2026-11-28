@@ -726,6 +726,7 @@
 		4C1C0C4A2EA1000000000004 /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000019 /* NOTICE */; };
 		4C9A00202EA0000000000002 /* MADMacConnectionWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */; };
 		4C9A00202EA0000000000003 /* MADMacDesignerCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */; };
+		4C9A00202EA0000000000012 /* MADMacTipBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000001C /* MADMacTipBar.m */; };
 		4C9A00202EA0000000000004 /* MADMacDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */; };
 		4C9A00202EA0000000000005 /* MADMacDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000000A /* MADMacDocument.m */; };
 		4C9A00202EA0000000000010 /* MADMacDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000015 /* MADMacDocumentController.m */; };
@@ -1575,6 +1576,8 @@
 		4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacConnectionWindowController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000005 /* MADMacDesignerCanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDesignerCanvasView.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacDesignerCanvasView.m; sourceTree = "<group>"; };
+		4C9A00102EA000000000001B /* MADMacTipBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacTipBar.h; sourceTree = "<group>"; };
+		4C9A00102EA000000000001C /* MADMacTipBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacTipBar.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000007 /* MADMacDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDesignerViewController.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacDesignerViewController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000009 /* MADMacDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDocument.h; sourceTree = "<group>"; };
@@ -2726,6 +2729,8 @@
 				4C9A00102EA0000000000015 /* MADMacDocumentController.m */,
 				4C9A00102EA000000000000B /* MADMacQueryViewController.h */,
 				4C9A00102EA000000000000C /* MADMacQueryViewController.m */,
+				4C9A00102EA000000000001B /* MADMacTipBar.h */,
+				4C9A00102EA000000000001C /* MADMacTipBar.m */,
 				4C9A00102EA000000000000D /* MADMacViewerViewController.h */,
 				4C9A00102EA000000000000E /* MADMacViewerViewController.m */,
 				4C9A00102EA000000000000F /* MADMacWindowController.h */,
@@ -2760,11 +2765,11 @@
 			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "MAD Viewer" */;
 			buildPhases = (
 				4CDA7B0600000000000000B4 /* Ensure Libraries (Compressor) */,
-				4CF3B6EC18046614004BE0AC /* ShellScript */,
 				4C0E7720163B5AEC003B951E /* Sources */,
 				4C0E779E163B5AEC003B951E /* Frameworks */,
 				4C0E77AF163B5AEC003B951E /* Resources */,
 				4C3DCBD91BCA00F500ABE231 /* Embed Frameworks */,
+				4CF3B6EC18046614004BE0AC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2780,13 +2785,13 @@
 			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "MAD Designer" */;
 			buildPhases = (
 				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
-				4C13394018026433004F61CA /* Run Script */,
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4CF46F4F1AC6411D007C0A82 /* Embed Foundation Extensions */,
 				4C744F181CE9BFCD00243830 /* CopyFiles */,
 				4C29162B24AC75E400EC794B /* Embed Frameworks */,
+				4C13394018026433004F61CA /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -2842,6 +2847,7 @@
 				4C9A00052EA0000000000001 /* Frameworks */,
 				4C9A00062EA0000000000001 /* Resources */,
 				4C9A00072EA0000000000001 /* Embed Frameworks */,
+				4C9A00092EA0000000000001 /* Build Identity */,
 			);
 			buildRules = (
 			);
@@ -3173,6 +3179,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms macosx --all\n";
+		};
+		4C9A00092EA0000000000001 /* Build Identity */ = {
+			alwaysOutOfDate = 1;
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Identity";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/buildcounter.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3735,6 +3756,7 @@
 				4C9A00202EA0000000000005 /* MADMacDocument.m in Sources */,
 				4C9A00202EA0000000000010 /* MADMacDocumentController.m in Sources */,
 				4C9A00202EA0000000000006 /* MADMacQueryViewController.m in Sources */,
+				4C9A00202EA0000000000012 /* MADMacTipBar.m in Sources */,
 				4C9A00202EA0000000000007 /* MADMacViewerViewController.m in Sources */,
 				4C9A00202EA0000000000008 /* MADMacWindowController.m in Sources */,
 				4C9A00202EA0000000000009 /* main.m in Sources */,

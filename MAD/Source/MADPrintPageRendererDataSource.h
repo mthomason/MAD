@@ -49,6 +49,13 @@
 - (NSUInteger)rowIDLastOfPage:(NSUInteger)page;
 - (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
 
+/// The read transaction a page draw wraps its cell reads in, on the data source's
+/// pinned table (MADDocumentRenderDataSource -dataTable).  The page builder calls
+/// these rather than `dataTable beginReadTransaction` so the transaction and the
+/// cell reads share one generation.
+- (void)beginReadTransaction;
+- (void)commitReadTransaction;
+
 - (void)updatePrintingReportFormatter;
 
 @end

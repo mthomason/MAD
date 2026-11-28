@@ -17,6 +17,10 @@
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <MAD/MADocument.h>
+#import <MAD/MADQueryFull.h>
+#import <MAD/MADConstants.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #endif
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
@@ -178,6 +182,36 @@
 	format.locale = (id)@"ja_JP";
 	format.decimalCount = 2;
 	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"¥1,234.50");
+}
+
+// A plain decimal data label has no currency format, and a document that never
+// touched the field leaves its decimalCount at zero.  Zero is the unconfigured
+// default, not "print no decimals": the source field's scale is the right count, so
+// a DECIMAL(10,2) amount prints "101.50" rather than being rounded to "102" (the
+// Chinook sample's Total and the cross-database amount columns did).
+- (void)testFormattedStringUsesTheSourceScaleWhenTheFormatNamesNone {
+
+	RptqStoreContext *context = [self newTestContext];
+	RptqDocumentElement *element =
+		[context insertObjectForEntity:@"RptqDocumentElement" identifier:0];
+	RptqNumericFormat *format =
+		[context insertObjectForEntity:@"RptqNumericFormat" identifier:0];
+	format.enabled = NO;
+	format.decimalCount = 0;
+	element.numericFormat = format;
+
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: 2],
+						  @"101.50");
+	// With no source scale, the zero count still rounds (the barcode/text callers).
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: -1],
+						  @"102");
+	// An integer field keeps zero fraction digits.
+	XCTAssertEqualObjects([element formattedString: MADDataTypeInteger forValue: @(101) decimals: 0],
+						  @"101");
+	// An explicit positive count still wins over the source scale.
+	format.decimalCount = 3;
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: 2],
+						  @"101.500");
 }
 
 #pragma mark - Document format
@@ -418,6 +452,48 @@
 	MADModelQuery *firstQuery = ((MADModelDatabase *)databases.firstObject).queries.firstObject;
 	XCTAssertNotEqual(firstQuery.identifier, (int64_t)0,
 					  @"the model layer found London's query");
+
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
+}
+
+// A document reconnects through -updateDatabaseWithConnection: (the connection
+// editor and the refresh's apply path both use it).  The cached mainQuery must
+// pick up the new dialect; otherwise a compile after the change still speaks the
+// old database's quoting.
+- (void)testMainQueryUsesTheUpdatedDatabaseDialect {
+	NSURL *directory = [self newTestDirectory];
+	NSURL *sampleURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"London" withExtension:@"mad"];
+	XCTAssertNotNil(sampleURL, @"London.mad was not copied into the test bundle.");
+	NSURL *documentURL = [directory URLByAppendingPathComponent:@"London.mad"];
+
+	NSError *error = nil;
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTAssertTrue([document readFromURL:sampleURL error:&error],
+				  @"opening the legacy document failed: %@", error);
+
+	MADQueryFull *mainQuery = (MADQueryFull *)document.mainQuery;
+	XCTAssertNotNil(mainQuery);
+
+	NSString *sqliteSQL = [mainQuery SQLOnlyActiveFields:NO
+								  managedObjectContext:document.storeContext
+												 error:&error];
+	XCTAssertNil(error);
+	XCTAssertFalse([sqliteSQL containsString:@"["],
+				   @"the SQLite query is not bracket-quoted: %@", sqliteSQL);
+
+	MADDatabaseConnection *tds = [MADDatabaseConnection newDatabaseConnectionWithType:MADDatabaseTypeTDS
+																				  host:@"localhost"
+																			  database:@"London"
+																				  port:1433];
+	[document updateDatabaseWithConnection:tds];
+
+	error = nil;
+	NSString *tdsSQL = [mainQuery SQLOnlyActiveFields:NO
+							   managedObjectContext:document.storeContext
+											  error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([tdsSQL containsString:@"["],
+				  @"the cached main query kept the old dialect: %@", tdsSQL);
 
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
@@ -755,5 +831,41 @@
 	[[NSFileManager defaultManager] removeItemAtURL:thumbnailURL error:NULL];
 }
 #endif
+
+#pragma mark - Container header versions
+
+- (void)testContainerHeaderAcceptsVersionOneZero {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 0,0, 0,0,0,0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertNil(error);
+}
+
+- (void)testContainerHeaderAcceptsVersionOneOne {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 1,0, 0,0,0,0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertNil(error);
+}
+
+- (void)testContainerHeaderRefusesANewerMajor {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 2,0, 0,0, 0,0,0,0 };
+	XCTAssertFalse(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertEqualObjects(error.domain, MADFileFormatErrorDomain);
+	XCTAssertTrue([error.localizedDescription containsString:@"Upgrade"]);
+}
+
+- (void)testContainerHeaderRefusesANewerMinor {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 2,0, 0,0,0,0 };
+	XCTAssertFalse(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertEqualObjects(error.domain, MADFileFormatErrorDomain);
+}
+
+- (void)testContainerHeaderTreatsNoMagicAsLegacy {
+	uint8_t bytes[16] = { 0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(bytes, sizeof(bytes), NULL));
+}
 
 @end

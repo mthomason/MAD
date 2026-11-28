@@ -38,6 +38,7 @@ typedef NS_ENUM(int, MADCLIExitCode) {
 @property (nonatomic, assign) BOOL verbose;				// --verbose
 @property (nonatomic, assign) BOOL quiet;				// --quiet
 @property (nonatomic, assign) NSInteger rows;			// --rows N, 0 means all
+@property (nonatomic, assign) BOOL json;				// --json (version)
 
 @property (readonly, nonatomic, copy) NSURL *documentURL;
 
@@ -65,6 +66,16 @@ MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunWrite(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunServe(MADCLIInvocation *invocation);
+MADCLIExitCode MADCLIRunVersion(MADCLIInvocation *invocation);
+
+/// The generated build identity (MADBuildInfo.plist) beside the executable, or
+/// nil when this build did not produce one.  Never a tracked plist.
+NSDictionary * MADCLIBuildInfo(void);
+
+/// The identity object shared by `mad version --json` and `mad serve`'s
+/// `engine-info`: protocolVersion, engineVersion, engineRevision, sourceCommit,
+/// sourceCommitShort, sourceDirty, capabilities.  Missing values are NSNull.
+NSDictionary * MADCLIEngineInfoDictionary(void);
 
 /// Logging that respects --quiet and --verbose.  Always to stderr, so stdout is
 /// the result and nothing else.

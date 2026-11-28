@@ -6,7 +6,14 @@ description: "Reports as tables, and drivers for anything that returns a table."
 
 # Multi-Source Reports — reports as tables, and drivers for anything
 
-This page describes composable reports: a report's result becomes a table another report can query, and a driver can front anything that returns rows. It is a design record; §8 names the phases, and not all of them are built.
+This page describes composable reports: a report's result becomes a table another report can query, and a driver can front anything that returns rows. It is a design record; §8 names the phases. **Same-document composition (Phase 3) is built**; the remaining phases are not.
+
+> **Normative model:** the execution contract this page motivates is now stated, normatively
+> and in one place, in
+> [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md). Where this page
+> (or `data-object.md`) differs from it, the spec wins. The spec's §0 is **final**: every node
+> in a composition is a full report with its own layout and data, and the root is the
+> document's default report, not the only viewable one.
 
 **Scope:** the architecture the user described on 2026-11-22: a user designs a report
 against a data source (MySQL, SQL Server, PostgreSQL, SQLite, or a Web API such as eBay's
@@ -18,12 +25,13 @@ runs the composing query over the materializations. The non-SQL driver seam is p
 this: a driver that fronts an API receives a structured query, not SQL text, and returns
 rows in table form.
 **Date:** 2026-11-22, read at `eba4225a1`; decisions folded in 2026-11-22 (§9.2).
-**Status:** design report. It states the idea and the design; it does not implement
-anything and it does not add work to `TASKS.md`. The code audit that grounds the
-data-object half is [`MAD_DATA_OBJECT.md`](data-object.md); the direction is
-[`docs/vision.md`](../vision.md). This document adds the multi-source composition model
-(intra-document sub-reports first), the driver API that makes non-SQL sources first-class,
-and a combined phase order.
+**Status:** design report, partially realized. Same-document composition shipped in MAD
+Designer for macOS and Windows 0.8; cross-document composition and the generic API driver
+remain designs. The code audit that grounds the data-object half is
+[`MAD_DATA_OBJECT.md`](data-object.md); the direction is [`docs/vision.md`](../vision.md);
+the public guide is [Composition Reports](../composition.html). This document adds the
+multi-source composition model (intra-document sub-reports first), the driver API that makes
+non-SQL sources first-class, and a combined phase order.
 
 ---
 
@@ -136,7 +144,8 @@ Two more facts matter for the composition design:
    materialization.
 3. Attach or open the materializations needed by the composing object.
 4. Execute the composing query against the local SQLite database and materialize its result.
-5. Repeat up the graph. The root is an ordinary report; its cache is what the viewer reads.
+5. Repeat up the graph. The root is an ordinary report; the viewer reads the selected
+   report's cache — the root by default, any source when the user selects it.
 
 Paging is unchanged. The engine still pulls the full result into the local cache; the UI
 pages over the cache. For an API driver, "pagination" is an **internal loop** over the API's
@@ -530,7 +539,7 @@ independent of composition and is the one that unblocks non-SQL sources.
 | 0 | **The driver seam.** Add `MADQueryPlan` + value types and move the three enums to `MADAPI`; add the optional `executeQueryPlan:`; add capabilities; make refresh prefer the plan and fall back to SQL. Implement the plan in one existing driver as a reference and pin plan-to-SQL equivalence with tests. No behavior change. | — |
 | 1 | **The data-object contract.** Split the SELECT-list construction from execution; add describe/execute; return the result schema as `MADDataColumn`s; make refresh call the contract. This is `MAD_DATA_OBJECT.md` Phase 1. | 0 (overlaps) |
 | 2 | **The query owns itself.** `MADQueryFull` uses the query it was given; `dataTableForQuery:` resolves per query; `MADQueryActiveQueryFields` scopes to a query; `MADModelDocument` mirrors any query. | 1 |
-| 3 | **Same-document composition.** A query table may reference another data object (sub-report); topological refresh; `ATTACH` support in `MADDatabaseSqlite3`; the composing query executes against the local cache. This is the user's one-portable-file model. | 1, 2 |
+| 3 | **Same-document composition — shipped in 0.8.** A query table may reference another data object (sub-report); topological refresh; `ATTACH` support in `MADDatabaseSqlite3`; the composing query executes against the local cache. This is the user's one-portable-file model. | 1, 2 |
 | 4 | **Cross-document composition (deferred).** A reference to another `.mad` report; document identity and path resolution; live vs pinned; file coordination; credential policy; missing/renamed handling. Lower priority: same-document composition satisfies the user's model. | 3 |
 | 5 | **The generic API driver.** One manifest-driven HTTP/JSON driver; schema from the manifest; plan-to-request mapping; pagination loop; type mapping; the extensible credential `options` field; eBay Seller as the worked example. | 0, 1 (and 3 for joins) |
 | 6 | **Surfaces and documentation.** Registry-driven driver lists and join rules; per-node refresh UI; CLI verbs; the driver-authoring tutorial updated with the plan/capabilities seam. | 0–5 |
@@ -541,7 +550,7 @@ should merely avoid coupling to a fixed driver list so dynamic loading stays pos
 
 Phase 0 is the "not far off" part: it is new value types, one optional method, a branch in
 refresh, and tests. It does not require the store, the UI, or the composition model to
-change. Phase 3 is where the user's `ATTACH` model lands, and it is smaller than it sounds
+change. Phase 3 is where the user's `ATTACH` model landed, and it was smaller than it sounds
 because SQLite is already a driver and the compiler already sorts a graph.
 
 ## 9. Decisions

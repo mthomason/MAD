@@ -33,8 +33,25 @@ StoreContent/analyitics: SQLite 3.x database, last written using SQLite version 
 `-createSchemaSQL` 生成，并由 `MADStoreTests` 与编译后的模型交叉校验。
 存储在 `PRAGMA user_version` 中记录架构版本：版本 1 是随版本发布的架构
 （缺失或为 0），版本 2 增加 `RptqQuery.sqlSourceText`——用户粘贴的 SQL，按原样保存
-（`project/MAD_SQL_ENTRY.md` §8）——`MADStore` 在打开时应用缺失的
-步骤。`RptqQuery` 表的字段：
+（`project/MAD_SQL_ENTRY.md` §8）——版本 3 增加组合字段，版本 4 增加逐节点布局。`MADStore` 在打开时应用缺失的
+步骤；每个描述符都在 `MAD/Source/rptq/store/MADStoreSchema.m` 中用
+`introducedInVersion` 标记引入它的修订版本。
+
+组合在修订版本 3 中增加了：
+
+| 新增项 | 用途 |
+|---|---|
+| `RptqQuery.name` | 图中报表的人类可读名称。 |
+| `RptqDocument.rootQuery` | 文档的默认报表（结果）。 |
+| `RptqQueryTable.upstreamQuery` | 来源是另一个查询而非远程架构表的表。 |
+| `RptqQueryField.outputIndex`、`RptqQueryField.outputKey` | 组合报表输出列的稳定名称和顺序。 |
+
+修订版本 4 增加 `RptqDocumentSection.ownerQuery`：每个查询可以拥有自己的布局
+节区和元素，因此组合中的每份报表都有自己的带区和字段
+绑定。读取器必须应用直到文档 `user_version` 的每一个步骤；较旧的
+读取器会拒绝较新的文档，而不是读取不完整的架构。
+
+`RptqQuery` 表的字段：
 
 | 列 | 类型 | 说明 |
 |---|---|---|

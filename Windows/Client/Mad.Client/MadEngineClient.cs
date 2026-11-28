@@ -17,11 +17,35 @@ using System.Text.Json;
 
 namespace Mad.Client;
 
+/// <summary>The engine's answer to `engine-info`.  Every identity field is nullable:
+/// an engine built without the generated identity file reports nulls, never a guess.</summary>
+public sealed record EngineInfo(
+	int ProtocolVersion,
+	string? EngineVersion,
+	string? EngineRevision,
+	string? SourceCommit,
+	string? SourceCommitShort,
+	bool? SourceDirty,
+	IReadOnlyList<string> Capabilities);
+
+/// <summary>The source a failed composition refresh named: its leaf query, the name
+/// the engine reports, and the connection string the credential map is keyed by.
+/// Null on every error that is not a named source.</summary>
+public sealed class MadEngineErrorSource
+{
+	public string Name { get; set; } = "";
+	public long QueryId { get; set; }
+	public string ConnectionString { get; set; } = "";
+}
+
 /// <summary>The `error` member of a failed response.</summary>
 public sealed class MadEngineError
 {
 	public int Code { get; set; }
 	public string Message { get; set; } = "";
+
+	/// <summary>The failing composition source, when `refresh` reported one.</summary>
+	public MadEngineErrorSource? Source { get; set; }
 }
 
 /// <summary>One parsed response line from `mad serve`.</summary>
@@ -47,6 +71,19 @@ public sealed class MadEngineResponse
 				Code = error.GetProperty("code").GetInt32(),
 				Message = error.GetProperty("message").GetString() ?? "",
 			};
+			if (error.TryGetProperty("source", out var source) && source.ValueKind == JsonValueKind.Object)
+			{
+				response.Error.Source = new MadEngineErrorSource
+				{
+					Name = source.TryGetProperty("name", out var name) && name.ValueKind == JsonValueKind.String
+						? name.GetString() ?? "" : "",
+					QueryId = source.TryGetProperty("queryId", out var queryId) && queryId.ValueKind == JsonValueKind.Number
+						? queryId.GetInt64() : 0,
+					ConnectionString = source.TryGetProperty("connectionString", out var connectionString)
+						&& connectionString.ValueKind == JsonValueKind.String
+						? connectionString.GetString() ?? "" : "",
+				};
+			}
 		}
 		return response;
 	}
@@ -56,19 +93,26 @@ public sealed class MadEngineResponse
 	{
 		if (!Ok)
 		{
-			throw new MadEngineException(Error?.Code ?? -1, Error?.Message ?? "the engine reported an error");
+			throw new MadEngineException(Error?.Code ?? -1, Error?.Message ?? "the engine reported an error", Error?.Source);
 		}
 	}
 }
 
-/// <summary>A non-`ok` response, carrying the engine's error code (the CLI exit code).</summary>
+/// <summary>A non-`ok` response, carrying the engine's error code (the CLI exit code)
+/// and, for a composition refresh that failed on one source, that source's identity.</summary>
 public sealed class MadEngineException : Exception
 {
 	public int Code { get; }
 
-	public MadEngineException(int code, string message) : base(message)
+	/// <summary>The failing composition source, or null when the error was not
+	/// source-scoped.  Named `SourceInfo` because <see cref="Exception.Source"/> is the
+	/// runtime's assembly name and must not be shadowed.</summary>
+	public MadEngineErrorSource? SourceInfo { get; }
+
+	public MadEngineException(int code, string message, MadEngineErrorSource? source = null) : base(message)
 	{
 		Code = code;
+		SourceInfo = source;
 	}
 }
 
@@ -203,6 +247,45 @@ public sealed class MadEngineClient : IDisposable
 			throw new MadEngineException(-1, "the engine closed its standard output before answering");
 		}
 		return MadEngineResponse.Parse(reply);
+	}
+
+	/// <summary>`engine-info` -- the running engine's identity.  An engine older than
+	/// this client answers "unknown method", which raises <see cref="MadEngineException"/>;
+	/// callers treat that as an unknown identity, never as a failed open.</summary>
+	public EngineInfo EngineInfo()
+	{
+		var result = CallOk("engine-info");
+		int protocolVersion = result.TryGetProperty("protocolVersion", out var protocol)
+			&& protocol.ValueKind == JsonValueKind.Number ? protocol.GetInt32() : 0;
+
+		string? String(string name) =>
+			result.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String
+				? value.GetString() : null;
+
+		bool? dirty = null;
+		if (result.TryGetProperty("sourceDirty", out var dirtyValue))
+		{
+			if (dirtyValue.ValueKind == JsonValueKind.True) dirty = true;
+			else if (dirtyValue.ValueKind == JsonValueKind.False) dirty = false;
+		}
+
+		var capabilities = new List<string>();
+		if (result.TryGetProperty("capabilities", out var collection)
+			&& collection.ValueKind == JsonValueKind.Array)
+		{
+			foreach (var capability in collection.EnumerateArray())
+			{
+				if (capability.ValueKind == JsonValueKind.String
+					&& capability.GetString() is { } name)
+				{
+					capabilities.Add(name);
+				}
+			}
+		}
+
+		return new EngineInfo(protocolVersion, String("engineVersion"),
+			String("engineRevision"), String("sourceCommit"),
+			String("sourceCommitShort"), dirty, capabilities);
 	}
 
 	/// <summary>`open` -- opens a document and returns its handle.</summary>

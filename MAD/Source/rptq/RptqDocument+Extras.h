@@ -15,7 +15,7 @@
 #import <MAD/MTPaper.h>
 
 @class MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
-	   RptqQueryPredicate, RptqQueryLinks;
+	   RptqQueryPredicate, RptqQueryLinks, RptqQueryField, RptqQueryTable;
 
 @interface RptqDocument (Extras)
 
@@ -49,6 +49,34 @@
 	- (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
 	- (MTPaperType)paperType;
+
+	/// Validates a composition graph: every upstream reference resolves, and the
+	/// dependency graph has no cycle.  An error names the affected query.  A
+	/// document with no root is not composed and trivially validates.
+	- (BOOL)validateCompositionGraphWithError:(NSError * __autoreleasing *)error;
+
+	/// The root's projected query fields, ordered by their output index.  Each
+	/// field carries its root output key and its source query and schema field.
+	/// Nil with `error` when a composed document records no output order (an
+	/// earlier store or an unset projection) -- never an invented order.
+	- (nullable NSArray<RptqQueryField *> *)orderedCompositionOutputsWithError:(NSError * __autoreleasing *)error;
+
+	/// Converts an ordinary single-query report into a one-child composition: the
+	/// report's query and connection become the child, a new root projects the
+	/// child's fields with derived output keys, the child's groups and sort move to
+	/// the root, and the layout's data-field, aggregate, and barcode field references
+	/// rebind to the root's outputs so the existing bands and labels keep their
+	/// values. Returns the new root, or nil with `error` (the report is left
+	/// unchanged). The caller saves.
+	- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
+														 error:(NSError * __autoreleasing *)error;
+
+	/// Adds a child query as a new input of the composed root: one upstream table
+	/// with a root query field per child field, then derives output keys for those
+	/// fields (preserving the root's existing outputs) and appends them to the root's
+	/// output order. Returns the new root table, or nil with `error`. The caller saves.
+	- (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
+										  error:(NSError * __autoreleasing *)error;
 
 @end
 

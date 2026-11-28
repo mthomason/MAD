@@ -29,6 +29,28 @@ public sealed class EngineService : IAsyncDisposable
 
     public int Pid => _client?.Pid ?? -1;
 
+    /// <summary>`engine-info` -- the identity of the engine this service launched.  A
+    /// failure (an engine too old to answer, a missing executable) answers null, and
+    /// the About window reports the engine as unknown rather than inventing an identity.</summary>
+    public async Task<EngineInfo?> EngineInfoAsync()
+    {
+        await _gate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            EnsureStarted();
+            MadEngineClient client = _client!;
+            return await Task.Run(() => client.EngineInfo()).ConfigureAwait(false);
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     public async Task<OpenResult> OpenAsync(string path, string? host = null, int? port = null, string? database = null)
     {
         var parameters = new Dictionary<string, object?> { ["path"] = path };
@@ -43,9 +65,13 @@ public sealed class EngineService : IAsyncDisposable
             result.GetProperty("driver").GetString() ?? "");
     }
 
-    public async Task<DescribeResult> DescribeAsync(int handle)
+    /// <summary>The selected query's schema and output columns, scoped by <paramref name="query"/>.
+    /// Omitted, it describes the document's report root.</summary>
+    public async Task<DescribeResult> DescribeAsync(int handle, long? query = null)
     {
-        var result = await CallAsync("describe", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("describe", parameters).ConfigureAwait(false);
 
         var columns = new List<ReportColumn>();
         foreach (var column in result.GetProperty("columns").EnumerateArray())
@@ -83,125 +109,232 @@ public sealed class EngineService : IAsyncDisposable
         return result.GetProperty("sql").GetString() ?? "";
     }
 
-    public async Task<QueryModel> QueryModelAsync(int handle)
+    public async Task<QueryModel> QueryModelAsync(int handle, long? query = null)
     {
-        var result = await CallAsync("query-model", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("query-model", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> AddTableAsync(int handle, string table)
+    public async Task<QueryModel> AddTableAsync(int handle, string table, long? query = null)
     {
-        var result = await CallAsync("add-table", new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("add-table", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> RemoveTableAsync(int handle, long table)
+    public async Task<QueryModel> RemoveTableAsync(int handle, long table, long? query = null)
     {
-        var result = await CallAsync("remove-table", new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("remove-table", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> AddLinkAsync(int handle, long leftField, long rightField)
+    public async Task<QueryModel> AddLinkAsync(int handle, long leftField, long rightField, long? query = null)
     {
-        var result = await CallAsync("add-link", new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["rightField"] = rightField }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["rightField"] = rightField };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("add-link", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> SetLinkTypeAsync(int handle, long link, int type)
+    public async Task<QueryModel> SetLinkTypeAsync(int handle, long link, int type, long? query = null)
     {
-        var result = await CallAsync("set-link-type", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link, ["type"] = type }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link, ["type"] = type };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("set-link-type", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> SwapLinkAsync(int handle, long link)
+    public async Task<QueryModel> SwapLinkAsync(int handle, long link, long? query = null)
     {
-        var result = await CallAsync("swap-link", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("swap-link", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> DeleteLinkAsync(int handle, long link)
+    public async Task<QueryModel> DeleteLinkAsync(int handle, long link, long? query = null)
     {
-        var result = await CallAsync("delete-link", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("delete-link", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> AddPredicateAsync(int handle, long leftField, int op, string value)
+    public async Task<QueryModel> AddPredicateAsync(int handle, long leftField, int op, string value, long? query = null)
     {
-        var result = await CallAsync("add-predicate", new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["operator"] = op, ["value"] = value }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["operator"] = op, ["value"] = value };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("add-predicate", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> RemovePredicateAsync(int handle, long predicate)
+    public async Task<QueryModel> RemovePredicateAsync(int handle, long predicate, long? query = null)
     {
-        var result = await CallAsync("remove-predicate", new Dictionary<string, object?> { ["handle"] = handle, ["predicate"] = predicate }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["predicate"] = predicate };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("remove-predicate", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> AddGroupAsync(int handle, long field, int sort)
+    public async Task<QueryModel> AddGroupAsync(int handle, long field, int sort, long? query = null)
     {
-        var result = await CallAsync("add-group", new Dictionary<string, object?> { ["handle"] = handle, ["field"] = field, ["sort"] = sort }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["field"] = field, ["sort"] = sort };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("add-group", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<QueryModel> RemoveGroupAsync(int handle, long group)
+    public async Task<QueryModel> RemoveGroupAsync(int handle, long group, long? query = null)
     {
-        var result = await CallAsync("remove-group", new Dictionary<string, object?> { ["handle"] = handle, ["group"] = group }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["group"] = group };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("remove-group", parameters).ConfigureAwait(false);
         return QueryModel.Parse(result);
     }
 
-    public async Task<SqlCompileResult> ValidateSqlAsync(int handle, string sql)
+    public async Task<SqlCompileResult> ValidateSqlAsync(int handle, string sql, long? query = null)
     {
-        var result = await CallAsync("validate-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("validate-sql", parameters).ConfigureAwait(false);
         return SqlCompileResult.Parse(result);
     }
 
-    public async Task<SqlCompileResult> ApplySqlAsync(int handle, string sql)
+    public async Task<SqlCompileResult> ApplySqlAsync(int handle, string sql, long? query = null)
     {
-        var result = await CallAsync("apply-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("apply-sql", parameters).ConfigureAwait(false);
         return SqlCompileResult.Parse(result);
     }
 
-    public async Task<LayoutModel> LayoutModelAsync(int handle)
+    /// <summary>The document's type and its queries (the composed root first, then each
+    /// source). Distinguishes a Composition Report from a Standard Report.</summary>
+    public async Task<DocumentInfo> DocumentInfoAsync(int handle)
     {
-        var result = await CallAsync("layout-model", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        var result = await CallAsync("document-info", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        return DocumentInfo.Parse(result);
+    }
+
+    /// <summary>Creates a connection-less empty document the composition flows import
+    /// children into, returning its handle.</summary>
+    public async Task<OpenResult> CreateEmptyAsync(string path)
+    {
+        var result = await CallAsync("create-empty", new Dictionary<string, object?> { ["path"] = path }).ConfigureAwait(false);
+        return new OpenResult(
+            result.GetProperty("handle").GetInt32(),
+            result.GetProperty("filename").GetString() ?? "",
+            result.GetProperty("driver").GetString() ?? "");
+    }
+
+    public async Task<DocumentInfo> AddRootAsync(int handle, string name)
+    {
+        var result = await CallAsync("add-root", new Dictionary<string, object?> { ["handle"] = handle, ["name"] = name }).ConfigureAwait(false);
+        return DocumentInfo.Parse(result);
+    }
+
+    /// <summary>Adds a source query: connects to a live source, imports its schema as a
+    /// new database plus a named query.</summary>
+    public async Task<DocumentInfo> AddSourceAsync(int handle, string name, ConnectionSpec spec)
+    {
+        var parameters = ConnectionParams(spec);
+        parameters["handle"] = handle;
+        parameters["name"] = name;
+        var result = await CallAsync("add-source", parameters).ConfigureAwait(false);
+        return DocumentInfo.Parse(result);
+    }
+
+    /// <summary>Adds a child query as a new input of the composed root.</summary>
+    public async Task<QueryModel> AddUpstreamAsync(int handle, long childQueryId)
+    {
+        var result = await CallAsync("add-upstream", new Dictionary<string, object?> { ["handle"] = handle, ["query"] = childQueryId }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    /// <summary>Imports the query graph of another .mad as a child of the composed root.</summary>
+    public async Task<DocumentInfo> ImportChildAsync(int handle, string path, string? name = null)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["path"] = path };
+        if (name != null) parameters["name"] = name;
+        var result = await CallAsync("import-child", parameters).ConfigureAwait(false);
+        return DocumentInfo.Parse(result);
+    }
+
+    /// <summary>Converts this standard report into a one-child composition.</summary>
+    public async Task<DocumentInfo> ConvertAsync(int handle, string? childName = null)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle };
+        if (childName != null) parameters["childName"] = childName;
+        var result = await CallAsync("convert", parameters).ConfigureAwait(false);
+        return DocumentInfo.Parse(result);
+    }
+
+    /// <summary>Chooses, names and orders the composed root's output fields.</summary>
+    public async Task<QueryModel> SetRootOutputsAsync(int handle, IReadOnlyList<RootOutput> outputs)
+    {
+        var array = outputs.Select(o => (object)new Dictionary<string, object?> { ["field"] = o.Field, ["key"] = o.Key }).ToArray();
+        var result = await CallAsync("set-root-outputs", new Dictionary<string, object?> { ["handle"] = handle, ["outputs"] = array }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> LayoutModelAsync(int handle, long? query = null)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("layout-model", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> AddElementAsync(int handle, string kind, long section, double x, double y)
+    public async Task<LayoutModel> AddElementAsync(int handle, string kind, long section, double x, double y, long? query = null)
     {
-        var result = await CallAsync("add-element", new Dictionary<string, object?> { ["handle"] = handle, ["kind"] = kind, ["section"] = section, ["x"] = x, ["y"] = y }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["kind"] = kind, ["section"] = section, ["x"] = x, ["y"] = y };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("add-element", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> RemoveElementsAsync(int handle, IReadOnlyList<long> elements)
+    public async Task<LayoutModel> RemoveElementsAsync(int handle, IReadOnlyList<long> elements, long? query = null)
     {
-        var result = await CallAsync("remove-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("remove-elements", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> DuplicateElementsAsync(int handle, IReadOnlyList<long> elements)
+    public async Task<LayoutModel> DuplicateElementsAsync(int handle, IReadOnlyList<long> elements, long? query = null)
     {
-        var result = await CallAsync("duplicate-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("duplicate-elements", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> MoveElementsAsync(int handle, IReadOnlyList<long> elements, long section)
+    public async Task<LayoutModel> MoveElementsAsync(int handle, IReadOnlyList<long> elements, long section, long? query = null)
     {
-        var result = await CallAsync("move-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray(), ["section"] = section }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray(), ["section"] = section };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("move-elements", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> SetElementGeometryAsync(int handle, IReadOnlyList<ElementGeometry> elements)
+    public async Task<LayoutModel> SetElementGeometryAsync(int handle, IReadOnlyList<ElementGeometry> elements, long? query = null)
     {
         var array = elements.Select(e => (object)new Dictionary<string, object?>
         {
             ["id"] = e.Id, ["x"] = e.X, ["y"] = e.Y, ["w"] = e.W, ["h"] = e.H,
         }).ToArray();
-        var result = await CallAsync("set-element-geometry", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = array }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = array };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("set-element-geometry", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> SetElementContentAsync(int handle, long element, ElementContent content)
+    public async Task<LayoutModel> SetElementContentAsync(int handle, long element, ElementContent content, long? query = null)
     {
         var contentParams = new Dictionary<string, object?>();
         if (content.Text != null) contentParams["text"] = content.Text;
@@ -213,7 +346,9 @@ public sealed class EngineService : IAsyncDisposable
         if (content.HumanReadable != null) contentParams["humanReadable"] = content.HumanReadable;
         if (content.BorderStyle != null) contentParams["borderStyle"] = content.BorderStyle;
         if (content.Data != null) contentParams["data"] = content.Data;
-        var result = await CallAsync("set-element-content", new Dictionary<string, object?> { ["handle"] = handle, ["element"] = element, ["content"] = contentParams }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["element"] = element, ["content"] = contentParams };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("set-element-content", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
@@ -230,7 +365,7 @@ public sealed class EngineService : IAsyncDisposable
         return types;
     }
 
-    public async Task<LayoutModel> SetElementTypographyAsync(int handle, IReadOnlyList<long> elements, ElementTypography style)
+    public async Task<LayoutModel> SetElementTypographyAsync(int handle, IReadOnlyList<long> elements, ElementTypography style, long? query = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
         if (style.FontName != null) parameters["fontname"] = style.FontName;
@@ -241,11 +376,12 @@ public sealed class EngineService : IAsyncDisposable
         if (style.Strikethrough != null) parameters["strikethrough"] = style.Strikethrough;
         if (style.HAlign != null) parameters["hAlign"] = style.HAlign;
         if (style.VAlign != null) parameters["vAlign"] = style.VAlign;
+        if (query is long queryId) parameters["query"] = queryId;
         var result = await CallAsync("set-element-typography", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> SetElementBoxModelAsync(int handle, IReadOnlyList<long> elements, ElementBoxModel box)
+    public async Task<LayoutModel> SetElementBoxModelAsync(int handle, IReadOnlyList<long> elements, ElementBoxModel box, long? query = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
         if (box.BorderTop != null) parameters["borderTop"] = box.BorderTop;
@@ -254,16 +390,18 @@ public sealed class EngineService : IAsyncDisposable
         if (box.BorderRight != null) parameters["borderRight"] = box.BorderRight;
         if (box.Padding != null) parameters["padding"] = box.Padding;
         if (box.Margin != null) parameters["margin"] = box.Margin;
+        if (query is long queryId) parameters["query"] = queryId;
         var result = await CallAsync("set-element-box-model", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
 
-    public async Task<LayoutModel> SetSectionAsync(int handle, long section, double? height, bool? visible, bool? pageBreak)
+    public async Task<LayoutModel> SetSectionAsync(int handle, long section, double? height, bool? visible, bool? pageBreak, long? query = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["section"] = section };
         if (height != null) parameters["height"] = height;
         if (visible != null) parameters["visible"] = visible;
         if (pageBreak != null) parameters["pageBreak"] = pageBreak;
+        if (query is long queryId) parameters["query"] = queryId;
         var result = await CallAsync("set-section", parameters).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
@@ -274,11 +412,22 @@ public sealed class EngineService : IAsyncDisposable
         return LayoutModel.Parse(result);
     }
 
-    public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null)
+    /// <summary>Refreshes the document.  A composed document may name one credential per
+    /// source query in <paramref name="sourceCredentials"/> (query id → `user:password`);
+    /// <paramref name="credentials"/> stays the single-credential fallback, and is the
+    /// only form a Standard Report uses.</summary>
+    public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null,
+        IReadOnlyDictionary<long, string>? sourceCredentials = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle };
         if (rows is int rowCount) parameters["rows"] = rowCount;
         if (credentials != null) parameters["credentials"] = credentials;
+        if (sourceCredentials is { Count: > 0 })
+        {
+            parameters["sourceCredentials"] = sourceCredentials.ToDictionary(
+                pair => pair.Key.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                pair => (object?)pair.Value);
+        }
 
         var result = await CallAsync("refresh", parameters).ConfigureAwait(false);
         return new RefreshResult(
@@ -286,9 +435,11 @@ public sealed class EngineService : IAsyncDisposable
             result.GetProperty("elapsed").GetDouble());
     }
 
-    public async Task<string> ExportAsync(int handle, string format)
+    public async Task<string> ExportAsync(int handle, string format, long? query = null)
     {
-        var result = await CallAsync("export", new Dictionary<string, object?> { ["handle"] = handle, ["format"] = format }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["format"] = format };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("export", parameters).ConfigureAwait(false);
         return result.GetProperty("data").GetString() ?? "";
     }
 
@@ -296,15 +447,27 @@ public sealed class EngineService : IAsyncDisposable
     /// The response's <c>data</c> member is text (the serve handler decodes the exporter's
     /// bytes as UTF-8), so it cannot carry a binary PDF; passing <c>path</c> makes the engine
     /// write the exporter's bytes to that file instead.</summary>
-    public async Task<long> ExportToPathAsync(int handle, string format, string path)
+    public async Task<long> ExportToPathAsync(int handle, string format, string path, long? query = null)
     {
-        var result = await CallAsync("export", new Dictionary<string, object?>
+        var parameters = new Dictionary<string, object?>
         {
             ["handle"] = handle,
             ["format"] = format,
             ["path"] = path,
-        }).ConfigureAwait(false);
+        };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("export", parameters).ConfigureAwait(false);
         return result.GetProperty("bytes").GetInt64();
+    }
+
+    /// <summary>Reads one node's materialized rows — the query-scoped result read. Omitted,
+    /// it reads the report root's published result.</summary>
+    public async Task<NodeResult> NodeResultAsync(int handle, long? query = null)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("node-result", parameters).ConfigureAwait(false);
+        return NodeResult.Parse(result);
     }
 
     public async Task<int> TestConnectionAsync(ConnectionSpec spec)
@@ -343,10 +506,13 @@ public sealed class EngineService : IAsyncDisposable
         return new ConnectionSpec(driver, file, host, port, database, server, null, null);
     }
 
-    public async Task ApplyConnectionAsync(int handle, ConnectionSpec spec)
+    /// <summary>Applies a connection.  With <paramref name="query"/> it edits only that
+    /// source query's database, which is how a composition reconnects one source.</summary>
+    public async Task ApplyConnectionAsync(int handle, ConnectionSpec spec, long? query = null)
     {
         var parameters = ConnectionParams(spec);
         parameters["handle"] = handle;
+        if (query is long queryId) parameters["query"] = queryId;
         await CallAsync("apply-connection", parameters).ConfigureAwait(false);
     }
 

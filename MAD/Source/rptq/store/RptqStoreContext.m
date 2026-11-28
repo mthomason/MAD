@@ -9,6 +9,25 @@
 #import "RptqObject.h"
 #import "MADStoreSchema.h"
 #import "MADStoreGraph.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqAlignment.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqDirectionalProperty.h>
+#import <MAD/RptqNumericFormat.h>
+#import <MAD/RptqPoint.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqTextStyle.h>
+#import <MADAPI/MADDatabaseType.h>
 
 // The change notification mirrors Core Data's contract -- the same userInfo keys,
 // object = this context -- under our own name (RptqStoreContext.h), so the
@@ -240,11 +259,21 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 }
 
 - (BOOL)save:(NSError * __autoreleasing *)error {
-	if (!self.hasChanges) return YES; // A clean save must not touch the file.
+	return [self saveComposed:NO error:error];
+}
+
+/// Saves a document that carries a composition graph: the store applies the
+/// revision-3 schema and version in the same transaction as the rows.
+- (BOOL)saveComposed:(NSError * __autoreleasing *)error {
+	return [self saveComposed:YES error:error];
+}
+
+- (BOOL)saveComposed:(BOOL)composed error:(NSError * __autoreleasing *)error {
+	if (!self.hasChanges && !composed) return YES; // A clean ordinary save must not touch the file.
 
 	NSArray<MADStoreObject *> *dirty = [self dirtyBackingObjects];
 	NSArray<MADStoreObject *> *deleted = self.deletedObjects.copy;
-	if (![self.store writeObjects:dirty deletingObjects:deleted error:error]) {
+	if (![self.store writeObjects:dirty deletingObjects:deleted composed:composed error:error]) {
 		return NO;
 	}
 
@@ -414,6 +443,263 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	} else {
 		[target setReference:nil forName:inverse.name];
 	}
+}
+
+#pragma mark - Importing a query graph
+
+static NSSet<NSString *> *MADStoreImportQueryGraphEntities(void) {
+	static NSSet<NSString *> *entities = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		entities = [NSSet setWithArray:@[
+			@"RptqQuery",
+			@"RptqDatabase",
+			@"RptqDatabaseCredentals",
+			@"RptqDatabaseSchemaTable",
+			@"RptqDatabaseSchemaField",
+			@"RptqQueryTable",
+			@"RptqQueryField",
+			@"RptqQueryLinks",
+			@"RptqQueryGroup",
+			@"RptqQueryPredicate",
+			@"RptqQuerySort",
+			@"RptqDocumentSection",
+			// The element subentities share RptqDocumentElement's table but are named
+			// individually so the flat copy reads each kind's own attributes.
+			@"RptqDocumentElementAggregate",
+			@"RptqDocumentElementBarcode",
+			@"RptqDocumentElementChart",
+			@"RptqDocumentElementFormula",
+			@"RptqDocumentElementGroupKey",
+			@"RptqDocumentElementImage",
+			@"RptqDocumentElementLabel",
+			@"RptqDocumentElementLabelDataField",
+			@"RptqDocumentElementLabelLink",
+		]];
+	});
+	return entities;
+}
+
+static NSNumber *MADStoreImportIdentifierForSourceIdentifier(NSNumber *sourceIdentifier,
+															 NSString *entity,
+															 NSDictionary<NSString *, NSDictionary<NSNumber *, RptqObject *> *> *remap) {
+	if (sourceIdentifier == nil || sourceIdentifier.longLongValue == 0) return nil;
+	RptqObject *imported = remap[entity][sourceIdentifier];
+	return imported != nil ? @(imported.identifier) : nil;
+}
+
+static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObject *> *importedDatabases,
+											   NSURL *baseURL) {
+	if (baseURL == nil || !baseURL.isFileURL) return;
+	for (RptqObject *object in importedDatabases.allValues) {
+		if (![object isKindOfClass:[RptqDatabase class]]) continue;
+		RptqDatabase *database = (RptqDatabase *)object;
+		if (database.databaseDriverTypeEnum != MADDatabaseTypeSqlite3) continue;
+		RptqDatabaseCredentals *credential = database.ownedByUser;
+		if (credential == nil) continue;
+		NSString *host = credential.host ?: @"";
+		if (host.length > 0 && [host hasPrefix:@"/"]) continue; // already absolute
+		NSString *filename = credential.dbname.length > 0 ? credential.dbname : host.lastPathComponent;
+		if (filename.length == 0) continue;
+		credential.host = [[baseURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:filename isDirectory:NO].path;
+		if (credential.dbname.length == 0) credential.dbname = filename;
+	}
+}
+
+/// Copies an element's value-type satellites from the source onto the imported element.
+/// `awakeFromInsert` already created the imported element's satellites (and border/rect's
+/// own sub-satellites); this copies the scalar geometry/typography/format values only.
+static void MADStoreCopyElementValueTypes(RptqDocumentElement *source, RptqDocumentElement *imported) {
+	if (source.alignment != nil) {
+		imported.alignment.horizontal = source.alignment.horizontal;
+		imported.alignment.vertical = source.alignment.vertical;
+	}
+	if (source.border != nil) {
+		imported.border.width.top = source.border.width.top;
+		imported.border.width.bottom = source.border.width.bottom;
+		imported.border.width.left = source.border.width.left;
+		imported.border.width.right = source.border.width.right;
+		imported.border.style.top = source.border.style.top;
+		imported.border.style.bottom = source.border.style.bottom;
+		imported.border.style.left = source.border.style.left;
+		imported.border.style.right = source.border.style.right;
+	}
+	if (source.dropPoint != nil) {
+		imported.dropPoint.x = source.dropPoint.x;
+		imported.dropPoint.y = source.dropPoint.y;
+	}
+	if (source.margin != nil) {
+		imported.margin.top = source.margin.top;
+		imported.margin.bottom = source.margin.bottom;
+		imported.margin.left = source.margin.left;
+		imported.margin.right = source.margin.right;
+	}
+	if (source.numericFormat != nil) {
+		imported.numericFormat.locale = source.numericFormat.locale;
+		imported.numericFormat.enabled = source.numericFormat.enabled;
+		imported.numericFormat.decimalCount = source.numericFormat.decimalCount;
+	}
+	if (source.padding != nil) {
+		imported.padding.top = source.padding.top;
+		imported.padding.bottom = source.padding.bottom;
+		imported.padding.left = source.padding.left;
+		imported.padding.right = source.padding.right;
+	}
+	if (source.rect != nil) {
+		imported.rect.origin.x = source.rect.origin.x;
+		imported.rect.origin.y = source.rect.origin.y;
+		imported.rect.size.width = source.rect.size.width;
+		imported.rect.size.height = source.rect.size.height;
+	}
+	if (source.textStyle != nil) {
+		imported.textStyle.strikethrough = source.textStyle.strikethrough;
+		imported.textStyle.underline = source.textStyle.underline;
+		imported.textStyle.italic = source.textStyle.italic;
+		imported.textStyle.bold = source.textStyle.bold;
+	}
+}
+
+- (nullable RptqQuery *)importQueryGraphFromContext:(RptqStoreContext *)sourceContext
+							   relativePathBaseURL:(nullable NSURL *)relativePathBaseURL
+											  error:(NSError * __autoreleasing *)error {
+	if (sourceContext == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADStore"
+										  code:1
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No source document to import.", @"Import failed: no source document was supplied.") }];
+		}
+		return nil;
+	}
+
+	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
+	NSSet<NSString *> *copySet = MADStoreImportQueryGraphEntities();
+	NSArray<NSString *> *orderedEntities = [copySet.allObjects sortedArrayUsingSelector:@selector(compare:)];
+
+	// Pass 1: insert a fresh object for every source object, remapping identifiers
+	// so two independently authored graphs coexist even with identical ids.
+	NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, RptqObject *> *> *remap =
+		[NSMutableDictionary dictionaryWithCapacity:orderedEntities.count];
+	for (NSString *entity in orderedEntities) {
+		NSArray<RptqObject *> *sourceObjects = [sourceContext objectsForEntity:entity];
+		NSMutableDictionary<NSNumber *, RptqObject *> *bySourceId =
+			[NSMutableDictionary dictionaryWithCapacity:sourceObjects.count];
+		for (RptqObject *sourceObject in sourceObjects) {
+			bySourceId[@(sourceObject.identifier)] = [self insertObjectForEntity:entity identifier:0];
+		}
+		remap[entity] = bySourceId;
+	}
+
+	// Pass 2: copy attributes and edges, remapping every identifier and dropping an
+	// edge whose destination is outside the query graph (layout bands, elements, and
+	// the source document row).
+	for (NSString *entity in orderedEntities) {
+		MADStoreEntity *descriptor = [schema entityNamed:entity];
+		NSDictionary<NSNumber *, RptqObject *> *bySourceId = remap[entity];
+		if (bySourceId.count == 0) continue;
+		for (RptqObject *sourceObject in [sourceContext objectsForEntity:entity]) {
+			RptqObject *imported = bySourceId[@(sourceObject.identifier)];
+			if (imported == nil) continue;
+
+			for (MADStoreAttribute *attribute in descriptor.allAttributes) {
+				if ([attribute.name isEqualToString:@"identifier"]) continue;
+				id value = [sourceObject.backingObject attributeValue:attribute.name];
+				if (value != nil) {
+					[imported.backingObject setAttributeValue:value forName:attribute.name];
+				}
+			}
+
+			for (NSString *name in sourceObject.backingObject.references) {
+				MADStoreRelationship *relationship = [descriptor anyRelationshipNamed:name];
+				if (relationship == nil || ![copySet containsObject:relationship.destination]) continue;
+				[imported.backingObject setReference:
+					MADStoreImportIdentifierForSourceIdentifier([sourceObject.backingObject referenceForName:name],
+																 relationship.destination, remap)
+														  forName:name];
+			}
+
+			for (NSString *name in sourceObject.backingObject.collections) {
+				MADStoreRelationship *relationship = [descriptor anyRelationshipNamed:name];
+				if (relationship == nil || ![copySet containsObject:relationship.destination]) continue;
+				NSArray<NSNumber *> *sourceIds = [sourceObject.backingObject existingCollectionForName:name];
+				NSMutableArray<NSNumber *> *importedIds = [NSMutableArray arrayWithCapacity:sourceIds.count];
+				for (NSNumber *sourceId in sourceIds) {
+					NSNumber *importedId = MADStoreImportIdentifierForSourceIdentifier(sourceId,
+																					   relationship.destination, remap);
+					if (importedId != nil) [importedIds addObject:importedId];
+				}
+				[[imported.backingObject collectionForName:name] addObjectsFromArray:importedIds];
+			}
+		}
+	}
+
+	// Pass 3: resolve relative SQLite source paths so they name the same file from
+	// the destination's location.
+	MADStoreResolveRelativeSQLitePaths(remap[@"RptqDatabase"], relativePathBaseURL);
+
+	// Pass 4: copy the layout's surrogate-keyed rows and value-type satellites, which
+	// have no identifier and so are out of reach of the flat identifier remap above.
+	// The sections and elements themselves were already copied (their attributes,
+	// field references, and element-to-element edges), remapped by identifier.  A
+	// document-structural section belongs to the source's root, so it is assigned to
+	// the imported root here; a group section keeps its remapped `inGroup`; a leaf's
+	// section already carries its remapped `ownerQuery`.
+	RptqDocument *sourceDocument = [RptqDocument newDocumentReadFromManagedObjectContext:sourceContext];
+	RptqQuery *sourceRoot = sourceDocument.rootQuery ?: sourceDocument.mainQuery;
+	RptqQuery *importedRoot = sourceRoot != nil ? (RptqQuery *)remap[@"RptqQuery"][@(sourceRoot.identifier)] : nil;
+
+	NSString *sectionEntity = NSStringFromClass([RptqDocumentSection class]);
+	NSString *rowEntity = NSStringFromClass([RptqDocumentSectionRows class]);
+	for (RptqObject *sourceSectionObject in [sourceContext objectsForEntity:sectionEntity]) {
+		RptqDocumentSection *sourceSection = (RptqDocumentSection *)sourceSectionObject;
+		RptqDocumentSection *importedSection = (RptqDocumentSection *)remap[sectionEntity][@(sourceSection.identifier)];
+		if (importedSection == nil) continue;
+
+		BOOL isDocumentSection = sourceSection.inReport != nil ||
+			sourceSection.inReportPageFooter != nil ||
+			sourceSection.inReportPageHeader != nil ||
+			sourceSection.inReportReportFooter != nil ||
+			sourceSection.inReportReportHeader != nil;
+		if (isDocumentSection && importedRoot != nil) {
+			importedSection.ownerQuery = importedRoot;
+		}
+
+		for (RptqDocumentSectionRows *sourceRow in sourceSection.hasRows) {
+			RptqDocumentSectionRows *importedRow = (RptqDocumentSectionRows *)[self insertObjectForEntity:rowEntity identifier:0];
+			importedRow.layoutHeight = sourceRow.layoutHeight;
+			importedRow.rowNumber = sourceRow.rowNumber;
+			importedRow.inSection = importedSection;
+
+			for (RptqDocumentElement *sourceElement in sourceRow.hasObjects) {
+				RptqDocumentElement *importedElement = (RptqDocumentElement *)remap[sourceElement.entity][@(sourceElement.identifier)];
+				if (importedElement == nil) continue;
+				MADStoreCopyElementValueTypes(sourceElement, importedElement);
+				importedElement.inSectionRow = importedRow;
+			}
+		}
+	}
+
+	// A layoutless source imports with five empty sections: a query that ended up with
+	// no structural sections of its own (a source that had no designed layout) gets an
+	// authorable layout here, eagerly rather than on its first scoped write.
+	for (RptqObject *importedQueryObject in remap[@"RptqQuery"].allValues) {
+		RptqQuery *importedQuery = (RptqQuery *)importedQueryObject;
+		if (importedQuery.hasLayoutSections.count == 0) {
+			[RptqDocumentSection createStructuralSectionsForQuery: importedQuery managedObjectContext: self];
+		}
+	}
+
+	// The imported databases join the destination document's schema list, so the
+	// document owns them and every walk (allQueries, the sidebar, refresh) sees them.
+	RptqDocument *destinationDocument = [RptqDocument newDocumentReadFromManagedObjectContext:self];
+	if (destinationDocument != nil) {
+		for (RptqObject *database in remap[@"RptqDatabase"].allValues) {
+			[self addObject:database toRelationshipNamed:@"hasDatabaseSchemas" onObject:destinationDocument];
+		}
+	}
+
+	// The imported root is the source's explicit root, else its single query (resolved
+	// in pass 4 above).
+	return sourceRoot != nil ? (RptqQuery *)remap[@"RptqQuery"][@(sourceRoot.identifier)] : nil;
 }
 
 @end

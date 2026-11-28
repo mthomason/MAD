@@ -46,6 +46,12 @@ typedef NS_ENUM(NSInteger, MADDatabaseSqlite3ErrorCode) {
 - (void)openDatabase;
 - (void)openDatabaseWithFlags:(int)flags;
 
+/// Finalize the bulk statement and close the underlying handle, if either is open.
+/// Idempotent.  A staged table that will be discarded calls this before its files
+/// are removed: Windows cannot delete a file whose handle is still open, and the
+/// reader handle otherwise stays open for a table's whole lifetime.
+- (void)closeDatabaseConnectionIfOpen;
+
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
 + (NSString *)sortDescriptionForColumnType:(MADDataType)columnType
@@ -62,6 +68,15 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	returnsResults: (BOOL)returnsResults
 	binaryBindings: (NSArray *)binaryBindings
 		 withError: (NSError * __autoreleasing *)resultError;
+
+/// Attach another SQLite database file read-only, under `name`, for a composition
+/// query.  The connection must be open with SQLITE_OPEN_URI so the read-only URI
+/// is honoured; it registers LSASC, so a join that orders or compares a text key
+/// works.  Returns NO with `error` when the file is missing or the attachment
+/// limit (SQLITE_MAX_ATTACHED) is exceeded.
+- (BOOL)attachReadOnlyDatabaseAtURL:(NSURL *)url
+							 asName:(NSString *)name
+							  error:(NSError * __autoreleasing *)error;
 
 void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
 

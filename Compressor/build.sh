@@ -206,8 +206,11 @@ acquire_lock() {
 		fi
 		if [[ -f "${LOCK_DIR}/pid" ]]; then
 			local owner
-			owner="$(cat "${LOCK_DIR}/pid")"
-			if ! kill -0 "${owner}" 2>/dev/null; then
+			# The owner can release the lock between the test and the read,
+			# which under `set -e` would abort the build.  An unreadable pid
+			# is not a dead owner -- wait and retry.
+			owner="$(cat "${LOCK_DIR}/pid" 2>/dev/null || true)"
+			if [[ -n "${owner}" ]] && ! kill -0 "${owner}" 2>/dev/null; then
 				log "breaking stale lock held by dead pid ${owner}"
 				rm -rf "${LOCK_DIR}"
 				continue

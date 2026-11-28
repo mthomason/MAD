@@ -25,6 +25,7 @@
 #import "RptqDocumentSectionRows.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqQuery+Extras.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDatabaseSchemaField.h"
@@ -394,7 +395,19 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 	NSUInteger rowIndex = 0, layoutSectionCounter = 0, readGroupCounter = 0;
 	NSMutableArray *accessibilityDrawingObjects = [[NSMutableArray alloc] init];
 	
-	RptqDocument *document = [self.reportFormatter.layout activeDocumentModel];
+	id <MADDocumentRenderProtocol> renderDocument = self.reportFormatter.layout;
+	RptqDocument *document = [renderDocument activeDocumentModel];
+
+	// The bands laid out are the render node's, but `documentSectionForType:` answers the
+	// document's (root) sections.  For a non-root node, resolve that node's own band.
+	int64_t renderQueryIdentifier = [renderDocument respondsToSelector: @selector(renderQueryIdentifier)]
+		? renderDocument.renderQueryIdentifier : 0;
+	RptqQuery *renderQuery = renderQueryIdentifier != 0
+		? (RptqQuery *)[renderDocument.storeContext objectForEntity: NSStringFromClass([RptqQuery class])
+														 identifier: renderQueryIdentifier]
+		: nil;
+	BOOL nodeScoped = renderQuery != nil && ![renderQuery isLayoutRootInDocument: document];
+
 	RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
 	
 	MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
@@ -407,7 +420,12 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
 		NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumerator:pageIndex];
 		for (NSDictionary *pageSection in layoutEnumerator) {
 			
-			RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
+			RptqDocumentSection *documentSection = nodeScoped
+				? [renderQuery layoutSectionForType: pageSection.sectionType level: pageSection.groupLevel]
+				: nil;
+			if (documentSection == nil) {
+				documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];
+			}
 			
 			CGRect sectionRect = [self sectionRectForDocumentSection:documentSection pageSection:pageSection inDocument:document pageRect:pageRect numberOfPages:numberOfPages pageIndex:pageIndex offset:&originY];
 			

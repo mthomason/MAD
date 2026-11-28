@@ -58,6 +58,19 @@ $ShimDir = Join-Path $BuildDir "shim"
 
 $GsRelease = Join-Path $Prefix "x64\Release"
 $GsInclude = Join-Path $GsRelease "include"
+
+# The version manifest is the single source of the engine's identity.
+function Get-ManifestValue([string]$Key) {
+	$manifest = Join-Path $RepoRoot "Versions.yml"
+	if (-not (Test-Path $manifest)) { throw "missing $manifest" }
+	foreach ($line in Get-Content $manifest) {
+		$trimmed = ($line -split '#', 2)[0].Trim()
+		if ($trimmed -match "^$([regex]::Escape($Key)):\s*(.+)$") {
+			return $Matches[1].Trim().Trim('"')
+		}
+	}
+	throw "Versions.yml has no $Key"
+}
 $GsLib = Join-Path $GsRelease "lib"
 $GsBin = Join-Path $GsRelease "bin"
 
@@ -1467,6 +1480,69 @@ Write-Host "### linking mad.exe"
 	"-L$GsLib" @allObjects @cliObjects @archiveLibs @linkLibs `
 	"-o" $madExe 2>&1 | ForEach-Object { Write-Host $_ }
 if ($LASTEXITCODE -ne 0) { throw "link failed: mad.exe" }
+
+# ---------------------------------------------------------------------------
+# 5c. The engine's identity, beside mad.exe, so `mad version` and `mad serve`'s
+#     engine-info can name the commit this binary came from.  It is a build
+#     product; the tracked plists are untouched.
+# ---------------------------------------------------------------------------
+$commit = "unknown"
+$short = "unknown"
+$dirty = "false"
+try {
+	$resolved = (& git -C $RepoRoot rev-parse HEAD 2>$null | Out-String).Trim()
+	if ($LASTEXITCODE -eq 0 -and $resolved) {
+		$commit = $resolved
+		$short = $resolved.Substring(0, [Math]::Min(8, $resolved.Length))
+		$dirty = if ([string]::IsNullOrWhiteSpace((& git -C $RepoRoot status --porcelain 2>$null | Out-String))) { "false" } else { "true" }
+	}
+} catch {
+	$commit = "unknown"
+	$short = "unknown"
+	$dirty = "false"
+}
+
+$buildNumber = "0"
+$counted = (& git -C $RepoRoot rev-list --count HEAD 2>$null | Out-String).Trim()
+if ($LASTEXITCODE -eq 0 -and $counted -match '^\d+$') { $buildNumber = $counted }
+
+$dirtyXml = if ($dirty -eq "true") { "<true/>" } else { "<false/>" }
+$buildDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+$containerFormat = "$(Get-ManifestValue 'container_major').$(Get-ManifestValue 'container_minor')"
+$identity = @"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MADAppVersion</key>
+	<string>$(Get-ManifestValue 'windows_app_version')</string>
+	<key>MADAppBuild</key>
+	<string>$buildNumber</string>
+	<key>MADBuildNumber</key>
+	<string>$buildNumber</string>
+	<key>MADEngineVersion</key>
+	<string>$(Get-ManifestValue 'engine_version')</string>
+	<key>MADEngineRevision</key>
+	<string>r$buildNumber</string>
+	<key>MADSourceCommit</key>
+	<string>$commit</string>
+	<key>MADSourceCommitShort</key>
+	<string>$short</string>
+	<key>MADSourceDirty</key>
+	$dirtyXml
+	<key>MADBuildDate</key>
+	<string>$buildDate</string>
+	<key>MADServeProtocolVersion</key>
+	<string>$(Get-ManifestValue 'serve_protocol_version')</string>
+	<key>MADContainerFormat</key>
+	<string>$containerFormat</string>
+	<key>MADStoreRevision</key>
+	<string>$(Get-ManifestValue 'store_revision')</string>
+</dict>
+</plist>
+"@
+$identity | Set-Content (Join-Path $BuildDir "MADBuildInfo.plist") -Encoding utf8NoBOM
+Write-Host "  ok   MADBuildInfo.plist beside mad.exe ($short)"
 
 # ---------------------------------------------------------------------------
 # 6. Run every test (and the smoke test)

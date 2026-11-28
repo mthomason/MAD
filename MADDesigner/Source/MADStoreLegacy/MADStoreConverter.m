@@ -156,6 +156,9 @@ static void MADStoreWriteRelationships(NSManagedObject *object,
 									   MADStoreEntity *entity,
 									   NSDictionary<NSManagedObjectID *, NSNumber *> *identifiers) {
 	for (MADStoreRelationship *relationship in entity.allRelationships) {
+		// Store-only fields the composition step (revision 3) introduces have no
+		// counterpart in a legacy Core Data document; there is nothing to read.
+		if (relationship.introducedInVersion > MADStoreCurrentVersion) continue;
 		id value = [object valueForKey:relationship.name];
 
 		if (!relationship.isToMany) {
@@ -292,12 +295,13 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	// working directory back before anything else can notice.
 	NSString *workingDirectory = [NSFileManager defaultManager].currentDirectoryPath;
 	MADArchiveManager *archive = [[MADArchiveManager alloc] initWithFileWrapperURL:directory archiveURL:documentURL];
-	BOOL unarchived = [archive unarchive];
+	NSError *archiveError = nil;
+	BOOL unarchived = [archive unarchiveWithError:&archiveError];
 	if (workingDirectory) [[NSFileManager defaultManager] changeCurrentDirectoryPath:workingDirectory];
 
 	if (!unarchived) {
 		if (error) {
-			*error = MADStoreConverterError(MADStoreConverterErrorUnarchive,
+			*error = archiveError ?: MADStoreConverterError(MADStoreConverterErrorUnarchive,
 											[[NSString alloc] initWithFormat:@"could not unarchive %@", documentURL.lastPathComponent]);
 		}
 		return nil;

@@ -86,11 +86,21 @@ public static class PredicateOperatorExtensions
     };
 }
 
-/// <summary>One query field: its store identifier, its schema field name, and its type token.</summary>
-public sealed record QueryField(long Id, string Name, string Type);
+/// <summary>One query field: its store identifier, its schema field name, and its type token.
+/// A composed root field also carries its persisted output key and order, when it is an output.</summary>
+public sealed record QueryField(long Id, string Name, string Type, string? OutputKey, long OutputIndex)
+{
+    /// <summary>True when this field is one of the composed root's outputs.</summary>
+    public bool IsOutput => !string.IsNullOrEmpty(OutputKey);
+}
 
 /// <summary>One query table (a placed card) and its fields.</summary>
-public sealed record QueryTable(long Id, string Name, string Alias, long DropIndex, IReadOnlyList<QueryField> Fields);
+public sealed record QueryTable(long Id, string Name, string Alias, long DropIndex, IReadOnlyList<QueryField> Fields, long UpstreamQuery)
+{
+    /// <summary>True when this card is a composed root's upstream table (it names a
+    /// child query), rather than a leaf's schema table.</summary>
+    public bool IsUpstream => UpstreamQuery != 0;
+}
 
 /// <summary>One join between two query fields.</summary>
 public sealed record QueryLink(long Id, LinkType Type, long LeftField, long RightField);
@@ -109,7 +119,10 @@ public sealed record QueryModel(
     IReadOnlyList<QueryTable> Tables,
     IReadOnlyList<QueryLink> Links,
     IReadOnlyList<QueryPredicate> Predicates,
-    IReadOnlyList<QueryGroup> Groups)
+    IReadOnlyList<QueryGroup> Groups,
+    long QueryId,
+    bool IsRoot,
+    bool IsComposing = false)
 {
     public static QueryModel Parse(JsonElement root)
     {
@@ -126,14 +139,17 @@ public sealed record QueryModel(
                 fields.Add(new QueryField(
                     field.GetProperty("id").GetInt64(),
                     field.GetProperty("name").GetString() ?? "",
-                    field.GetProperty("type").GetString() ?? ""));
+                    field.GetProperty("type").GetString() ?? "",
+                    field.TryGetProperty("outputKey", out var ok) && ok.ValueKind == JsonValueKind.String ? ok.GetString() : null,
+                    field.TryGetProperty("outputIndex", out var oi) && oi.ValueKind == JsonValueKind.Number ? oi.GetInt64() : 0));
             }
             tables.Add(new QueryTable(
                 table.GetProperty("id").GetInt64(),
                 table.GetProperty("name").GetString() ?? "",
                 table.GetProperty("alias").GetString() ?? "",
                 table.GetProperty("dropIndex").GetInt64(),
-                fields));
+                fields,
+                table.TryGetProperty("upstreamQuery", out var upstream) && upstream.ValueKind == JsonValueKind.Number ? upstream.GetInt64() : 0));
         }
 
         var links = new List<QueryLink>();
@@ -167,8 +183,20 @@ public sealed record QueryModel(
                 (GroupSort)group.GetProperty("sort").GetInt32()));
         }
 
-        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups);
+        long queryId = root.TryGetProperty("queryId", out var queryIdEl) && queryIdEl.ValueKind == JsonValueKind.Number ? queryIdEl.GetInt64() : 0;
+        // The engine writes these flags as a JSON boolean in document-info but as 1/0 in
+        // query-model (an NSNumber built from a BOOL expression), so accept either form.
+        // isComposing is true for the composed root and for any query with an upstream table.
+        bool isRoot = ReadFlag(root, "isRoot");
+        bool isComposing = ReadFlag(root, "isComposing");
+        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups, queryId, isRoot, isComposing);
     }
+
+    /// <summary>Reads a boolean flag that the engine may write as a JSON boolean or as 1/0.</summary>
+    private static bool ReadFlag(JsonElement root, string name)
+        => root.TryGetProperty(name, out var element)
+            && (element.ValueKind == JsonValueKind.True
+                || (element.ValueKind == JsonValueKind.Number && element.GetInt32() != 0));
 }
 
 /// <summary>The result of <c>validate-sql</c> / <c>apply-sql</c>: the plan's counts.</summary>

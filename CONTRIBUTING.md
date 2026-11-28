@@ -65,6 +65,32 @@ The Linux suites record known platform divergences as `NEED` lines rather than
 silently skipping them — a new `NEED` must carry a reason, and a divergence
 that isn't either fixed or recorded is a failing change.
 
+## Versions and build identity
+
+`Versions.yml` at the repository root is the one checked-in statement of intended
+versions: the next release, the published release, each app's semantic version, the
+iOS line, and the published engine's version and revision. Build numbers are not
+stored there — they are the git commit count at build time, so a merge advances the
+number automatically and nothing is edited per commit or push. Only
+`ios_build_floor` is manual, and only at an App Store submission.
+
+* `python3 -I scripts/dev/versions.py check` must pass before a release pull
+  request. It holds `docs/_data/versions.yml`, `MADMeta.plist`, the container and
+  store constants, the Windows package defaults, and the public download links to
+  the manifest.
+* `python3 -I scripts/dev/versions.py docs` rewrites the documentation site's
+  published values after a version change.
+* Build products carry a generated `MADBuildInfo.plist`/`.json` with the app
+  version, build, engine identity, the full source commit, and a dirty flag.
+  `scripts/dev/build-info.sh` writes it; the Mac, iOS, Windows, and CLI builds place
+  it. Never commit one, and never write build numbers back into a tracked plist —
+  the About windows report `unknown` when the file is absent, which is the correct
+  answer for an unidentified build.
+
+Release numbers: `0.7.1` is the stabilization candidate and `0.8.0` the composition
+candidate. The published `v0.7.0` tag, its assets, and the links that advertise it
+stay as they are until a release is cut.
+
 ## Style
 
 * Tabs, not spaces. Comments where they earn their place, not everywhere.

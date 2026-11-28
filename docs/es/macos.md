@@ -37,7 +37,10 @@ iPad/iPhone, la CLI `mad` en Linux y la GitHub Action
 
 Cada documento `.mad` abierto se ejecuta en una ventana nativa de `NSDocument` (`MADMacDocument` / `MADMacWindowController`)
 con un control segmentado **Workspace** centrado en la barra de herramientas de la
-ventana (`Cmd+1`, `Cmd+2`, `Cmd+3`) que alterna entre las tres etapas de generación de informes:
+ventana (`Cmd+1`, `Cmd+2`, `Cmd+3`) que alterna entre las tres etapas de generación de informes.
+Un informe se abre en el espacio de trabajo Query la primera vez y después en el espacio de
+trabajo en el que se mostró por última vez; el subtítulo de la ventana indica su tipo
+(**Standard Report** o **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -103,6 +106,34 @@ El espacio de trabajo **MAD Viewer** (`MADMacViewerViewController`) actualiza la
     * **JSON Full Report (`.json`)** — secciones jerárquicas, grupos y elementos evaluados (`MADReportExporterJSONReport`)
     * **Plain Text (`.txt`)** — tabla de texto monoespaciado (`MADReportExporterText`)
 * **Vista previa enmarcada de páginas y barra de estado:** Renderiza páginas nítidas con sombra en un `PDFView` nativo e indica en la barra de estado inferior el número de páginas renderizadas, el número de filas en caché y las dimensiones del papel.
+
+---
+
+## Informes de composición
+
+Un **Informe de composición** combina varios informes en un solo documento `.mad`. Es la
+manera de escritorio de unir datos de distintas bases de datos —MySQL, PostgreSQL, SQL Server y
+SQLite— sin un servidor de federación. Consulte [la guía de composición](composition.html) para
+el concepto y las muestras entre bases de datos.
+
+* **Selector Navigation de la barra de herramientas:** un Informe de composición añade un menú emergente **Navegación**.
+  Lista el **Resultado** primero (*Resultado — <nombre>*) y luego cada origen.
+  Seleccionar un informe cambia los espacios de trabajo Query, Designer y Viewer juntos; nunca
+  cambia el espacio de trabajo activo.
+* **Cada origen es un informe:** seleccionar un origen muestra su propia consulta en MAD Query, sus
+  propias bandas y lista de campos en MAD Designer, y sus propias páginas en MAD Viewer. Un origen
+  que aún no tiene diseño sigue siendo un informe de filas: el visor muestra una cuadrícula de filas y el
+  diseñador ofrece crear su diseño.
+* **Credenciales por origen:** una composición pide una contraseña por origen al actualizar,
+  con el controlador, host, puerto, base de datos y usuario ya rellenados. Las contraseñas permanecen en el
+  Llavero o en la sesión actual y nunca se escriben en el `.mad`.
+
+
+**Para crear una composición:** **Archivo ▸ Nueva composición…** elige informes existentes y un
+destino; **Archivo ▸ Nuevo documento…** ofrece los tipos Standard y Composition Report; **Archivo
+▸ Convertir en composición…** convierte el informe estándar abierto en una composición
+de un solo origen. El menú Añadir del espacio de trabajo MAD Query también añade una consulta de origen desde una conexión
+de base de datos o importa un informe existente en la composición abierta.
 
 ---
 

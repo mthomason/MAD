@@ -177,7 +177,7 @@ lang: ja-JP
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
 
-ネイティブmacOSアプリケーションの公開ユーザーおよび開発者ドキュメントは[`docs/macos.md`](../../macos.md)（スクリーンショットは`docs/assets/macos-native-mad-query.png`と`docs/assets/macos-native-mad-designer.png`）と[`Mac/README.md`](../../../../Mac/README.md)に公開されています。
+ネイティブmacOSアプリケーションの公開ユーザーおよび開発者ドキュメントは[`docs/macos.md`](../../macos.md)（スクリーンショットは`docs/assets/macos-native-mad-query.png`と`docs/assets/macos-native-mad-designer.png`）と[`Mac/README.md`](https://github.com/mthomason/MAD/blob/master/Mac/README.md)に公開されています。
 
 ### 継続的インテグレーション（完了）
 

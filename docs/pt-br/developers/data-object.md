@@ -11,14 +11,26 @@ Esta página define o objeto de dados: a definição de um relatório, seu esque
 
 **Escopo:** o conceito levantado em 2026-10-16 — o que é um objeto de dados, como ele é representado
 neste código e o que é preciso para formalizá-lo. A montagem multifonte / de sub-relatórios descrita
-na mesma conversa está registrada aqui como consequência do contrato, deliberadamente
-não construída.
-**Data:** 2026-10-16, lido em `445794e11`.
-**Status:** documento de design. Ele propõe; não implementa nada, e nada aqui está
-agendado. [a visão do projeto](../vision.html) §1 — "um relatório é uma função de fontes de dados para uma tabela" — é
-a visão que este arquivo torna concreta e nomeia o código para ela.
+na mesma conversa está registrada aqui como consequência do contrato; sua metade no mesmo documento
+agora está construída.
+**Data:** 2026-10-16, lido em `445794e11`; status atualizado em 2026-11-27.
+**Status:** registro de design, parcialmente realizado. A composição no mesmo documento é entregue no MAD
+Designer para macOS e Windows 0.8: um documento `.mad` contém um grafo de relatórios, cada um com
+sua própria consulta, layout e tabela materializada. A análise abaixo é preservada como o
+registro que levou a isso; §5 e §7 marcam o que está construído e o que permanece adiado. O guia
+público é [Relatórios de Composição](../composition.html). [a visão do projeto](../vision.html) §1 —
+"um relatório é uma função de fontes de dados para uma tabela" — é a visão que este arquivo torna
+concreta e nomeia o código para ela.
 
 ---
+
+> **Decisão final sobre a composição (2026-11-26):** o esboço de composição da §5 (incluindo
+> sua recomendação de Layout B, §5.1/§9.2) foi substituído pelo documento normativo
+> [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md), que adota o
+> Layout A (`ATTACH`, um `.maddb` por nó). A §0 da especificação é **final**: cada nó de uma
+> composição é um relatório completo com seu próprio layout e seus próprios dados; a raiz é o
+> relatório padrão do documento, não o único. Combinar relatórios leva o layout e o resultado
+> de cada filho junto.
 
 ## 1. A ideia, e o que ela não é
 
@@ -301,11 +313,16 @@ Forma mínima, recomendada:
 A alternativa mais pesada — uma nova entidade `RptqDataObject` proprietária da definição, com
 `RptqQuery` rebaixado — tem nomenclatura mais limpa e uma migração maior. Registrada como decisão 9.1.
 
-## 5. Composição — a montagem de sub-relatórios, documentada, não construída
+## 5. Composição — a montagem de sub-relatórios, construída no mesmo documento
 
-**Esta seção é deliberadamente não agendada** (o usuário, 2026-10-16: *"Não quero montar
-isso… mas quero documentar esta ideia"*). Ela existe para que, quando for desejada, seja um plano
-em vez de uma descoberta.
+**Status: construída no mesmo documento (2026-11-27).** O mecanismo desta seção é o que foi entregue: uma
+composição é um grafo de relatórios completos, materializados em ordem, com o relatório compositor
+unindo as tabelas de seus filhos localmente. A posição anterior — documentada, mas deliberadamente
+não agendada (o usuário, 2026-10-16: *"Não quero montar isso… mas quero documentar esta
+ideia"*) — é história. A decisão normativa
+([`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md) §0) torna cada nó
+de uma composição um relatório completo com seu próprio layout e dados. A composição entre documentos, e
+uma identidade estável compartilhada entre arquivos, permanecem adiadas.
 
 ### 5.1 O mecanismo, precisamente
 
@@ -329,16 +346,24 @@ A versão de uma linha, que é toda a razão de isto ser uma montagem e não um 
 resultado de toda consulta já é uma tabela SQLite, e o SQLite já é um driver.** A
 engine de federação está na caixa; atualmente ela é endereçada por um hash de nome de arquivo.
 
-### 5.2 O que seria construído, se desejado
+### 5.2 O que foi construído, e o que permanece
 
-1. O contrato da §4 (descrever/executar, identidade, endereço) — um pré-requisito, não uma fase.
-2. O tipo de fonte: `RptqQueryTable` → objeto de dados; a geração de SQL o resolve para a
-   tabela de materialização do objeto em vez de `db.table`.
-3. A ordem de execução: percorrer o DAG; atualizar objetos obsoletos; depois a consulta compositora.
-4. A telescopia do designer (palavra do usuário): no painel Adicionar Tabela, um segundo tipo de
-   fonte ao lado das tabelas de esquema — os outros objetos de dados do documento, ou uma caixa de sub-relatório que
-   lista os campos de saída do outro objeto. A interface de junção é inalterada; ambas as extremidades são campos.
-5. Suporte a `ATTACH` em `MADDatabaseSqlite3` se e quando a composição entre arquivos for desejada.
+Entregue (no mesmo documento):
+
+1. O contrato da §4 (descrever/executar, identidade, endereço).
+2. O tipo de fonte: uma tabela de consulta cuja origem é outra consulta; a compilação de SQL a resolve para
+   a tabela materializada do filho em vez de `db.table`.
+3. A ordem de execução: uma travessia topológica materializa cada nó, o relatório compositor por último.
+4. A telescopia do designer (palavra do usuário): uma superfície de Importar Relatório / Adicionar Fonte ao lado
+   das tabelas de esquema, com o grafo de composição e os relatórios por nó em todos os três workspaces.
+5. `ATTACH DATABASE` no caminho SQLite para uma tabela materializada por nó.
+
+Adiado:
+
+* Composição entre documentos — uma fonte que vive em um arquivo `.mad` *diferente*, com identidade
+  de documento, resolução de caminho e política de credenciais.
+* Um endereço estável compartilhado entre documentos (a marca de materialização ainda é indexada pelo
+  hash do nome de arquivo do documento).
 
 ### 5.3 O que faz isto não ser uma linha de código
 
@@ -400,18 +425,19 @@ mudança da §3 que ela aposenta.
 | 2 | **A consulta é dona de si.** `MADQueryFull` recebe a consulta que lhe foi dada (sem releitura do documento); `-dataTableForQuery:` resolve por consulta; `MADQueryActiveQueryFields` limita-se a uma consulta; `MADModelDocument` espelha qualquer consulta. Um documento, muitos objetos. | Todos os três pontos de fixação da §3.6 |
 | 3 | **Identidade e endereço.** Nomeie o objeto no armazenamento; marque materializações pelo identificador do objeto, não pelo nome de arquivo; uma tabela de resultado por objeto no cache; plist de esquema por objeto. | Materialização com hash de nome de arquivo; uma tabela por documento |
 | 4 | **A vinculação e as superfícies.** O layout vincula-se ao esquema de um objeto de dados; a CLI ganha `describe`; a forma JSON é fixada uma vez (exportação + API + IA). | Vinculação à "consulta do documento" |
-| 5 | **Composição** (§5), somente quando solicitada. | — |
+| 5 | **Composição** (§5): no mesmo documento, entregue na 0.8. Entre documentos permanece adiada. | — |
 
 A Fase 1 é a carga útil real do design e a menor: não precisa de mudança no armazenamento, nem de mudança
 na interface, nem de novo formato — ela reordena código que já existe, e é demonstrável pelas
 suítes atuais mais uma asserção de esquema em uma consulta com zero linhas. As Fases 2–4 são a mesma ideia
-aplicada às camadas que sustentam a suposição de consulta única. A Fase 5 é a montagem, documentada,
-não agendada.
+aplicada às camadas que sustentam a suposição de consulta única. A Fase 5 foi entregue como
+composição no mesmo documento; a composição entre documentos permanece adiada.
 
 ## 8. O que não fazer
 
-- **Não construa a montagem multifonte agora.** A decisão do usuário, 2026-10-16; este documento é
-  o registro, não um item de fila. (Aplicam-se as convenções de `TASKS.md`/`BUGS.md`: nada aqui é
+- **Não construa a composição entre documentos agora.** A composição no mesmo documento está entregue;
+  uma referência a um relatório em outro arquivo `.mad` ainda é um trabalho separado e adiado.
+  (Aplicam-se as convenções de `TASKS.md`/`BUGS.md`: nada aqui é
   iniciado por iniciativa do agente.)
 - **Não comprima nem reprojete o cache.** Ele é estrutural, o design de duas passagens precisa dele,
   e a §5.1 de `MAD_FORMAT.md` é a análise vigente.

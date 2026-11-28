@@ -81,6 +81,30 @@ La aplicación tiene las mismas tres etapas de informes que la app de macOS:
 
 El visor exporta **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** y **Texto sin formato**, en el orden del visor de macOS. El motor escribe el PDF (el mismo exportador que usa `mad export --format pdf`), de modo que un informe grande no bloquea la ventana: la barra de estado muestra una barra de progreso indeterminada y una línea «Exportando…» hasta que se escribe el archivo, y después indica su tamaño.
 
+## Informes de composición
+
+Un **Informe de composición** combina varios informes en un solo documento `.mad`, uniendo datos
+de MySQL, PostgreSQL, SQL Server y SQLite localmente en lugar de mediante un servidor de
+federación. [La guía de composición](composition.html) cubre el modelo y las muestras.
+
+* **Panel de composición:** un Informe de composición muestra un panel izquierdo acoplado con el
+  grafo del documento —el **Resultado** arriba y sus orígenes debajo, con conectores que apuntan al
+  informe que los consume—. El panel tiene un `GridSplitter` y un modo Expandir/Contraer.
+* **Una sola selección:** hacer clic en una tarjeta del grafo, o elegir un informe en el selector
+  **Componente** de la barra de herramientas, cambia los espacios de trabajo Query, Designer y Viewer a ese
+  informe. El selector permanece visible cuando el panel está contraído.
+* **Cada origen es un informe:** un origen conserva su propia consulta, diseño y filas. Un origen
+  sin diseño es un informe de filas: el visor muestra sus filas en caché en una cuadrícula y el
+  diseñador ofrece crear un diseño.
+* **Credenciales por origen:** la actualización pregunta una vez por cada origen que requiere credenciales, con los
+  detalles de conexión ya rellenados. Las contraseñas permanecen en la sesión o en el almacén
+  de credenciales de la plataforma, no en el documento.
+
+**Para crear uno:** **Archivo ▸ Nueva composición…** crea una composición a partir de informes existentes;
+**Archivo ▸ Importar…** agrega un informe a la composición abierta; **Archivo ▸ Convertir en composición**
+convierte el informe estándar abierto. La acción Importar del panel hace lo mismo desde dentro del
+espacio de trabajo.
+
 ## Compilar desde el código fuente
 
 La aplicación se compila con el SDK de .NET fijado en [`Windows/global.json`](https://github.com/mthomason/MAD/blob/master/Windows/global.json) (10.0.404):

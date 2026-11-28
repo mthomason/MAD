@@ -299,7 +299,7 @@ Produz:
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
 
-A documentação pública de usuário e desenvolvedor do aplicativo nativo para macOS é publicada em [`docs/macos.md`](../../macos.md) (com capturas de tela em `docs/assets/macos-native-mad-query.png` e `docs/assets/macos-native-mad-designer.png`) e em [`Mac/README.md`](../../../../Mac/README.md).
+A documentação pública de usuário e desenvolvedor do aplicativo nativo para macOS é publicada em [`docs/macos.md`](../../macos.md) (com capturas de tela em `docs/assets/macos-native-mad-query.png` e `docs/assets/macos-native-mad-designer.png`) e em [`Mac/README.md`](https://github.com/mthomason/MAD/blob/master/Mac/README.md).
 
 ### Integração contínua (Concluída)
 

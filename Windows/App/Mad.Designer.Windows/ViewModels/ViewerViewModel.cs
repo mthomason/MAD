@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
 using Mad.Designer.Windows.Engine;
@@ -71,6 +72,8 @@ public sealed class ViewerViewModel : ObservableObject
     private readonly EngineService _engine;
     private readonly Func<string, string?>? _exportPath;
     private int _handle = -1;
+    private long _queryId;
+    private bool _isNodeReportRoot = true;
     private Func<Task<bool>>? _refresh;
     private Func<int, Task>? _setPaperSize;
     private int _selectedPaperIndex;
@@ -81,6 +84,8 @@ public sealed class ViewerViewModel : ObservableObject
     private int _currentPage;
     private int _rowCount;
     private string? _previewHtml;
+    private DataView? _nodeRows;
+    private bool _isRowGrid;
     private string _statusText = NotYetRefreshedText;
     private ViewerStatusKind _statusKind = ViewerStatusKind.Neutral;
     private bool _isExporting;
@@ -108,6 +113,28 @@ public sealed class ViewerViewModel : ObservableObject
     public int PreviewPageIndex => _pageCount > 0 ? _currentPage - 1 : -1;
 
     public bool HasDocument => _handle >= 0;
+
+    /// <summary>The node the Viewer shows. Selecting another node clears the previous node's
+    /// HTML/rows first, so one report never flashes through while the next loads.</summary>
+    public long QueryId
+    {
+        get => _queryId;
+        set
+        {
+            if (Set(ref _queryId, value)) ClearRendered();
+        }
+    }
+
+    /// <summary>Discards the previous render (pages, HTML, and row grid) and returns the status
+    /// line to its neutral waiting text. Called when the selected node changes.</summary>
+    public void ClearRendered()
+    {
+        PreviewHtml = null;
+        PageCount = 0;
+        CurrentPage = 0;
+        SetNodeRows(null);
+        SetStatus(NotYetRefreshedText, ViewerStatusKind.Neutral);
+    }
 
     public AsyncRelayCommand RefreshCommand { get; }
     public AsyncRelayCommand ExportCommand { get; }
@@ -152,12 +179,41 @@ public sealed class ViewerViewModel : ObservableObject
     private static PaperOption OptionForType(int type)
         => PaperOptions.FirstOrDefault(option => option.Type == type) ?? PaperOptions[0];
 
+    /// <summary>The selected node's report identity: the Result (or a Standard Report's single
+    /// query) is the report root. Only the root may export <c>json-report</c>; a source's export
+    /// list drops it.</summary>
+    public bool IsNodeReportRoot
+    {
+        get => _isNodeReportRoot;
+        set
+        {
+            if (Set(ref _isNodeReportRoot, value))
+            {
+                // Keep the chosen index inside the (possibly shorter) list, then republish it.
+                if (_selectedFormatIndex >= AvailableExportFormats.Count)
+                {
+                    _selectedFormatIndex = AvailableExportFormats.Count - 1;
+                }
+                OnPropertyChanged(nameof(AvailableExportFormats));
+                OnPropertyChanged(nameof(SelectedFormatIndex));
+                OnPropertyChanged(nameof(SelectedFormat));
+            }
+        }
+    }
+
+    /// <summary>The formats offered for the selected node, in the catalogue's order. A source
+    /// (a non-root node) drops <c>json-report</c>, which the engine refuses for it.</summary>
+    public IReadOnlyList<ViewerExportFormat> AvailableExportFormats
+        => _isNodeReportRoot
+            ? ExportFormats
+            : ExportFormats.Where(f => f.Format != "json-report").ToList();
+
     public int SelectedFormatIndex
     {
         get => _selectedFormatIndex;
         set
         {
-            int index = Math.Clamp(value, 0, ExportFormats.Count - 1);
+            int index = Math.Clamp(value, 0, AvailableExportFormats.Count - 1);
             if (Set(ref _selectedFormatIndex, index))
             {
                 OnPropertyChanged(nameof(SelectedFormat));
@@ -165,7 +221,7 @@ public sealed class ViewerViewModel : ObservableObject
         }
     }
 
-    public ViewerExportFormat SelectedFormat => ExportFormats[_selectedFormatIndex];
+    public ViewerExportFormat SelectedFormat => AvailableExportFormats[_selectedFormatIndex];
 
     public double Zoom
     {
@@ -211,6 +267,13 @@ public sealed class ViewerViewModel : ObservableObject
 
     public int RowCount { get => _rowCount; private set => Set(ref _rowCount, value); }
 
+    /// <summary>A layout-less node's rows, or null when the node renders its HTML report. The
+    /// ViewerView shows this as a grid and hides the HTML preview.</summary>
+    public DataView? NodeRows { get => _nodeRows; private set => Set(ref _nodeRows, value); }
+
+    /// <summary>True when the Viewer is showing the row grid for a layout-less node.</summary>
+    public bool IsRowGrid { get => _isRowGrid; private set => Set(ref _isRowGrid, value); }
+
     /// <summary>The report HTML the preview shows — the engine's <c>html</c> export bytes.</summary>
     public string? PreviewHtml { get => _previewHtml; private set => Set(ref _previewHtml, value); }
 
@@ -239,9 +302,10 @@ public sealed class ViewerViewModel : ObservableObject
     /// document's live-data refresh (which calls back into <see cref="RenderAsync"/>) and
     /// answers whether it succeeded; <paramref name="setPaperSize"/> lets the document apply
     /// the paper through its own path (so the Designer's snapshot stays in step).</summary>
-    public Task LoadAsync(int handle, Func<Task<bool>> refresh, Func<int, Task>? setPaperSize = null)
+    public Task LoadAsync(int handle, long queryId, Func<Task<bool>> refresh, Func<int, Task>? setPaperSize = null)
     {
         _handle = handle;
+        _queryId = queryId;
         _refresh = refresh;
         _setPaperSize = setPaperSize;
 
@@ -252,6 +316,7 @@ public sealed class ViewerViewModel : ObservableObject
         CurrentPage = 0;
         RowCount = 0;
         PreviewHtml = null;
+        SetNodeRows(null);
         SetStatus(NotYetRefreshedText, ViewerStatusKind.Neutral);
 
         OnPropertyChanged(nameof(HasDocument));
@@ -263,6 +328,9 @@ public sealed class ViewerViewModel : ObservableObject
     /// render step and tests share the same path the engine export feeds.</summary>
     public void SetRenderedHtml(string html, int rowCount)
     {
+        // Clear any row-grid state first, so the HTML preview's property change is not
+        // suppressed by IsRowGrid still being true from a previously selected node.
+        SetNodeRows(null);
         RowCount = rowCount;
         PreviewHtml = html;
         PageCount = CountPages(html);
@@ -270,9 +338,30 @@ public sealed class ViewerViewModel : ObservableObject
         SetStatus(StatusMessage(PageCount, rowCount), ViewerStatusKind.Success);
     }
 
-    /// <summary>Lays the report out for the selected paper and loads its HTML preview.
-    /// Called by the document after a successful refresh.</summary>
-    public async Task RenderAsync(int rowCount)
+    /// <summary>Shows a layout-less node as a row grid: its columns and rows become a bound
+    /// <see cref="DataView"/> and the HTML preview is hidden.</summary>
+    public void SetNodeRows(NodeResult? node)
+    {
+        if (node == null)
+        {
+            NodeRows = null;
+            IsRowGrid = false;
+            return;
+        }
+
+        RowCount = node.RowCount;
+        NodeRows = node.ToDataTable().DefaultView;
+        IsRowGrid = true;
+        PreviewHtml = null;
+        PageCount = 0;
+        CurrentPage = 0;
+        SetStatus(Localizer.Format("Viewer.NodeRows", node.RowCount), ViewerStatusKind.Success);
+    }
+
+    /// <summary>Renders the selected node for the Viewer's paper: a node with elements renders
+    /// its HTML report, and a layout-less node shows a row grid from its retained result.
+    /// <paramref name="hasLayout"/> is the selected node's "has any element".</summary>
+    public async Task RenderAsync(bool hasLayout)
     {
         if (!HasDocument) return;
 
@@ -289,13 +378,40 @@ public sealed class ViewerViewModel : ObservableObject
             }
             RenderedPaperType = paper;
 
-            string html = await _engine.ExportAsync(_handle, "html");
-            SetRenderedHtml(html, rowCount);
+            NodeResult node;
+            try
+            {
+                node = await _engine.NodeResultAsync(_handle, _queryId);
+            }
+            catch (Exception)
+            {
+                // A node has no retained result until the document has been refreshed, and a
+                // failed refresh leaves every node's previous result untouched. Say so plainly
+                // rather than surfacing the transport error.
+                RenderedPaperType = paper;
+                PreviewHtml = null;
+                SetNodeRows(null);
+                PageCount = 0;
+                CurrentPage = 0;
+                SetStatus(Localizer.Get("Viewer.NodeNotRefreshed"), ViewerStatusKind.Neutral);
+                return;
+            }
+
+            if (hasLayout)
+            {
+                string html = await _engine.ExportAsync(_handle, "html", _queryId);
+                SetRenderedHtml(html, node.RowCount);
+            }
+            else
+            {
+                SetNodeRows(node);
+            }
         }
         catch (Exception exception)
         {
             RenderedPaperType = paper;
             PreviewHtml = null;
+            SetNodeRows(null);
             PageCount = 0;
             CurrentPage = 0;
             SetStatus(exception.Message, ViewerStatusKind.Error);
@@ -328,6 +444,13 @@ public sealed class ViewerViewModel : ObservableObject
         // export runs, and re-reading it would let the file's extension, its bytes and the
         // success line disagree.
         ViewerExportFormat format = SelectedFormat;
+        if (format.Format == "json-report" && !_isNodeReportRoot)
+        {
+            // The export list already hides it for a source; this is the direct-call guard,
+            // which surfaces the reason instead of letting the engine's error bubble up.
+            SetStatus(Localizer.Get("Viewer.JsonReportUnavailable"), ViewerStatusKind.Error);
+            return;
+        }
         string? stagedPath = null;
         bool targetExisted = File.Exists(outPath);
         bool succeeded = false;
@@ -350,7 +473,7 @@ public sealed class ViewerViewModel : ObservableObject
                 // The engine writes the bytes itself. Stage beside the target and move on
                 // success, so a failure can never delete a file the user already had.
                 stagedPath = $"{outPath}.{Guid.NewGuid():N}.part";
-                long bytes = await _engine.ExportToPathAsync(_handle, format.Format, stagedPath);
+                long bytes = await _engine.ExportToPathAsync(_handle, format.Format, stagedPath, _queryId);
                 File.Move(stagedPath, outPath, overwrite: true);
                 stagedPath = null;
                 succeeded = true;
@@ -361,7 +484,7 @@ public sealed class ViewerViewModel : ObservableObject
             }
             else
             {
-                string data = await _engine.ExportAsync(_handle, format.Format);
+                string data = await _engine.ExportAsync(_handle, format.Format, _queryId);
                 await File.WriteAllTextAsync(outPath, data);
                 succeeded = true;
                 SetStatus(Localizer.Format("Viewer.ExportStatus",

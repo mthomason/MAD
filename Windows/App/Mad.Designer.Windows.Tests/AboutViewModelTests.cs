@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using Mad.Client;
 using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
@@ -26,12 +27,27 @@ public sealed class AboutViewModelTests
     }
 
     [Fact]
-    public void About_ReportsTheEngineAndApplicationVersionsSeparately()
+    public void About_ShowsUnknownWhenTheEngineDoesNotAnswer()
     {
-        var about = new AboutViewModel();
-        Assert.Equal("v9.0 (r4433)", about.EngineVersion);
-        Assert.Equal("v0.7", about.ApplicationVersion);
-        Assert.NotEqual(about.EngineVersion, about.ApplicationVersion);
+        var about = new AboutViewModel(BuildInfo.Missing, engine: null);
+        Assert.Equal("unknown", about.EngineVersion);
+        Assert.Equal("unknown", about.ApplicationVersion);
+    }
+
+    [Fact]
+    public void About_UsesTheEngineIdentityItWasGiven()
+    {
+        var engine = new EngineInfo(1, "9.1", "r5151", "abc", "abc12345", false,
+            new[] { "engine-info" });
+        var build = new BuildInfo("0.8.0", "5151", "9.1", "r5151", "abc", "abc12345", false);
+
+        var about = new AboutViewModel(build, engine);
+
+        Assert.Contains("v9.1", about.EngineVersion);
+        Assert.Contains("r5151", about.EngineVersion);
+        Assert.Contains("abc12345", about.EngineVersion);
+        Assert.Contains("0.8.0", about.ApplicationVersion);
+        Assert.Contains("5151", about.ApplicationVersion);
     }
 
     [Fact]

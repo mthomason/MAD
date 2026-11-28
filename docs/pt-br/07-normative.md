@@ -46,6 +46,7 @@ que um checkpoint incorporaria diretamente ao arquivo principal.
 | Membro | Obrigatório | Conteúdo |
 |---|---|---|
 | `meta.plist` | sim | `generator`, `version` |
+| `requirements.plist` | para documentos compostos | `format`, `requiredCapabilities` (por exemplo, `query-composition`) |
 | `StoreContent/<name>` | sim | a definição do documento |
 | `StoreContent/<name>-wal` / `-shm` | não | presentes apenas quando não houve checkpoint (bit 0 da flag do cabeçalho = 0) |
 | `AdditionalContent/` | não | `thumbnail@2x.png` |
@@ -54,7 +55,11 @@ que um checkpoint incorporaria diretamente ao arquivo principal.
 
 - **v0** — formato inicial distribuído: sem cabeçalho magic, possivelmente com WAL, `version` 1. Os leitores devem
   aceitá-lo indefinidamente; ambos os documentos de exemplo originais são v0.
-- **v1** — cabeçalho magic, store com checkpoint concluído, `version` 1, novos membros conforme descrito acima.
+- **v1.0** — cabeçalho magic, store com checkpoint concluído, `version` 1, novos membros conforme descrito acima.
+  Um relatório comum é gravado como 1.0.
+- **v1.1** — um documento composto: o mesmo cabeçalho e membros que a v1.0, versão menor
+  1, mais `requirements.plist`. Um leitor que conhece apenas 1.0 recusa um documento 1.1
+  com um erro de atualização em vez de abrir um store cujo esquema ele não consegue ler.
 
 Um gravador emite v1 mantendo `meta.plist` inalterado no restante. Um leitor detecta v0 pela
 ausência dos magic bytes.

@@ -6,12 +6,15 @@
 # GNUstep built from source.  The engine is therefore built on the workstation
 # and packed as mad-windows-x64.zip — mad.exe, its GNUstep/ObjC/VC runtime
 # DLLs, and the Liberation fonts the PDF writer loads — and attached to the
-# v0.7.0 release.  This workflow downloads that asset and runs both .NET
-# suites against it.
+# v0.8.0-engine-rc1 pre-release, the composition candidate engine.  This
+# workflow downloads that asset and runs both .NET suites against it.
 #
 # The tag is pinned on purpose: a run is reproducible against one engine build.
 # Refresh the asset (and this pin, when a release carries a new engine) when
-# the engine changes.
+# the engine changes.  The capability gate below fails the job when the pinned
+# asset predates the protocol the app calls, so a stale engine cannot turn this
+# check green.  The pre-release is temporary: repoint the pin when v0.8.0 (or
+# the next release) carries its own mad-windows-x64.zip.
 #
 # The bundle is extracted to Windows/Engine/build, the path MadPathResolver and
 # MadPathResolverTests expect, and the DLLs sit beside mad.exe, so no GNUstep
@@ -63,7 +66,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $destination = Join-Path $env:GITHUB_WORKSPACE 'Windows/Engine/build'
           New-Item -ItemType Directory -Force -Path $destination | Out-Null
-          gh release download v0.7.0 --repo $env:GITHUB_REPOSITORY `
+          gh release download v0.8.0-engine-rc1 --repo $env:GITHUB_REPOSITORY `
             --pattern mad-windows-x64.zip --output engine.zip --clobber
           Expand-Archive -Path engine.zip -DestinationPath $destination -Force
           Remove-Item engine.zip
@@ -74,6 +77,26 @@ jobs:
           $ErrorActionPreference = 'Stop'
           & 'Windows/Engine/build/mad.exe' inspect 'CLI/Fixtures/London.portable.mad'
           if ($LASTEXITCODE -ne 0) { throw "mad.exe inspect exited $LASTEXITCODE" }
+
+      # The pinned asset must be an engine this branch can drive.  The v0.7.0
+      # asset predates the composition protocol -- it cannot answer
+      # `version --json` or `engine-info`, and the composition acceptance tests
+      # fail with "unknown method".  The candidate asset advertises
+      # query-composition; an asset that does not is a stale download and must
+      # fail here, not be skipped downstream.
+      - name: Verify the engine matches this branch
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $json = & 'Windows/Engine/build/mad.exe' version --json
+          if ($LASTEXITCODE -ne 0) {
+            throw "mad.exe version --json exited $LASTEXITCODE; the pinned engine predates the version protocol"
+          }
+          $info = $json | ConvertFrom-Json
+          if ($info.capabilities -notcontains 'query-composition') {
+            throw "the downloaded engine (source $($info.sourceCommitShort)) does not advertise query-composition; the engine asset is stale"
+          }
+          Write-Host "engine $($info.engineVersion) ($($info.engineRevision)), source $($info.sourceCommitShort)"
 
       # The London and Music fixtures name a bare `chinook.sqlite3`.  The engine
       # resolves it beside the document first, then in Application Support -- a

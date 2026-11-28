@@ -30,6 +30,9 @@
 
 	- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 								   databaseClass:(Class)databaseClass;
+	- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
+								   databaseClass:(Class)databaseClass
+								 queryIdentifier:(int64_t)queryIdentifier;
 	- (MADSectionLayout *)sectionLayoutAtIndex:(NSUInteger)index;
 
 @end

@@ -171,16 +171,27 @@
 @dynamic fieldKey;
 
 - (NSString *)fieldKey {
-	NSString *qa = [self.item.referencesQueryField.inQueryTable queryAlias];
-	NSString *fieldName = self.item.referencesQueryField.databaseSchemaField.name;
+	RptqQueryField *field = self.item.referencesQueryField;
+	// A composed document's root fields persist an explicit output key, and the
+	// composed result table is keyed by those output keys -- not by a source-table
+	// alias the way an ordinary query's columns are.  Reading the alias here would
+	// resolve to nothing and render the detail band blank, or worse, if two sources
+	// name a field the same, to the wrong source's value.
+	if (field.outputKey.length > 0) {
+		return field.outputKey;
+	}
+	NSString *qa = [field.inQueryTable queryAlias];
+	NSString *fieldName = field.databaseSchemaField.name;
 	NSString *fieldKey = [self.datasource.database queryKey: fieldName
 													  table: qa];
 	return fieldKey;
 }
 
 - (NSString *)formattedStringForValue:(id)value {
-	return [self.item formattedString: self.item.referencesQueryField.databaseSchemaField.dataType
-							  forValue: value];
+	RptqDatabaseSchemaField *schemaField = self.item.referencesQueryField.databaseSchemaField;
+	return [self.item formattedString:schemaField.dataType
+							 forValue:value
+							 decimals:schemaField.decimals];
 }
 
 @end
@@ -268,8 +279,10 @@
 }
 
 - (NSString *)formattedStringForValue:(id)value {
-	return [self.item formattedString: self.item.aggregateField.databaseSchemaField.dataType
-							 forValue: value];
+	RptqDatabaseSchemaField *schemaField = self.item.aggregateField.databaseSchemaField;
+	return [self.item formattedString:schemaField.dataType
+							 forValue:value
+							 decimals:schemaField.decimals];
 }
 
 @end

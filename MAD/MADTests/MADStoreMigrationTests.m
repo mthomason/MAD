@@ -437,6 +437,33 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	return url;
 }
 
+/// A revision-3 store: the base schema plus the five 2→3 composition columns, stamped
+/// `user_version = 3`, exactly what a composed document written by the previous build
+/// carried.  The 3→4 step adds `ownerQuery_identifier` to `RptqDocumentSection` only.
+- (NSURL *)makeVersionThreeStoreURL {
+	NSURL *url = [self.directory URLByAppendingPathComponent:@"revision3.sqlite"];
+
+	// Build the base (revision-2) schema the way a fresh store does, then stamp the
+	// composition columns and the revision the previous build would have left behind.
+	MADStore *fresh = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	XCTAssertTrue([fresh openWithError:&error], @"fresh open failed: %@", error);
+	[fresh close];
+
+	XCTAssertTrue((SQLiteExecute(url, @"ALTER TABLE \"RptqQuery\" ADD COLUMN \"name\" TEXT;")),
+				  @"2→3 name column");
+	XCTAssertTrue((SQLiteExecute(url, @"ALTER TABLE \"RptqDocument\" ADD COLUMN \"rootQuery_identifier\" INTEGER;")),
+				  @"2→3 rootQuery_identifier column");
+	XCTAssertTrue((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryTable\" ADD COLUMN \"upstreamQuery_identifier\" INTEGER;")),
+				  @"2→3 upstreamQuery_identifier column");
+	XCTAssertTrue((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryField\" ADD COLUMN \"outputIndex\" INTEGER;")),
+				  @"2→3 outputIndex column");
+	XCTAssertTrue((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryField\" ADD COLUMN \"outputKey\" TEXT;")),
+				  @"2→3 outputKey column");
+	XCTAssertTrue((SQLiteExecute(url, @"PRAGMA user_version = 3;")), @"could not stamp revision 3");
+	return url;
+}
+
 #pragma mark - The migration
 
 - (void)testVersionOneStoreMigratesOnOpen {
@@ -546,6 +573,65 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	MADStoreObject *reread = [store objectForEntity:@"RptqQuery" identifier:20 error:&error];
 	XCTAssertEqualObjects([reread attributeValue:@"sqlSourceText"],
 						  @"SELECT * FROM customers -- entered by hand");
+	[store close];
+}
+
+/// A store written by a newer build is refused before journal-mode, schema
+/// creation or migration writes anything.  The version-1 fixture is deliberately
+/// missing `sqlSourceText`, so the column's absence after the failed open proves
+/// no migration ran.
+- (void)testAStoreFromANewerBuildIsRefusedBeforeAnyWrite {
+	NSURL *url = [self makeVersionOneStoreURL];
+	// One past the highest readable revision -- a composed document is revision 3,
+	// which this build reads, so only 4 and beyond is "newer".
+	XCTAssertTrue((SQLiteExecute(url, [[NSString alloc] initWithFormat:
+		@"PRAGMA user_version = %ld;", (long)(MADStoreMaximumReadableVersion + 1)])),
+		@"could not stamp the newer version");
+
+	MADStore *store = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	XCTAssertFalse([store openWithError:&error], @"a newer store must not open");
+	XCTAssertEqualObjects(error.domain, MADStoreErrorDomain);
+	XCTAssertEqual(error.code, MADStoreErrorUnsupportedVersion);
+
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreMaximumReadableVersion + 1,
+				   @"the refused open leaves user_version alone");
+	XCTAssertFalse(SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText"),
+				   @"the refused open runs no migration");
+	[store close];
+}
+
+/// A revision-3 store opens unchanged (the base migration ladder stops at 2, so a
+/// store already past it is not touched), then a composed save runs the 3→4 step:
+/// `RptqDocumentSection` gains `ownerQuery_identifier` and `user_version` becomes 4.
+- (void)testRevisionThreeStoreMigratesToFourOnComposedSave {
+	NSURL *url = [self makeVersionThreeStoreURL];
+
+	// Opening a revision-3 store must not touch the schema: the 3→4 step runs on a
+	// composed save, never on open.
+	MADStore *store = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	XCTAssertEqual(SQLiteUserVersion(url), 3, @"revision 3 opens as revision 3");
+	XCTAssertFalse(SQLiteTableHasColumn(url, @"RptqDocumentSection", @"ownerQuery_identifier"),
+				   @"revision 3 has no ownerQuery column yet");
+
+	// A composed save (the path a document takes when its graph is first written)
+	// applies the 3→4 step in the same transaction as the write.
+	MADStoreObject *document = [MADStoreObject objectWithEntity:@"RptqDocument" identifier:1];
+	[document setReference:@100 forName:@"rootQuery"];
+	MADStoreObject *query = [MADStoreObject objectWithEntity:@"RptqQuery" identifier:100];
+	[query setAttributeValue:@"root" forName:@"name"];
+	[query setAttributeValue:@0 forName:@"override"];
+	MADStoreGraph *graph = [MADStoreGraph new];
+	[graph addObject:document];
+	[graph addObject:query];
+
+	XCTAssertTrue([store writeGraph:graph replacingAll:NO composed:YES error:&error],
+				  @"composed save failed: %@", error);
+	XCTAssertEqual(SQLiteUserVersion(url), 4, @"the composed save advances to revision 4");
+	XCTAssertTrue(SQLiteTableHasColumn(url, @"RptqDocumentSection", @"ownerQuery_identifier"),
+				  @"the composed save adds the ownerQuery column");
 	[store close];
 }
 

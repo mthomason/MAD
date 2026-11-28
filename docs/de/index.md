@@ -8,7 +8,7 @@ lang: de-DE
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer-Symbol" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>Ein offenes Format und eine einbettbare Engine für relationales Reporting — hier ist jeder Bericht ein portabler Abfragegraph, eine materialisierte SQLite-Tabelle und ein parametrisches Layout.</strong></p>
 
-MAD ist eine eingebettete Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die Apps **MAD Designer** und **MAD Viewer** für iOS und natives macOS (`AppKit`), die headless Engine, die sie unter Linux und Windows ausführt, und das offene `.mad`-Dokumentformat. Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und das bandbasierte Layout seiner Elemente — in weniger als 100 KB, sauber getrennt von der materialisierten SQLite-Tabelle (`.maddb` + `.mdcache`), die sie beim Aktualisieren erzeugt.
+MAD ist eine eingebettete Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die Apps **MAD Designer** und **MAD Viewer** für iOS und natives macOS (`AppKit`), die headless Engine, die sie unter Linux und Windows ausführt, und das offene `.mad`-Dokumentformat. Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und das bandbasierte Layout seiner Elemente — in weniger als 100 KB, sauber getrennt von der materialisierten SQLite-Tabelle (`.maddb` + `.mdcache`), die sie beim Aktualisieren erzeugt. Ein **Kompositionsbericht** kann mehrere Berichte — jeden mit eigener Abfrage, eigenem Layout und eigenen Daten — in einem Dokument kombinieren und dabei MySQL, PostgreSQL, SQL Server und SQLite ohne einen Föderationsserver verknüpfen.
 
 Der Code liegt auf
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), unter MIT-Lizenz;
@@ -95,6 +95,9 @@ Lesen Sie zuerst die [Einführung in die Spezifikation](README.html) oder spring
   visuelle Abfrageleinwand, bandbasierter Berichtsdesigner mit Minimap und
   Inspector, seitenweise Anzeige und wie man sie aus dem Quellcode baut oder
   paketiert.
+* [Kompositionsberichte](composition.html) — kombinieren Sie Berichte aus
+  mehreren Datenbanken in einem portablen `.mad`-Dokument; jede Quelle behält
+  ihr Layout und ihre Daten, und das Ergebnis verknüpft sie.
 * [Bauen und testen](https://github.com/mthomason/MAD#build-and-test) —
   die genauen Befehle für die iOS-Suites, die nativen macOS-Suites und den
   Linux-Build.

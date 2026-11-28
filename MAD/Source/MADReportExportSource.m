@@ -20,9 +20,14 @@
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 
@@ -59,6 +64,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 + (NSString *)driverNameForDocument:(id <MADDocumentDataProtocol>)document;
 
 @property (nonatomic, readwrite, strong) id <MADDocumentDataProtocol> document;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *result;
 @property (nonatomic, readwrite, copy) NSString *driverName;
 @property (nonatomic, readwrite, copy) NSString *sql;
 @property (nonatomic, readwrite, copy) NSArray <NSString *> *columnKeys;
@@ -79,6 +85,12 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		return nil;
 	}
 
+	// A composed document has no single compilable query; its committed root result
+	// and its persisted output projection are the schema, fields and rows.
+	if (document.activeDocumentModel.rootQuery != nil) {
+		return [self composedSourceWithDocument: document error: error];
+	}
+
 	// The SQL build is what populates the query's fieldKeys and fields, so the column
 	// descriptions below are read after it, not before.
 	NSError *sqlError = nil;
@@ -94,6 +106,9 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 
 	MADReportExportSource *source = [[MADReportExportSource alloc] init];
 	source.document = document;
+	// Pin the published generation now: a refresh that publishes while an exporter
+	// is running must not change the rows or the column map under it.
+	source.result = document.currentResult;
 	source.sql = sql;
 	source.driverName = [MADReportExportSource driverNameForDocument: document];
 
@@ -107,7 +122,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	// builds them from the first row -- so the query's own field keys stand in, and
 	// the export still describes the shape of something empty rather than nothing
 	// (docs/developers/data-object.md section 3.6).
-	MADDataTableFast *table = document.dataTable;
+	MADDataTableFast *table = source.result.dataTable ?: document.dataTable;
 	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
 	for (NSString *tableColumnKey in table.columnKeys) {
 		MADDataColumn *column = table.columns[tableColumnKey];
@@ -127,6 +142,120 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		if ([field isKindOfClass: [RptqDatabaseSchemaField class]]) {
 			fields[columnKey] = field;
 		}
+	}
+	source.schemaFields = fields;
+
+	return source;
+}
+
++ (NSError *)errorForUnrefreshedNode:(RptqQuery *)query {
+	return [NSError errorWithDomain:@"MADReportExport" code:3 userInfo:@{
+		NSLocalizedDescriptionKey: [NSString stringWithFormat:
+			NSLocalizedString(@"The node '%@' has not been refreshed; refresh the document first.", @"Export of an unrefreshed node."),
+			query.name.length > 0 ? query.name : @"?"] }];
+}
+
++ (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
+									  query:(nullable RptqQuery *)query
+									  error:(NSError * _Nullable __autoreleasing *)error {
+	// The report's layout/result root, or no explicit node, reads the document the way
+	// it always has.  An ordinary report has no composed root, so its single/default
+	// query is the root here too -- otherwise a no-`query` read would look for a node
+	// result that an ordinary refresh never publishes.
+	if (query == nil || [query isLayoutRootInDocument: document.activeDocumentModel]) {
+		return [self sourceWithDocument:document error:error];
+	}
+
+	MADDataResult *result = document.nodeResults[@(query.identifier)];
+	if (result == nil) {
+		if (error != NULL) *error = [self errorForUnrefreshedNode: query];
+		return nil;
+	}
+
+	MADReportExportSource *source = [[MADReportExportSource alloc] init];
+	source.document = document;
+	source.result = result;
+	source.sql = @"<node>";
+
+	// The node's committed columns, keyed by their logical identifier (the same
+	// physical → logical mapping the root source does): the c<hash> table keys are
+	// storage, the column.identifier is the field key the SELECT list wrote.
+	MADDataTableFast *table = result.dataTable;
+	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
+	for (NSString *tableColumnKey in table.columnKeys) {
+		MADDataColumn *column = table.columns[tableColumnKey];
+		[columnKeys addObject: column.identifier ?: tableColumnKey];
+	}
+	NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields = [NSMutableDictionary dictionary];
+
+	if ([query isComposing]) {
+		source.driverName = @"composed";
+		NSArray <RptqQueryField *> *outputs = [query orderedOutputFieldsWithError:NULL] ?: @[];
+		for (RptqQueryField *output in outputs) {
+			if (output.outputKey != nil) fields[output.outputKey] = output.databaseSchemaField;
+		}
+		if (columnKeys.count == 0) {
+			for (RptqQueryField *output in outputs) {
+				if (output.outputKey != nil) [columnKeys addObject:output.outputKey];
+			}
+		}
+	} else {
+		RptqDatabase *database = query.inDatabase;
+		source.driverName = database.databaseDriverType ?: @"";
+		for (RptqQueryTable *table in query.hasQueryTables) {
+			NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+			for (RptqQueryField *field in table.hasQueryFields) {
+				NSString *name = field.databaseSchemaField.name ?: @"";
+				if (name.length == 0) continue;
+				NSString *key = alias.length > 0 ? [NSString stringWithFormat:@"%@.%@", alias, name] : name;
+				fields[key] = field.databaseSchemaField;
+			}
+		}
+	}
+
+	source.columnKeys = columnKeys;
+	source.schemaFields = fields;
+	return source;
+}
+
+/// The export source for a composed document: the committed root's columns and
+/// rows, and the persisted output projection's schema fields.  The root result's
+/// columns are keyed by the output keys the composer wrote, which is the order the
+/// document persists.
++ (instancetype)composedSourceWithDocument:(id <MADDocumentDataProtocol>)document
+									 error:(NSError * _Nullable __autoreleasing *)error {
+
+	RptqDocument *model = document.activeDocumentModel;
+	NSArray <RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: error];
+	if (outputs == nil) return nil;
+
+	MADReportExportSource *source = [[MADReportExportSource alloc] init];
+	source.document = document;
+	source.result = document.currentResult;
+	source.driverName = @"composed";
+	// The root has no single SQL statement the way an ordinary query does; a reader
+	// dispatches on the document's composition, not on this description.
+	source.sql = @"<composed root>";
+
+	MADDataTableFast *table = source.result.dataTable ?: document.dataTable;
+	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
+	for (NSString *tableColumnKey in table.columnKeys) {
+		MADDataColumn *column = table.columns[tableColumnKey];
+		[columnKeys addObject: column.identifier ?: tableColumnKey];
+	}
+	// A root with no published result still describes its projection from the
+	// persisted outputs, so an empty composed export is shaped, not absent.
+	if (columnKeys.count == 0) {
+		for (RptqQueryField *output in outputs) {
+			[columnKeys addObject: output.outputKey];
+		}
+	}
+	source.columnKeys = columnKeys;
+
+	NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields =
+		[NSMutableDictionary dictionaryWithCapacity: outputs.count];
+	for (RptqQueryField *output in outputs) {
+		fields[output.outputKey] = output.databaseSchemaField;
 	}
 	source.schemaFields = fields;
 
@@ -165,7 +294,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	}
 	// The stored column, when the document does not name the schema field: the table
 	// keys its columns by the c<hash> name, so the field key is looked up first.
-	MADDataTableFast *table = self.document.dataTable;
+	MADDataTableFast *table = self.result.dataTable ?: self.document.dataTable;
 	NSString *tableColumnKey = [table columnKeyForColumnName: columnKey];
 	MADDataColumn *column = tableColumnKey != nil ? table.columns[tableColumnKey] : nil;
 	return column != nil ? MADReportExportTypeName(column.type) : nil;
@@ -174,11 +303,13 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 #pragma mark - Rows
 
 - (NSUInteger)numberOfRows {
+	if (self.result != nil) return self.result.numberOfRows;
 	return self.document.numberOfResults;
 }
 
 - (NSEnumerator <NSDictionary <NSString *, id> *> *)rowEnumerator {
-	return [self.document.dataTable objectEnumerator];
+	MADDataTableFast *table = self.result.dataTable ?: self.document.dataTable;
+	return [table objectEnumerator];
 }
 
 #pragma mark - Values

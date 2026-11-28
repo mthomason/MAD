@@ -77,6 +77,10 @@
 	MADQueryFull *_mainQuery;
 	MADDatabase *_database;
 	MADDataTableFast *_dataTable;
+	MADDataResult *_currentResult;
+	MADDataResult *_pendingResult;
+	NSDictionary<NSNumber *, MADDataResult *> *_nodeResults;
+	int64_t _renderQueryIdentifier;
 	BOOL _refreshed;
 	BOOL _limitResultsDesignMode;
 	MADReportFormatter *_reportFormatter;
@@ -176,12 +180,45 @@
 	return document;
 }
 
++ (nullable instancetype)createEmptyDocumentAtURL:(NSURL *)url
+											error:(NSError * _Nullable __autoreleasing *)outError {
+	if (url == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											 code:13
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A file URL is required to create a document.", @"Error when an empty document is created without a URL.") }];
+		}
+		return nil;
+	}
+
+	MADHeadlessDocument *document = [[self alloc] initWithFileURL:url];
+	[[NSFileManager defaultManager] removeItemAtURL:document.documentStore.gutsURL error:NULL];
+	if (![document.documentStore openWithError:outError]) {
+		return nil;
+	}
+
+	RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext:document.storeContext];
+	if (rptqDocument == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											 code:14
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize the document model in the portable store.", @"Error when the portable store cannot be initialized.") }];
+		}
+		return nil;
+	}
+
+	if (![document writeToURL:url reproducible:NO error:outError]) {
+		return nil;
+	}
+	return document;
+}
+
 - (instancetype)initWithFileURL:(NSURL *)url {
 	if (self = [super init]) {
 		_fileURL = [url copy];
 		_documentStore = [MADDocumentStore storeForDocumentURL: url];
 
-		MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+		MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
 		dataTable.cacheDelegate = self;
 		_dataTable = dataTable;
 	}
@@ -208,13 +245,14 @@
 
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.documentStore.gutsURL
 																			   archiveURL: url];
-	if (![archiveManager unarchive]) {
+	NSError *archiveError = nil;
+	if (![archiveManager unarchiveWithError:&archiveError]) {
 		os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
 		if (error != NULL) {
-			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
-										 code: 2
-									 userInfo: @{ NSLocalizedDescriptionKey:
-						 [NSString stringWithFormat: @"Could not unpack %@.", url.lastPathComponent] }];
+			*error = archiveError ?: [NSError errorWithDomain: @"MADHeadlessDocument"
+														 code: 2
+													 userInfo: @{ NSLocalizedDescriptionKey:
+								 [NSString stringWithFormat: @"Could not unpack %@.", url.lastPathComponent] }];
 		}
 		return NO;
 	}
@@ -236,9 +274,14 @@
 	}
 
 	// The store as it stands.  A document that was only read has nothing dirty, so
-	// this writes nothing -- the same call the app's save makes.
+	// this writes nothing -- the same call the app's save makes.  A composed
+	// document (one with an explicit root) saves at store revision 3.  Check the
+	// document row directly rather than through -activeDocumentModel, which
+	// asserts when the document has not been inserted yet.
+	NSArray *documents = [context objectsForEntity:@"RptqDocument"];
+	BOOL composed = (documents.count > 0 && [documents.lastObject valueForKey:@"rootQuery"] != nil);
 	NSError *storeError = nil;
-	if (![context save: &storeError]) {
+	if (!(composed ? [context saveComposed: &storeError] : [context save: &storeError])) {
 		if (outError != NULL) {
 			*outError = storeError;
 		}
@@ -259,6 +302,7 @@
 																		   archiveURL: url];
 	archiveManager.checkpointed = checkpointed;
 	archiveManager.reproducible = reproducible;
+	archiveManager.composed = composed;
 	if (![archiveManager archive: YES]) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain: @"MADHeadlessDocument"
@@ -291,6 +335,9 @@
 			MADQueryFull *mainQuery = [[MADQueryFull alloc] initWithQuery: query
 															andQueryLimit: self.limitResultsDesignMode ? 50 : NSUIntegerMax];
 			mainQuery.dataDelegate = self;
+			// The query compiles with the dialect of the database it runs against,
+			// not whatever database the delegate happens to hand back.
+			mainQuery.database = self.database;
 			// The table's group indexes are built from the query's sort order, so it
 			// is applied once here, as MADocument applies it.
 			[self.dataTable sortUsingDescriptors: [self readCurrentSortDescriptors]];
@@ -330,6 +377,9 @@
 - (MADDatabase *)database {
 	if (_database == nil) {
 		RptqDatabase *database = self.activeDocumentModel.hasDatabaseSchemas.anyObject;
+		// An empty document -- a composition before any child is imported -- has
+		// no database, so there is no source to build a connection for.
+		if (database == nil) return nil;
 		// The credential row conforms through its category
 		// (RptqDatabaseCredentals+MADDatabaseConnection.h), which the compiler
 		// cannot see from the class alone -- the same cast the app makes.
@@ -346,6 +396,9 @@
 	if (_database != database) {
 		_database = database;
 		_database.delegate = self;
+		// The cached query compiles with the source's dialect; keep it in step
+		// when the document reconnects through -updateDatabaseWithConnection:.
+		_mainQuery.database = database;
 	}
 }
 
@@ -361,40 +414,90 @@
 
 	RptqDocument *docModel = self.activeDocumentModel;
 	RptqDatabase *rptqDB = docModel.defaultDatabase ?: docModel.hasDatabaseSchemas.anyObject;
-	if (rptqDB != nil) {
-		RptqDatabaseCredentals *credentals = rptqDB.ownedByUser;
-		if (credentals == nil && self.storeContext != nil) {
-			credentals = [RptqDatabaseCredentals newDatabaseCredental: self.storeContext];
-			rptqDB.ownedByUser = credentals;
+	[self applyDatabaseConnection: databaseConnection toDatabase: rptqDB];
+}
+
+- (BOOL)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+             forQueryIdentifier:(int64_t)queryIdentifier
+                           error:(NSError * _Nullable __autoreleasing *)error {
+	if (databaseConnection == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
+										 code: 20
+									 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"A database connection is required.", @"Error when a query connection is applied without one.") }];
 		}
-		rptqDB.databaseDriverTypeEnum = databaseConnection.databaseType;
-		if (credentals != nil) {
-			credentals.driverID = [databaseConnection.identifier copy];
-			credentals.key = [databaseConnection.connectionString copy];
-			switch (databaseConnection.databaseType) {
-				case MADDatabaseTypeSqlite3: {
-					NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
-					credentals.dbname = [sqliteURL.path.lastPathComponent copy];
-					credentals.host = [sqliteURL.path copy];
-					credentals.server = nil;
-					credentals.port = 0;
-					break;
-				}
-				case MADDatabaseTypeMySQL:
-				case MADDatabaseTypePostgres:
-				case MADDatabaseTypeTDS: {
-					MADDatabaseConnection <MADConnectionsPropertiesProtocol> *conn =
-						(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)databaseConnection;
-					credentals.port = conn.port;
-					credentals.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
-					credentals.server = [conn.server copy];
-					credentals.dbname = [conn.database copy];
-					break;
-				}
-				default:
-					break;
+		return NO;
+	}
+
+	RptqDocument *docModel = self.activeDocumentModel;
+	RptqQuery *query = nil;
+	for (RptqDatabase *database in docModel.hasDatabaseSchemas) {
+		for (RptqQuery *candidate in database.hasQueries) {
+			if (candidate.identifier == queryIdentifier) {
+				query = candidate;
+				break;
 			}
 		}
+		if (query != nil) break;
+	}
+	RptqDatabase *rptqDB = query.inDatabase;
+	if (query == nil || rptqDB == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
+										 code: 21
+									 userInfo: @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:
+										 NSLocalizedString(@"No source database for query %lld.", @"Error when a query-scoped connection names an unknown or connection-less query."),
+										 (long long)queryIdentifier] }];
+		}
+		return NO;
+	}
+
+	[self applyDatabaseConnection: databaseConnection toDatabase: rptqDB];
+	[self invalidateQueryAndModelCaches];
+	return YES;
+}
+
+/// Writes `databaseConnection` over one database's persisted credential row, creating
+/// the row when the database has none.  Shared by the document-level reconnect and the
+/// per-source reconnect so the two cannot describe a connection differently.
+- (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+					 toDatabase:(RptqDatabase *)rptqDB {
+	if (databaseConnection == nil || rptqDB == nil) {
+		return;
+	}
+	RptqDatabaseCredentals *credentals = rptqDB.ownedByUser;
+	if (credentals == nil && self.storeContext != nil) {
+		credentals = [RptqDatabaseCredentals newDatabaseCredental: self.storeContext];
+		rptqDB.ownedByUser = credentals;
+	}
+	rptqDB.databaseDriverTypeEnum = databaseConnection.databaseType;
+	if (credentals == nil) {
+		return;
+	}
+	credentals.driverID = [databaseConnection.identifier copy];
+	credentals.key = [databaseConnection.connectionString copy];
+	switch (databaseConnection.databaseType) {
+		case MADDatabaseTypeSqlite3: {
+			NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
+			credentals.dbname = [sqliteURL.path.lastPathComponent copy];
+			credentals.host = [sqliteURL.path copy];
+			credentals.server = nil;
+			credentals.port = 0;
+			break;
+		}
+		case MADDatabaseTypeMySQL:
+		case MADDatabaseTypePostgres:
+		case MADDatabaseTypeTDS: {
+			MADDatabaseConnection <MADConnectionsPropertiesProtocol> *conn =
+				(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)databaseConnection;
+			credentals.port = conn.port;
+			credentals.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
+			credentals.server = [conn.server copy];
+			credentals.dbname = [conn.database copy];
+			break;
+		}
+		default:
+			break;
 	}
 }
 
@@ -404,7 +507,11 @@
 
 - (NSArray *)readCurrentSortDescriptors {
 	RptqDocument *document = self.activeDocumentModel;
-	return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase: self.database];
+	// A composed document's grouping lives on its explicit root, whose fields
+	// persist output keys; an ordinary document's lives on its single default
+	// query.  Both feed the same sort-descriptor builder.
+	RptqQuery *query = document.rootQuery ?: document.defaultDatabase.defaultQuery;
+	return [query sortDescriptorsForDatabase: self.database];
 }
 
 #pragma mark - The rows
@@ -414,24 +521,163 @@
 }
 
 - (void)resetCache {
-	MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+	MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
 	dataTable.cacheDelegate = self;
 	NSError *error = nil;
-	[dataTable loadFromCacheWithUrl: self.urlDataTableCache error: &error];
+	BOOL loaded = [dataTable loadFromCacheWithUrl: self.urlDataTableCache error: &error];
 	// -215 is "no cache file yet", which is the normal state of a document that has
 	// never been refreshed where this runs; MADocument filters it the same way.
 	if (error != nil && error.code != -215) {
 		os_log_error(GetMadLog(), "Error: %@", error);
 	}
 	_dataTable = dataTable;
+	_currentResult = loaded ? [MADDataResult resultWithDataTable: dataTable
+													columnMapURL: self.urlDataTableCache] : nil;
+	_nodeResults = nil;
+}
+
+#pragma mark - Publication
+
+- (MADDataResult *)currentResult {
+	return _currentResult;
+}
+
+- (MADDataResult *)pendingResult {
+	return _pendingResult;
+}
+
+- (NSDictionary<NSNumber *, MADDataResult *> *)nodeResults {
+	return _nodeResults;
+}
+
+- (void)setNodeResults:(NSDictionary<NSNumber *, MADDataResult *> *)results {
+	_nodeResults = [results copy];
+}
+
+- (int64_t)renderQueryIdentifier {
+	return _renderQueryIdentifier;
+}
+
+- (void)setRenderQueryIdentifier:(int64_t)renderQueryIdentifier {
+	_renderQueryIdentifier = renderQueryIdentifier;
+}
+
+- (MADDataResult *)beginRefreshResultWithError:(NSError * __autoreleasing *)error {
+	// Establish the last published result from the cache before staging the next
+	// one, so a failed refresh has something to leave usable.
+	if (_currentResult == nil) {
+		[self resetCache];
+	}
+
+	NSString *generation = NSUUID.UUID.UUIDString;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
+	table.cacheFileIdentifier = generation;
+	table.cacheDelegate = self;
+	NSURL *columnMapURL = [self.cachedFilesDirectory URLByAppendingPathComponent:
+		[generation stringByAppendingPathExtension:@"mdcache"]];
+
+	_pendingResult = [[MADDataResult alloc] initWithIdentifier: generation
+													 dataTable: table
+												rowDatabaseURL: table.rowDatabaseURL
+												  columnMapURL: columnMapURL];
+	return _pendingResult;
+}
+
+- (BOOL)publishPendingResultWithError:(NSError * __autoreleasing *)error {
+	MADDataResult *pending = _pendingResult;
+	if (pending == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 1
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"There is no pending refresh result.", @"No result to publish.") }];
+		}
+		return NO;
+	}
+
+	NSError *writeError = nil;
+	if (![pending.dataTable cacheWithUrl: pending.columnMapURL error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 2 userInfo: nil];
+		return NO;
+	}
+
+	NSData *columnMap = [NSData dataWithContentsOfURL: pending.columnMapURL options: 0 error: &writeError];
+	if (columnMap == nil) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 3 userInfo: nil];
+		return NO;
+	}
+
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	if (rowDatabaseURL == nil || ![[NSFileManager defaultManager] fileExistsAtPath: rowDatabaseURL.path]) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 4
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The refreshed row table was not written.", @"The staged row file is missing.") }];
+		}
+		return NO;
+	}
+
+	// The commit point: the stable column map now points at the staged row file.
+	if (![self writePublishedColumnMapData: columnMap
+									toURL: self.urlDataTableCache
+									error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 5 userInfo: nil];
+		return NO;
+	}
+
+	_dataTable = pending.dataTable;
+	_currentResult = [[MADDataResult alloc] initWithIdentifier: pending.identifier
+													 dataTable: pending.dataTable
+												rowDatabaseURL: pending.rowDatabaseURL
+												  columnMapURL: self.urlDataTableCache];
+	_pendingResult = nil;
+	[[NSFileManager defaultManager] removeItemAtURL: pending.columnMapURL error: NULL];
+	return YES;
+}
+
+- (void)discardPendingResult {
+	MADDataResult *pending = _pendingResult;
+	_pendingResult = nil;
+	if (pending == nil) return;
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	NSURL *columnMapURL = pending.columnMapURL;
+	MADDataTableFast *table = pending.dataTable;
+	// Close the staged table's handles before removing its files: Windows cannot
+	// delete a file whose handle is still open, and the reader otherwise stays open
+	// for the table's whole lifetime (holding the space on Apple).
+	[table closeConnections];
+	pending = nil;
+
+	// A removal failure is observable but must not clobber the refresh's own error;
+	// the discard is a cleanup, so its result is logged, not returned.
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *removeError = nil;
+	if (![fileManager removeItemAtURL: rowDatabaseURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged row file %@: %@",
+					 rowDatabaseURL.lastPathComponent, removeError.localizedDescription);
+	}
+	if (![fileManager removeItemAtURL: columnMapURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged column map %@: %@",
+					 columnMapURL.lastPathComponent, removeError.localizedDescription);
+	}
+}
+
+- (BOOL)writePublishedColumnMapData:(NSData *)data toURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+	NSDataWritingOptions options = (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen);
+#else
+	NSUInteger options = NSDataWritingAtomic;
+#endif
+	return [data writeToURL: url options: options error: error];
 }
 
 - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegate {
-	self.dataTable.dataDelegate = delegate;
+	MADDataTableFast *table = _pendingResult.dataTable ?: _dataTable;
+	table.dataDelegate = delegate;
 }
 
 - (void)dataTableSort:(RptqQuery *)query {
-	[self.dataTable sortUsingDescriptors: [query sortDescriptorsForDatabase: self.database]];
+	MADDataTableFast *table = _pendingResult.dataTable ?: _dataTable;
+	[table sortUsingDescriptors: [query sortDescriptorsForDatabase: self.database]];
 }
 
 - (BOOL)dataTableMakeCache {
@@ -507,6 +753,30 @@
 	}
 	return _renderDataSource;
 }
+
+- (void)pinRenderResultToCurrentResult {
+	[self.renderDataSource pinResult:self.currentResult explicitly:NO];
+}
+
+- (void)pinRenderResult:(MADDataResult *)result {
+	[self.renderDataSource pinResult:result explicitly:YES];
+}
+
+- (void)unpinRenderResult {
+	[self.renderDataSource pinResult:nil explicitly:NO];
+}
+
+- (MADDataResult *)pinnedRenderResult {
+	return self.renderDataSource.result;
+}
+
+- (BOOL)isRenderResultExplicitlyPinned {
+	return self.renderDataSource.resultPinnedExplicitly;
+}
+
+- (void)beginReadTransaction { [self.renderDataSource beginReadTransaction]; }
+
+- (void)commitReadTransaction { [self.renderDataSource commitReadTransaction]; }
 
 #pragma mark MADReportFormatterDataSource
 

@@ -39,7 +39,10 @@ den iPad-/iPhone-Apps, der `mad`-CLI unter Linux und der GitHub Action
 Jedes geöffnete `.mad`-Dokument läuft in einem nativen `NSDocument`-Fenster
 (`MADMacDocument` / `MADMacWindowController`) mit einem zentrierten segmentierten
 Steuerelement **Workspace** in der Fenstersymbolleiste (`Cmd+1`, `Cmd+2`,
-`Cmd+3`), das zwischen den drei Berichtsphasen wechselt:
+`Cmd+3`), das zwischen den drei Berichtsphasen wechselt. Ein Bericht öffnet sich beim
+ersten Mal im Arbeitsbereich Abfrage und danach in dem Arbeitsbereich, in dem er zuletzt
+angezeigt wurde; der Fensteruntertitel nennt seinen Typ (**Standard Report** oder
+**Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -186,6 +189,35 @@ lokalen SQLite-Tabellen-Cache (`MADDataTableFast`) und rendert die Seiten:
   Schatten versehene Seiten in einem nativen `PDFView` und zeigt in der unteren
   Statusleiste die Anzahl der gerenderten Seiten, der zwischengespeicherten
   Zeilen und die Papierabmessungen an.
+
+---
+
+## Kompositionsberichte
+
+Ein **Kompositionsbericht** kombiniert mehrere Berichte zu einem einzigen `.mad`-Dokument. Er ist
+der Desktop-Weg, um Daten aus verschiedenen Datenbanken — MySQL, PostgreSQL, SQL Server und
+SQLite — ohne einen Föderationsserver zu verknüpfen. Siehe [die Kompositionsanleitung](../composition.html)
+für das Konzept und die datenbankübergreifenden Beispiele.
+
+* **Navigation-Auswahl in der Symbolleiste:** Ein Kompositionsbericht fügt ein
+  Popup **Navigation** hinzu. Es listet zuerst das **Ergebnis** auf (*Ergebnis — <Name>*) und dann jede
+  Quelle. Die Auswahl eines Berichts schaltet die Arbeitsbereiche Abfrage, Designer und Betrachter
+  gemeinsam um; sie ändert nie den aktiven Arbeitsbereich.
+* **Jede Quelle ist ein Bericht:** Die Auswahl einer Quelle zeigt ihre eigene Abfrage in MAD Query,
+  ihre eigenen Bänder und ihre Feldliste in MAD Designer und ihre eigenen Seiten in MAD Viewer.
+  Eine Quelle ohne Layout ist weiterhin ein Bericht aus Zeilen: Der Betrachter zeigt ein
+  Zeilenraster, und der Designer bietet an, ihr Layout zu erstellen.
+* **Zugangsdaten pro Quelle:** Eine Komposition fragt beim Aktualisieren nach einem Kennwort pro
+  Quelle, wobei Treiber, Host, Port, Datenbank und Benutzername vorausgefüllt sind. Kennwörter
+  bleiben im Schlüsselbund oder in der aktuellen Sitzung und werden nie in die `.mad` geschrieben.
+
+
+**Eine Komposition erstellen:** **File ▸ New Composition…** wählt vorhandene Berichte und ein
+Ziel; **File ▸ New Document…** bietet die Typen Standard Report und Composition Report an;
+**File ▸ Convert to Composition…** wandelt den geöffneten Standardbericht in eine Komposition mit
+einer Quelle um. Das Add-Menü des Arbeitsbereichs MAD Query fügt außerdem eine Quellabfrage aus
+einer Datenbankverbindung hinzu oder importiert einen vorhandenen Bericht in die geöffnete
+Komposition.
 
 ---
 

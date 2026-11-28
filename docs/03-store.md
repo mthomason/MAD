@@ -37,8 +37,26 @@ hand-maintained `MADStoreSchema` descriptors (`MAD/Source/rptq/store/`), generat
 `-createSchemaSQL`, and cross-checked against the compiled model by `MADStoreTests`.
 The store records its schema version in `PRAGMA user_version`: version 1 is the schema
 as it shipped (absent or 0), version 2 adds `RptqQuery.sqlSourceText` -- the user's
-pasted SQL, kept verbatim (`docs/developers/sql-entry.md` §8) -- and `MADStore` applies the missing
-steps on open.  The `RptqQuery` table's fields:
+pasted SQL, kept verbatim (`docs/developers/sql-entry.md` §8) -- version 3 adds the
+composition fields, and version 4 adds per-node layouts.  `MADStore` applies the missing
+steps on open; each descriptor marks the revision that introduced it with
+`introducedInVersion` in `MAD/Source/rptq/store/MADStoreSchema.m`.
+
+Composition added, in revision 3:
+
+| Addition | Purpose |
+|---|---|
+| `RptqQuery.name` | A human-readable name for a report in the graph. |
+| `RptqDocument.rootQuery` | The document's default report (the Result). |
+| `RptqQueryTable.upstreamQuery` | A table whose source is another query, not a remote schema table. |
+| `RptqQueryField.outputIndex`, `RptqQueryField.outputKey` | The stable name and order of a composing report's output columns. |
+
+Revision 4 adds `RptqDocumentSection.ownerQuery`: each query can own its own layout
+sections and elements, so every report in a composition has its own bands and field
+bindings.  A reader must apply every step up to the document's `user_version`; an older
+reader refuses a newer document rather than reading a partial schema.
+
+The `RptqQuery` table's fields:
 
 | Column | Type | Notes |
 |---|---|---|

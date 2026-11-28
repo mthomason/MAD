@@ -33,6 +33,8 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 
 #import <MADFoundation/madlog.h>
 
@@ -125,7 +127,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	CGRect bounds = [self pageBoundsForDocument: document];
 	CGRect trimBox = [self pageTrimBoxForDocument: document];
 	MADReportFormatter *reportFormatter = document.reportFormatter;
-	reportFormatter.overrideIdentifier = @"madpreview";
+	int64_t renderQuery = [document respondsToSelector: @selector(renderQueryIdentifier)] ? document.renderQueryIdentifier : 0;
+	reportFormatter.overrideIdentifier = renderQuery != 0 ? [NSString stringWithFormat: @"madpreview-q%lld", renderQuery] : @"madpreview";
 	reportFormatter.didRefresh = YES;
 	reportFormatter.layoutSize = bounds.size;
 	[reportFormatter setMarginUsingPrintableRect: trimBox];
@@ -172,19 +175,39 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	// One read transaction for the whole page: every cell read would otherwise pay
 	// autocommit's journal begin/commit on its own.  See docs/project/registers/BUGS.md "Page draws run one
 	// SQLite transaction per cell".  Only the page-bound check above can return
-	// early, so the pair below stays balanced.
-	[datasource.dataTable beginReadTransaction];
+	// early, so the pair below stays balanced.  The transaction is on the data
+	// source's pinned table, the same one the cell reads use.
+	[datasource beginReadTransaction];
 
 	CGFloat originY = pageRect.origin.y;
 	NSUInteger offsetElement = 0;
 
-	RptqDocument *document = (reportFormatter.layout).activeDocumentModel;
+	id <MADDocumentRenderProtocol> renderDocument = reportFormatter.layout;
+	RptqDocument *document = renderDocument.activeDocumentModel;
+
+	// The formatter lays out the render node's bands, but `documentSectionForType:` always
+	// answers the document's (root) sections.  When the walk is scoped to a non-root node,
+	// resolve that node's own band instead, so its elements fill the bands drawn for it.
+	int64_t renderQueryIdentifier = [renderDocument respondsToSelector: @selector(renderQueryIdentifier)]
+		? renderDocument.renderQueryIdentifier : 0;
+	RptqQuery *renderQuery = renderQueryIdentifier != 0
+		? (RptqQuery *)[renderDocument.storeContext objectForEntity: NSStringFromClass([RptqQuery class])
+														 identifier: renderQueryIdentifier]
+		: nil;
+	BOOL nodeScoped = renderQuery != nil && ![renderQuery isLayoutRootInDocument: document];
+
 	NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumerator:pageIndex];
 	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
 
 	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
-		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
-																	   andLevel: pageSection.groupLevel];
+		RptqDocumentSection *documentSection = nodeScoped
+			? [renderQuery layoutSectionForType: pageSection.sectionType level: pageSection.groupLevel]
+			: nil;
+		if (documentSection == nil) {
+			// The root, a Standard Report, or a node band it does not own.
+			documentSection = [document documentSectionForType: pageSection.sectionType
+													  andLevel: pageSection.groupLevel];
+		}
 
 		NSNumber *sectionIdentifier = @(documentSection.identifier);
 		CGRect rect = SectionBounds(pageRect, HeightWithVisibility([reportFormatter heightSection:sectionIdentifier], documentSection.visibility), documentSection.visibility, pageSection.sectionType, reportFormatter.numberOfPages, pageIndex, originY);
@@ -205,7 +228,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 		originY += rect.size.height;
 	}
 
-	[datasource.dataTable commitReadTransaction];
+	[datasource commitReadTransaction];
 
 	return pageRepresentation;
 }

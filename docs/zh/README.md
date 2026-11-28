@@ -7,7 +7,7 @@ lang: zh-CN
 
 本文定义 `.mad` 文件是什么。它描述格式**当前的实际情况**，取自两份已发布的示例文档以及读写它们的代码；然后说明格式**应当如何定义**，使另一个平台上的读者——命令行工具、Windows 构建——无需依赖 Core Data 或任何 Apple 框架即可打开文档。
 
-格式之所以重要，是因为报表*很小*——已发布的示例不到 80 KB——而且运行它的引擎既能装在手机上，也能装进容器：同一份定义可在 iOS、macOS 和 Linux 无头构建上运行。格式的发展方向——报表的结果表成为其他报表的数据源，从而让一份文档横跨多个数据库——见 [`vision.md`](vision.md)。规范也作为网站在 <https://docs.everydayapps.com> 上提供。
+格式之所以重要，是因为报表*很小*——已发布的示例不到 80 KB——而且运行它的引擎既能装在手机上，也能装进容器：同一份定义可在 iOS、macOS 和 Linux 无头构建上运行。报表的结果表现在可以成为其他报表的数据源，因此一份文档可以横跨多个数据库：[组合报表](composition.md)描述了这一模型，而 [`vision.md`](vision.md) 记录了更广阔的方向。规范也作为网站在 <https://docs.everydayapps.com> 上提供。
 
 前半部分的一切都是实测结果，而非推断。两份示例分别是
 `../../MADDesigner/Resources/Assets/Samples.xcassets/Reports/Music.dataset/Music.mad` 和

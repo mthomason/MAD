@@ -38,6 +38,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, readonly, nullable) id <MADDocumentRenderProtocol> document;
 
+/// The generation this data source reads from.  The formatter pins it to the
+/// document's `currentResult` at the start of a render, so every row, column,
+/// group and aggregate read in that operation sees one result even if a refresh
+/// publishes another while it runs.  nil reads the document's current table, as
+/// before publication existed.
+@property (nonatomic, strong, nullable) MADDataResult *result;
+
+/// YES when an export pinned `result` explicitly and a following format must keep
+/// it, rather than re-pinning to the live current result.
+@property (nonatomic, readonly) BOOL resultPinnedExplicitly;
+
+/// Pin to a specific result.  `explicitly` YES marks an export's pin; NO is the
+/// formatter's own pin-to-current.
+- (void)pinResult:(nullable MADDataResult *)result explicitly:(BOOL)explicitly;
+
 @end
 
 NS_ASSUME_NONNULL_END

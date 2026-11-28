@@ -12,6 +12,7 @@
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/MADConstants.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 static NSString * const MADCLICommandInspect	= @"inspect";
@@ -21,6 +22,7 @@ static NSString * const MADCLICommandRefresh	= @"refresh";
 static NSString * const MADCLICommandExport		= @"export";
 static NSString * const MADCLICommandWrite		= @"write";
 static NSString * const MADCLICommandServe		= @"serve";
+static NSString * const MADCLICommandVersion	= @"version";
 
 static NSError *MADCLIUsageError(NSString *message) {
 	return [NSError errorWithDomain: @"MADCLI"
@@ -38,6 +40,69 @@ NSString *MADCLIResolveArgumentPath(NSString *path) {
 		workingDirectory = [NSFileManager defaultManager].currentDirectoryPath;
 	}
 	return [workingDirectory stringByAppendingPathComponent: path];
+}
+
+#pragma mark - Build identity
+
+/// The directory holding the `mad` executable.  The generated MADBuildInfo.plist
+/// is written beside it by the build, so no source file carries the identity.
+static NSString *MADCLIExecutableDirectory(void) {
+	NSString *path = [NSBundle mainBundle].executablePath;
+	if (path.length == 0) {
+		NSArray <NSString *> *arguments = [NSProcessInfo processInfo].arguments;
+		if (arguments.count > 0) path = arguments[0];
+	}
+	if (path.length == 0) return nil;
+	return MADCLIResolveArgumentPath(path).stringByDeletingLastPathComponent;
+}
+
+NSDictionary * MADCLIBuildInfo(void) {
+	NSString *directory = MADCLIExecutableDirectory();
+	if (directory.length == 0) return nil;
+	NSString *path = [directory stringByAppendingPathComponent: @"MADBuildInfo.plist"];
+	return [NSDictionary dictionaryWithContentsOfFile: path];
+}
+
+static id MADCLIIdentityValue(NSDictionary *info, NSString *key) {
+	id value = info[key];
+	return value ?: [NSNull null];
+}
+
+NSDictionary * MADCLIEngineInfoDictionary(void) {
+	NSDictionary *info = MADCLIBuildInfo() ?: @{};
+	NSNumber *dirty = info[@"MADSourceDirty"] ?: @NO;
+	return @{
+		@"protocolVersion": @([info[@"MADServeProtocolVersion"] integerValue]),
+		@"engineVersion": MADCLIIdentityValue(info, @"MADEngineVersion"),
+		@"engineRevision": MADCLIIdentityValue(info, @"MADEngineRevision"),
+		@"sourceCommit": MADCLIIdentityValue(info, @"MADSourceCommit"),
+		@"sourceCommitShort": MADCLIIdentityValue(info, @"MADSourceCommitShort"),
+		@"sourceDirty": dirty,
+		@"capabilities": @[ @"open", @"describe", @"query", @"refresh", @"export",
+							@"write", @"query-model", @"layout-model", @"sql-entry",
+							@"node-result", @"engine-info", MADDocumentCapabilityQueryComposition ],
+	};
+}
+
+MADCLIExitCode MADCLIRunVersion(MADCLIInvocation *invocation) {
+	NSDictionary *info = MADCLIEngineInfoDictionary();
+
+	if (invocation.json) {
+		NSData *data = [NSJSONSerialization dataWithJSONObject: info options: 0 error: NULL];
+		if (data == nil) return MADCLIExitUsage;
+		fwrite(data.bytes, 1, data.length, stdout);
+		fputc('\n', stdout);
+		return MADCLIExitSuccess;
+	}
+
+	NSString *version = [info[@"engineVersion"] isKindOfClass: [NSString class]] ? info[@"engineVersion"] : @"unknown";
+	NSString *revision = [info[@"engineRevision"] isKindOfClass: [NSString class]] ? info[@"engineRevision"] : @"unknown";
+	NSString *commit = [info[@"sourceCommitShort"] isKindOfClass: [NSString class]] ? info[@"sourceCommitShort"] : @"unknown";
+	BOOL dirty = [info[@"sourceDirty"] boolValue];
+	printf("MAD Designer engine %s (%s) commit %s%s\n",
+		   version.UTF8String, revision.UTF8String, commit.UTF8String,
+		   dirty ? " · local build" : "");
+	return MADCLIExitSuccess;
 }
 
 @implementation MADCLIInvocation
@@ -69,6 +134,8 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 			invocation.deterministic = YES;
 		} else if ([argument isEqualToString: @"--reproducible"]) {
 			invocation.reproducible = YES;
+		} else if ([argument isEqualToString: @"--json"]) {
+			invocation.json = YES;
 		} else if ([argument hasPrefix: @"--"]) {
 
 			// Every remaining option takes a value.  A missing value is a usage error
@@ -142,6 +209,15 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 		[invocation.command isEqualToString: @"--help"] ||
 		[invocation.command isEqualToString: @"-h"]) {
 		invocation.command = @"help";
+		return invocation;
+	}
+
+	// `version` reports the build identity; like `help` and `serve` it takes no document.
+	if ([invocation.command isEqualToString: MADCLICommandVersion]) {
+		if (positional.count > 1) {
+			if (error) *error = MADCLIUsageError(@"mad version takes no document.");
+			return nil;
+		}
 		return invocation;
 	}
 
@@ -245,6 +321,7 @@ NSString *MADCLIUsageString(void) {
 			"  export    render the report and write it out\n"
 			"  write     write the document out as a .mad (a copy; --out is required)\n"
 			"  serve     speak newline-delimited JSON over stdio (the Windows shell's boundary)\n"
+			"  version   print the engine identity and the source commit (--json for machines)\n"
 			"\n"
 			"Options:\n"
 			"  --format <name>          output format (export: %@)\n"

@@ -1,0 +1,35 @@
+# MAD version manifest — the one checked-in statement of intended versions.
+# Tooling reads this file; scripts/dev/versions.py check keeps every other
+# surface in agreement with it.  Change this file, not the copies.
+#
+# Build numbers are not stored here: they are the git commit count at build
+# time, written into MADBuildInfo.plist/.json.  A merge advances the number
+# automatically; no per-commit or per-push edit is needed.
+#
+# At release time: set next_release/next_tag to the number being shipped,
+# bump the semantic version of each platform that ships, verify the iOS App
+# Store record before changing ios_app_version, set published_engine_revision
+# to the shipped build (r<count>), publish published_* to the new tag, then
+# run: python3 -I scripts/dev/versions.py docs
+#
+# ios_build_floor is the highest iOS build already submitted; the generated
+# iOS build is max(commit count, floor + 1).  It stays 0 unless a submission
+# needs it.
+#
+# 0.8.0 ships composition reports (macOS and Windows); the engine moves to 9.1.
+schema: "1"
+next_release: "0.8.0"
+next_tag: "v0.8.0"
+published_release: "0.7.0"
+published_tag: "v0.7.0"
+macos_app_version: "0.8.0"
+windows_app_version: "0.8.0"
+ios_app_version: "9.0"
+ios_build_floor: "0"
+engine_version: "9.1"
+published_engine_version: "9.0"
+published_engine_revision: "r4433"
+container_major: "1"
+container_minor: "0"
+store_revision: "2"
+serve_protocol_version: "1"

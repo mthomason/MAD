@@ -249,6 +249,17 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	return result;
 }
 
++ (NSString *)keyPathInGroupHasFieldOutputKey {
+	NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+	NSString *keyOutputKey = [RptqQueryField keyOutputKey];
+	NSString *result = [self keyPathInGroup];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
+	result = [result stringByAppendingString:keyPathHasField];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
+	result = [result stringByAppendingString:keyOutputKey];
+	return result;
+}
+
 
 
 
@@ -574,8 +585,44 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 																  identifier:0];
 	section.visibility = YES;
 	section.type = type;
-	
+
 	return section;
+}
+
++ (NSArray<RptqDocumentSection *> *)createStructuralSectionsForQuery:(RptqQuery *)query
+											  managedObjectContext:(RptqStoreContext *)context {
+	NSParameterAssert(query != nil);
+	NSParameterAssert(context != nil);
+
+	NSString *docSection = NSStringFromClass([RptqDocumentSection class]);
+	NSString *rowEntity = NSStringFromClass([RptqDocumentSectionRows class]);
+
+	NSMutableArray<RptqDocumentSection *> *sections = [NSMutableArray arrayWithCapacity:5];
+	for (int i = 0; i < 5; i++) {
+		RptqDocumentSection *section = (RptqDocumentSection *)[context insertObjectForEntity:docSection identifier:0];
+		section.ownerQuery = query;
+		section.visibility = YES;
+
+		RptqDocumentSectionRows *row = (RptqDocumentSectionRows *)[context insertObjectForEntity:rowEntity identifier:0];
+		section.hasRows = [[NSOrderedSet alloc] initWithObject:row];
+		row.inSection = section;
+
+		[sections addObject:section];
+	}
+
+	sections[0].type = MADDocumentSectionTypeReportHeader;
+	sections[1].type = MADDocumentSectionTypeReportFooter;
+	sections[2].type = MADDocumentSectionTypePageHeader;
+	sections[3].type = MADDocumentSectionTypePageFooter;
+	sections[4].type = MADDocumentSectionTypeBody;
+
+	[sections[0] setInterfaceHeight:44.0];
+	[sections[1] setInterfaceHeight:44.0];
+	[sections[2] setInterfaceHeight:44.0];
+	[sections[3] setInterfaceHeight:44.0];
+	[sections[4] setInterfaceHeight:88.0];
+
+	return sections;
 }
 
 #pragma mark - Handling Rows

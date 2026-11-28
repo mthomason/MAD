@@ -96,10 +96,9 @@
 			continue;
 		}
 
-		RptqDatabase *database = planTable.schemaTable.inDatabase;
 		RptqQueryTable *queryTable = [RptqQueryTable newQueryTableForSchemaTable:planTable.schemaTable
-																		database:database
-														  forManagedObjectContext:self.context];
+																		   query:self.query
+														 forManagedObjectContext:self.context];
 		NSMutableSet<RptqQueryField *> *fields = [NSMutableSet setWithCapacity:planTable.schemaTable.hasFields.count];
 		for (RptqDatabaseSchemaField *schemaField in planTable.schemaTable.hasFields) {
 			RptqQueryField *queryField = [RptqQueryField newQueryField:self.context];

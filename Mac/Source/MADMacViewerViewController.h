@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat zoomScale;
 
 @property (nonatomic, strong, readonly) NSButton *refreshButton;
+/// The overflow (…) button.  Also exposed under its historical name `connectionButton`.
+@property (nonatomic, strong, readonly) NSButton *overflowButton;
 @property (nonatomic, strong, readonly) NSButton *connectionButton;
 @property (nonatomic, strong, readonly) NSButton *exportButton;
 @property (nonatomic, strong, readonly) NSButton *printButton;
@@ -33,6 +35,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSView *statusBarView;
 @property (nonatomic, strong, readonly) NSTextField *statusLabel;
 @property (nonatomic, strong, readonly, nullable) NSError *lastRefreshError;
+
+/// The row grid shown for a node whose layout has no elements.  Hidden while the PDF
+/// preview is visible.
+@property (nonatomic, strong, readonly) NSTableView *rowGridView;
+@property (nonatomic, assign, readonly) BOOL isShowingRowGrid;
+
+/// The row grid's cell text at a position (blank for NULL).  Nil outside the grid.
+- (nullable NSString *)gridValueAtRow:(NSInteger)row columnIndex:(NSInteger)columnIndex;
 
 - (instancetype)initWithDocument:(MADMacDocument *)document;
 - (void)reloadPreview;

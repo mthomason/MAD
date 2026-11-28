@@ -258,14 +258,28 @@ static void testUniqueURLForURL(void) {
 
 static void testDocumentArchiveURL(void) {
 	NSURL *documentURL = [NSURL fileURLWithPath:@"/tmp/My Report.mad"];
+	// The guts directory is keyed by the full path, not the basename, so two
+	// same-named documents in different folders cannot collide.
+	NSString *expectedName = [NSString stringWithFormat:@"%@.zip", hashName([[documentURL standardizedURL] path])];
 
 	NSURL *archive = [MADURLFactory newURLDocumentArchiveForFileURL:documentURL extension:@"zip"];
 
 	MAD_PASS(urlHasDirectoryPath(archive), "a directory URL");
-	MAD_PASS_EQUAL(archive.lastPathComponent, @"My Report.zip", "the archive name");
+	MAD_PASS_EQUAL(archive.lastPathComponent, expectedName, "the archive name is the path hash");
 	MAD_PASS_EQUAL(archive.URLByDeletingLastPathComponent.path,
 				   [MADURLFactory newURLLocalTemporaryDirectory].path,
 				   "in the temporary directory");
+}
+
+static void testDocumentArchiveURLsDifferForSameNamedDocumentsInDifferentFolders(void) {
+	NSURL *first = [NSURL fileURLWithPath:@"/tmp/A/SharedName.mad"];
+	NSURL *second = [NSURL fileURLWithPath:@"/tmp/B/SharedName.mad"];
+
+	NSURL *firstArchive = [MADURLFactory newURLDocumentArchiveForFileURL:first extension:@"mada"];
+	NSURL *secondArchive = [MADURLFactory newURLDocumentArchiveForFileURL:second extension:@"mada"];
+
+	MAD_PASS(![firstArchive.path isEqualToString:secondArchive.path],
+			 "two same-named documents must not share one guts directory");
 }
 
 static void testURLForSelectorInvokesTheNamedFactory(void) {
@@ -292,4 +306,5 @@ MAD_TEST_MAIN("MADURLFactoryTests",
 	MAD_TEST(testUniqueUrlInDirectoryAppendsZeroFirst),
 	MAD_TEST(testUniqueURLForURL),
 	MAD_TEST(testDocumentArchiveURL),
+	MAD_TEST(testDocumentArchiveURLsDifferForSameNamedDocumentsInDifferentFolders),
 	MAD_TEST(testURLForSelectorInvokesTheNamedFactory));

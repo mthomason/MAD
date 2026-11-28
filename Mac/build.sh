@@ -90,6 +90,14 @@ assemble_app_bundle() {
 		-e "s/\$(MACOSX_DEPLOYMENT_TARGET)/${DEPLOYMENT_TARGET}/g" \
 		"${SCRIPT_DIR}/Resources/Info.plist" > "${CONTENTS_DIR}/Info.plist"
 
+	# 1b. Version and build come from the manifest.  The tracked template stays
+	# generic, and the built plist -- not the source -- carries the release numbers.
+	local app_version app_build
+	app_version="$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" --repo "${REPO_ROOT}" read macos_app_version)"
+	app_build="$(git -C "${REPO_ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)"
+	/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${app_version}" "${CONTENTS_DIR}/Info.plist"
+	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${app_build}" "${CONTENTS_DIR}/Info.plist"
+
 	# 2. Embed all 12 frameworks
 	local fw
 	for fw in "${FRAMEWORKS[@]}"; do
@@ -110,6 +118,11 @@ assemble_app_bundle() {
 	cp "${REPO_ROOT}/LICENSE" "${RESOURCES_DIR}/LICENSE"
 	cp "${REPO_ROOT}/NOTICE" "${RESOURCES_DIR}/NOTICE"
 	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/MADMeta.plist" "${RESOURCES_DIR}/MADMeta.plist"
+	# The generated identity sits beside it; About prefers it and falls back to
+	# MADMeta only for the engine's static version.
+	"${REPO_ROOT}/scripts/dev/build-info.sh" --format plist \
+		--output "${RESOURCES_DIR}/MADBuildInfo.plist" \
+		--app-version "${app_version}" --app-build "${app_build}"
 	cp "${SCRIPT_DIR}/Resources/AppIcon.icns" "${RESOURCES_DIR}/AppIcon.icns"
 	cp "${REPO_ROOT}/docs/assets/mad-designer-macos-icon-512.png" "${RESOURCES_DIR}/AppIcon.png"
 
@@ -200,6 +213,7 @@ run_smoke_test() {
 		"${SCRIPT_DIR}/Source/MADMacDesignerViewController.m" \
 		"${SCRIPT_DIR}/Source/MADMacViewerViewController.m" \
 		"${SCRIPT_DIR}/Source/MADMacDesignerCanvasView.m" \
+		"${SCRIPT_DIR}/Source/MADMacTipBar.m" \
 		"${TRANSFORMERS[@]}" \
 		"${LEGACY_SOURCES[@]}" \
 		-o "${smoke_bin}"

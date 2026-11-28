@@ -81,6 +81,30 @@ O aplicativo tem as mesmas três etapas de relatório do app para macOS:
 
 O visualizador exporta **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** e **Texto simples**, na mesma ordem do visualizador do macOS. O PDF é gravado pelo próprio motor (o mesmo exportador que `mad export --format pdf` usa); portanto, um relatório grande não bloqueia a janela: a barra de status mostra uma barra de progresso indeterminada e uma linha “Exportando…” até o arquivo ser gravado e, em seguida, informa seu tamanho.
 
+## Relatórios de Composição
+
+Um **Relatório de Composição** combina vários relatórios em um único documento `.mad`, unindo dados
+de MySQL, PostgreSQL, SQL Server e SQLite localmente em vez de por meio de um servidor
+de federação. [O guia de composição](../composition.html) cobre o modelo e os exemplos.
+
+* **Painel Composition:** um Relatório de Composição mostra um painel esquerdo acoplado com o grafo
+  do documento — o **Resultado** no topo e suas fontes abaixo, com conectores apontando para o
+  relatório que os consome. O painel tem um `GridSplitter` e um modo Expand/Collapse.
+* **Uma única seleção:** clicar em um cartão no grafo, ou escolher um relatório no seletor
+  **Component** da barra de ferramentas, alterna os workspaces MAD Query, MAD Designer e MAD Viewer para esse
+  relatório. O seletor permanece visível quando o painel é recolhido.
+* **Toda fonte é um relatório:** uma fonte mantém sua própria consulta, layout e linhas. Uma fonte
+  sem layout é um relatório de linhas — o Viewer mostra suas linhas em cache em uma grade e o
+  Designer oferece criar um layout.
+* **Credenciais por fonte:** a atualização solicita uma vez por fonte que exige credencial, com os
+  detalhes de conexão já preenchidos. As senhas ficam na sessão ou no armazenamento de credenciais
+  da plataforma, não no documento.
+
+**Criando uma:** **File ▸ New Composition…** constrói uma composição a partir de relatórios existentes;
+**File ▸ Import…** adiciona um relatório à composição aberta; **File ▸ Convert to Composition**
+converte o relatório padrão aberto. A ação Import do painel faz o mesmo de dentro do
+workspace.
+
 ## Compilando a partir do código-fonte
 
 O aplicativo é compilado com o SDK do .NET fixado em [`Windows/global.json`](https://github.com/mthomason/MAD/blob/master/Windows/global.json) (10.0.404):

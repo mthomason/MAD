@@ -1,258 +1,258 @@
 {
-	"version": 1,
-	"description": "Known and accepted localization-audit findings. Review before regenerating: python3 -I scripts/localization/audit.py --write-baseline",
-	"entries": [
-		{
-			"category": "nonliteral-key",
-			"file": "MADDataStructures/Source/MTGraph.m",
-			"text": "TextCycleEncountered",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDatabaseTableSectionHeaderView.m",
-			"text": "TextAccessibilityHint",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
-			"text": "MADTextFormFeed",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
-			"text": "MADTextFormFeedHint",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
-			"text": "MADTextVisible",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
-			"text": "MADTextVisibleHint",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextFormatting",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextFormattingPage",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextNoCache",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextNothingToDisplay",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextPageXofY",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextReadRecords",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADLabelStatus.m",
-			"text": "MADTextRefreshing",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADOperationPromptError.m",
-			"text": "TextYes",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
-			"text": "MADButtonContinue",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
-			"text": "MADMessagePassword",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
-			"text": "MADTitlePassword",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
-			"text": "TextAccending",
-			"count": 2,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
-			"text": "TextDecending",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
-			"text": "TextDefault",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQueryGroups",
-			"count": 4,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQueryLinks",
-			"count": 2,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQueryPredicate",
-			"count": 4,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQueryReportingMode",
-			"count": 3,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQuerySelectTables",
-			"count": 6,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
-			"text": "MADTextQuerySetupDatasource",
-			"count": 6,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderGroups",
-			"count": 2,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderInformation",
-			"count": 2,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderLink",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderPredicate",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderSettings",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
-			"text": "TextHeaderTable",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADStoreViewController.m",
-			"text": "MADTextAlready",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADStoreViewController.m",
-			"text": "MADTextYouGotIt",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADStoreViewController.m",
-			"text": "MADTextYouItsYours",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADExplorer/MADExplorer/MADExplorer/MADExplorerViewDelegate.m",
-			"text": "MADTextNotDownloaded",
-			"count": 1,
-			"reason": ""
-		}
-	]
+  "version": 1,
+  "description": "Known and accepted localization-audit findings. Review before regenerating: python3 -I scripts/localization/audit.py --write-baseline",
+  "entries": [
+    {
+      "category": "nonliteral-key",
+      "file": "MADDataStructures/Source/MTGraph.m",
+      "text": "TextCycleEncountered",
+      "count": 2,
+      "reason": "The cycle message is used from two graph error paths."
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADDatabaseTableSectionHeaderView.m",
+      "text": "TextAccessibilityHint",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
+      "text": "MADTextFormFeed",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
+      "text": "MADTextFormFeedHint",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
+      "text": "MADTextVisible",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
+      "text": "MADTextVisibleHint",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextFormatting",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextFormattingPage",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextNoCache",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextNothingToDisplay",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextPageXofY",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextReadRecords",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADLabelStatus.m",
+      "text": "MADTextRefreshing",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADOperationPromptError.m",
+      "text": "TextYes",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADOperationPromptPassword.m",
+      "text": "MADButtonContinue",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADOperationPromptPassword.m",
+      "text": "MADMessagePassword",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADOperationPromptPassword.m",
+      "text": "MADTitlePassword",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
+      "text": "TextAccending",
+      "count": 2,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
+      "text": "TextDecending",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
+      "text": "TextDefault",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQueryGroups",
+      "count": 4,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQueryLinks",
+      "count": 2,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQueryPredicate",
+      "count": 4,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQueryReportingMode",
+      "count": 3,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQuerySelectTables",
+      "count": 6,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
+      "text": "MADTextQuerySetupDatasource",
+      "count": 6,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderGroups",
+      "count": 2,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderInformation",
+      "count": 2,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderLink",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderPredicate",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderSettings",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
+      "text": "TextHeaderTable",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADStoreViewController.m",
+      "text": "MADTextAlready",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADStoreViewController.m",
+      "text": "MADTextYouGotIt",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADDesigner/Source/MADStoreViewController.m",
+      "text": "MADTextYouItsYours",
+      "count": 1,
+      "reason": ""
+    },
+    {
+      "category": "nonliteral-key",
+      "file": "MADExplorer/MADExplorer/MADExplorer/MADExplorerViewDelegate.m",
+      "text": "MADTextNotDownloaded",
+      "count": 1,
+      "reason": ""
+    }
+  ]
 }

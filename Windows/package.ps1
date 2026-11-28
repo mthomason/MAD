@@ -37,8 +37,8 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Version = "0.7",
-    [string]$EngineVersion = "9.0 (r4433)",
+    [string]$Version,
+    [string]$EngineVersion,
     [string]$OutputDir = (Join-Path $PSScriptRoot "build\packages"),
     [string]$GnuStepBin,
     [string]$VcRuntimeDir,
@@ -56,6 +56,26 @@ $AppProject = Join-Path $PSScriptRoot "App\Mad.Designer.Windows\Mad.Designer.Win
 $Sample = Join-Path $RepoRoot "CLI\Fixtures\London.portable.mad"
 $SampleDatabase = Join-Path $RepoRoot "MADDesigner\Resources\Assets\Samples.xcassets\Data\chinook.dataset\chinook.sqlite3"
 $Licenses = Join-Path $RepoRoot "ThirdParty\Licenses"
+
+# The version manifest is the single source of the numbers this package advertises.
+function Get-ManifestValue([string]$Key) {
+    $manifest = Join-Path $RepoRoot "Versions.yml"
+    if (-not (Test-Path $manifest)) { throw "missing $manifest" }
+    foreach ($line in Get-Content $manifest) {
+        $trimmed = ($line -split '#', 2)[0].Trim()
+        if ($trimmed -match "^$([regex]::Escape($Key)):\s*(.+)$") {
+            return $Matches[1].Trim().Trim('"')
+        }
+    }
+    throw "Versions.yml has no $Key"
+}
+
+if (-not $Version) { $Version = Get-ManifestValue "windows_app_version" }
+$BuildNumber = ((& git -C $RepoRoot rev-list --count HEAD 2>$null | Out-String).Trim())
+if ($BuildNumber -notmatch '^\d+$') { $BuildNumber = "0" }
+if (-not $EngineVersion) {
+    $EngineVersion = "$(Get-ManifestValue 'engine_version') (r$BuildNumber)"
+}
 
 # mad.exe links these runtime DLLs directly or through gnustep-base, measured
 # with llvm-objdump -p (docs/developers/build/windows.md section 8).  The engine
@@ -108,6 +128,8 @@ function Copy-Engine([string]$destination) {
         Copy-Item (Join-Path $GnuStepBin $file) $destination
     }
     Copy-Item (Join-Path $EngineDir "fonts") $destination -Recurse
+    $identity = Join-Path $EngineDir "MADBuildInfo.plist"
+    if (Test-Path $identity) { Copy-Item $identity $destination }
     foreach ($name in $VcRuntimeNames) {
         Copy-Item (Join-Path $VcRuntimeDir $name) $destination
     }
@@ -150,10 +172,47 @@ if (-not $SkipPublish) {
     Write-Host "### Publishing the WPF app (self-contained win-x64)"
     if (Test-Path $PublishDir) { Remove-Item -Recurse -Force $PublishDir }
     & dotnet publish $AppProject -c Release -r win-x64 --self-contained true `
-        -p:PublishSingleFile=false -o $PublishDir --nologo
+        -p:PublishSingleFile=false -p:Version=$Version -o $PublishDir --nologo
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 }
 Require (Join-Path $PublishDir "Mad.Designer.Windows.exe") "publish the app first, or drop -SkipPublish"
+
+# The application's identity is generated beside the executable, never committed.
+function Write-BuildInfo([string]$Path) {
+    $commit = "unknown"
+    $short = "unknown"
+    $dirty = $false
+    try {
+        $resolved = (& git -C $RepoRoot rev-parse HEAD 2>$null | Out-String).Trim()
+        if ($LASTEXITCODE -eq 0 -and $resolved) {
+            $commit = $resolved
+            $short = $resolved.Substring(0, [Math]::Min(8, $resolved.Length))
+            $dirty = -not [string]::IsNullOrWhiteSpace((& git -C $RepoRoot status --porcelain 2>$null | Out-String))
+        }
+    } catch {
+        $commit = "unknown"
+        $short = "unknown"
+        $dirty = $false
+    }
+
+    $info = [ordered]@{
+        MADAppVersion          = $Version
+        MADAppBuild            = $BuildNumber
+        MADBuildNumber         = $BuildNumber
+        MADEngineVersion       = (Get-ManifestValue "engine_version")
+        MADEngineRevision      = "r$BuildNumber"
+        MADSourceCommit        = $commit
+        MADSourceCommitShort   = $short
+        MADSourceDirty         = $dirty
+        MADBuildDate           = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+        MADServeProtocolVersion = (Get-ManifestValue "serve_protocol_version")
+        MADContainerFormat     = "$(Get-ManifestValue 'container_major').$(Get-ManifestValue 'container_minor')"
+        MADStoreRevision       = (Get-ManifestValue "store_revision")
+    }
+    $info | ConvertTo-Json | Set-Content -Path $Path -Encoding utf8NoBOM
+}
+
+Write-BuildInfo (Join-Path $PublishDir "MADBuildInfo.json")
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 $AppName = "MAD-Designer-Windows-$Version"
@@ -170,6 +229,24 @@ Copy-Item $Sample (Join-Path $StageRoot "CLI\Fixtures")
 Copy-Item $SampleDatabase (Join-Path $StageRoot "CLI\Fixtures")
 
 Copy-Engine (Join-Path $StageRoot "Windows\Engine\build")
+
+# The staged engine must be the engine this checkout built.  Its own `version --json`
+# answers with the generated identity; a mismatch fails packaging rather than
+# shipping a package whose About window would name the wrong commit.
+$engineInfoJson = & (Join-Path $StageRoot "Windows\Engine\build\mad.exe") version --json
+if ($LASTEXITCODE -ne 0) { throw "the staged engine did not report its identity (exit $LASTEXITCODE)" }
+$engineInfo = ($engineInfoJson | Out-String).Trim() | ConvertFrom-Json
+$expectedCommit = (& git -C $RepoRoot rev-parse HEAD 2>$null | Out-String).Trim()
+if ($engineInfo.engineVersion -ne (Get-ManifestValue "engine_version")) {
+    throw "the staged engine reports version '$($engineInfo.engineVersion)', expected '$(Get-ManifestValue 'engine_version')'"
+}
+if ($engineInfo.engineRevision -ne "r$BuildNumber") {
+    throw "the staged engine reports revision '$($engineInfo.engineRevision)', expected 'r$BuildNumber'"
+}
+if ($engineInfo.sourceCommit -ne $expectedCommit) {
+    throw "the staged engine was built from '$($engineInfo.sourceCommit)', not '$expectedCommit'"
+}
+Write-Host "  ok   the bundled engine reports $($engineInfo.engineVersion) ($($engineInfo.engineRevision)) commit $($engineInfo.sourceCommitShort)"
 
 New-Item -ItemType Directory -Force -Path (Join-Path $StageRoot "ThirdParty") | Out-Null
 Copy-Item $Licenses (Join-Path $StageRoot "ThirdParty") -Recurse

@@ -16,11 +16,11 @@ sein.
 Das Format ist wichtig, weil ein Bericht *klein* ist – die ausgelieferten
 Beispiele bleiben unter 80 KB – und weil die Engine, die ihn ausführt, auf ein
 Telefon und in einen Container passt: Dieselbe Definition läuft unter iOS, macOS
-und im headless Linux-Build. Wohin das Format führt – die Ergebnistabelle eines
-Berichts wird zur Datenquelle für andere Berichte, sodass ein Dokument mehrere
-Datenbanken umspannen kann – beschreibt
-[`vision.md`](vision.md). Die Spezifikation wird außerdem als Website unter
-<https://docs.everydayapps.com> bereitgestellt.
+und im headless Linux-Build. Die Ergebnistabelle eines Berichts kann jetzt eine
+Datenquelle für andere Berichte sein, sodass ein Dokument mehrere Datenbanken
+umspannen kann: [Kompositionsberichte](composition.md) beschreibt das Modell, und
+[`vision.md`](vision.md) hält die weitere Richtung fest. Die Spezifikation wird
+außerdem als Website unter <https://docs.everydayapps.com> bereitgestellt.
 
 Alles in der ersten Hälfte ist gemessen, nicht abgeleitet. Die beiden Beispiele
 sind

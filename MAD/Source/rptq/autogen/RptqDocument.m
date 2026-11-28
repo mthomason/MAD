@@ -24,5 +24,6 @@
 @dynamic hasPageHeaderSection;
 @dynamic hasReportFooterSection;
 @dynamic hasReportHeaderSection;
+@dynamic rootQuery;
 
 @end

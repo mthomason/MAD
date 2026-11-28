@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
+@property (nonatomic) int64_t outputIndex;
+@property (nullable, nonatomic, copy) NSString *outputKey;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentElementAggregate *> *inAggregateObject;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentElementBarcode *> *inBarcodeField1;
 @property (nullable, nonatomic, retain) NSSet<RptqDocumentElementBarcode *> *inBarcodeField2;

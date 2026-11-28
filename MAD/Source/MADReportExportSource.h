@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADDocumentDataProtocol;
 
-@class RptqDatabase;
+@class MADDataResult, RptqDatabase, RptqQuery;
 
 @interface MADReportExportSource : NSObject
 
@@ -33,8 +33,27 @@ NS_ASSUME_NONNULL_BEGIN
 /// no SQL -- there is nothing to export then.
 + (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
 									  error:(NSError * _Nullable __autoreleasing *)error;
+/// Reads one node's committed result and layout.  `query` nil, or the root, reads the
+/// document's current result (the existing `sourceWithDocument:` behavior).  A non-root
+/// node reads its retained result from the document's per-node map; it errors when the
+/// node has not been refreshed.
++ (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
+					  query:(nullable RptqQuery *)query
+					  error:(NSError * _Nullable __autoreleasing *)error;
+
+/// The error every node-scoped read/export returns when the node has no committed
+/// result (it has not been refreshed).  Shared so the data exporters and the render
+/// exporters refuse an unrefreshed node the same way.
++ (NSError *)errorForUnrefreshedNode:(RptqQuery *)query;
 
 @property (readonly, nonatomic, strong) id <MADDocumentDataProtocol> document;
+
+/// The published generation this source pinned when it was created.  The rows,
+/// row count and column map are read from it, so a refresh that completes while an
+/// export is running cannot change the export's result mid-stream.  nil when the
+/// document has no published result yet; the source then reads the document's
+/// current table, as it did before publication existed.
+@property (readonly, nonatomic, strong, nullable) MADDataResult *result;
 
 /// The stored driver identifier -- "Sqlite 3", "MySQL", "TDS" -- which is a
 /// document-format constant (MADDatabaseDriverRegistry.h).

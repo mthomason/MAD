@@ -425,6 +425,26 @@ static NSURL *makeVersionOneStoreURL(NSURL *directory) {
 	return url;
 }
 
+/// A revision-3 store: the base schema plus the five 2→3 composition columns, stamped
+/// `user_version = 3`, exactly what a composed document written by the previous build
+/// carried.  The 3→4 step adds `ownerQuery_identifier` to `RptqDocumentSection` only.
+static NSURL *makeVersionThreeStoreURL(NSURL *directory) {
+	NSURL *url = [directory URLByAppendingPathComponent:@"revision3.sqlite"];
+
+	MADStore *fresh = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	MAD_PASS([fresh openWithError:&error], "fresh open failed: %s", [[error description] UTF8String]);
+	[fresh close];
+
+	MAD_PASS((SQLiteExecute(url, @"ALTER TABLE \"RptqQuery\" ADD COLUMN \"name\" TEXT;")), "2→3 name column");
+	MAD_PASS((SQLiteExecute(url, @"ALTER TABLE \"RptqDocument\" ADD COLUMN \"rootQuery_identifier\" INTEGER;")), "2→3 rootQuery_identifier column");
+	MAD_PASS((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryTable\" ADD COLUMN \"upstreamQuery_identifier\" INTEGER;")), "2→3 upstreamQuery_identifier column");
+	MAD_PASS((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryField\" ADD COLUMN \"outputIndex\" INTEGER;")), "2→3 outputIndex column");
+	MAD_PASS((SQLiteExecute(url, @"ALTER TABLE \"RptqQueryField\" ADD COLUMN \"outputKey\" TEXT;")), "2→3 outputKey column");
+	MAD_PASS((SQLiteExecute(url, @"PRAGMA user_version = 3;")), "could not stamp revision 3");
+	return url;
+}
+
 static void testVersionOneStoreMigratesOnOpen(void) {
 	NSURL *directory = makeTempDirectory();
 	NSURL *url = makeVersionOneStoreURL(directory);
@@ -536,8 +556,41 @@ static void testMigratedStoreCarriesTheNewAttribute(void) {
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:nil];
 }
 
+/// A revision-3 store opens unchanged (the base migration ladder stops at 2, so a
+/// store already past it is not touched), then a composed save runs the 3→4 step:
+/// `RptqDocumentSection` gains `ownerQuery_identifier` and `user_version` becomes 4.
+static void testRevisionThreeStoreMigratesToFourOnComposedSave(void) {
+	NSURL *directory = makeTempDirectory();
+	NSURL *url = makeVersionThreeStoreURL(directory);
+
+	MADStore *store = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	MAD_PASS([store openWithError:&error], "open failed: %s", [[error description] UTF8String]);
+	MAD_PASS(SQLiteUserVersion(url) == 3, "revision 3 opens as revision 3");
+	MAD_PASS(!SQLiteTableHasColumn(url, @"RptqDocumentSection", @"ownerQuery_identifier"),
+			 "revision 3 has no ownerQuery column yet");
+
+	MADStoreObject *document = [MADStoreObject objectWithEntity:@"RptqDocument" identifier:1];
+	[document setReference:@100 forName:@"rootQuery"];
+	MADStoreObject *query = [MADStoreObject objectWithEntity:@"RptqQuery" identifier:100];
+	[query setAttributeValue:@"root" forName:@"name"];
+	[query setAttributeValue:@0 forName:@"override"];
+	MADStoreGraph *graph = [MADStoreGraph new];
+	[graph addObject:document];
+	[graph addObject:query];
+
+	MAD_PASS([store writeGraph:graph replacingAll:NO composed:YES error:&error],
+			 "composed save failed: %s", [[error description] UTF8String]);
+	MAD_PASS(SQLiteUserVersion(url) == 4, "the composed save advances to revision 4");
+	MAD_PASS(SQLiteTableHasColumn(url, @"RptqDocumentSection", @"ownerQuery_identifier"),
+			 "the composed save adds the ownerQuery column");
+	[store close];
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:nil];
+}
+
 MAD_TEST_MAIN("MADStoreMigrationTests",
 	MAD_TEST(testVersionOneStoreMigratesOnOpen),
 	MAD_TEST(testOpeningTwiceIsIdempotent),
 	MAD_TEST(testFreshStoreIsCreatedAtTheCurrentVersion),
-	MAD_TEST(testMigratedStoreCarriesTheNewAttribute));
+	MAD_TEST(testMigratedStoreCarriesTheNewAttribute),
+	MAD_TEST(testRevisionThreeStoreMigratesToFourOnComposedSave));

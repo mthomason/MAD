@@ -506,9 +506,13 @@ is the binding constraint of the entire project.
   known mess, `MADFeedback` is unused, `Scrimpter` is parked. Behaviour-safe cleanup is
   welcome per the project's own rules — but none of it before items 1–3 above.
 
+**Scheduled (2026-11-26):** composition as a node-as-report graph — every node keeps its own
+layout and data, and the root is the document's default report, not the only one. This
+supersedes the earlier "don't build the multi-source/subreport rig" call. The normative
+decision is `MAD_COMPOSITION_SPEC.md` §0; the implementation scope is
+`MAD_COMPOSITION_NODE_VIEW.md`.
+
 **Don't:**
-- Don't build the multi-source/subreport rig (`MAD_DATA_OBJECT.md` §5 — deliberately
-  unscheduled; the composition story sells better once one product ships).
 - Don't build Stage 4 (the platform layer) before external signal — it is the most
   expensive unforced error in the plan.
 - Don't chase byte-identical PDFs on Linux (`MAD_PDF_LINUX.md` already says why it is

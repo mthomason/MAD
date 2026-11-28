@@ -26,6 +26,9 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly Action? _openAbout;
     private readonly Action? _newDocument;
     private readonly Action? _editConnection;
+    private readonly Action? _editSourceConnection;
+    private readonly Action? _newComposition;
+    private readonly Action? _importChild;
     private readonly Action<string>? _persistRecent;
     private Workspace _selectedWorkspace = Workspace.Viewer;
 
@@ -35,23 +38,34 @@ public sealed class MainWindowViewModel : ObservableObject
         Func<string, string?>? exportPath = null,
         Action? newDocument = null,
         Action? editConnection = null,
+        Action? newComposition = null,
+        Action? importChild = null,
         IReadOnlyList<string>? recentFiles = null,
         Func<string?>? saveAsPath = null,
         ICredentialStore? credentials = null,
-        Action<string>? persistRecent = null)
+        Action<string>? persistRecent = null,
+        Func<SourceCredentialPrompt, Task<SourceCredentialResult?>>? sourceCredentialPrompt = null,
+        Action? editSourceConnection = null)
     {
         _openAbout = openAbout;
         _newDocument = newDocument;
         _editConnection = editConnection;
+        _editSourceConnection = editSourceConnection;
+        _newComposition = newComposition;
+        _importChild = importChild;
         _persistRecent = persistRecent;
-        Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials);
+        Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials, sourceCredentialPrompt);
         RecentFiles = new ObservableCollection<string>(NormalizeRecent(recentFiles));
         Document.PropertyChanged += OnDocumentChanged;
 
         OpenDocumentCommand = new AsyncRelayCommand(OpenDocumentAsync);
         OpenAboutCommand = new RelayCommand(() => _openAbout?.Invoke());
         NewDocumentCommand = new RelayCommand(() => _newDocument?.Invoke());
+        NewCompositionCommand = new RelayCommand(() => _newComposition?.Invoke());
         EditConnectionCommand = new RelayCommand(() => _editConnection?.Invoke());
+        EditSourceConnectionCommand = new RelayCommand(() => _editSourceConnection?.Invoke(), () => Document.CanEditSourceConnection);
+        ConvertCommand = new AsyncRelayCommand(() => Document.ConvertToCompositionAsync(), () => HasDocument);
+        ImportChildCommand = new RelayCommand(() => _importChild?.Invoke(), () => HasDocument);
         OpenRecentCommand = new AsyncRelayCommand<string?>(path => OpenPathAsync(path!));
         SelectQueryCommand = new RelayCommand(() => SelectedWorkspace = Workspace.Query, () => HasDocument);
         SelectDesignerCommand = new RelayCommand(() => SelectedWorkspace = Workspace.Designer, () => HasDocument);
@@ -120,33 +134,39 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand OpenDocumentCommand { get; }
     public ICommand OpenAboutCommand { get; }
     public ICommand NewDocumentCommand { get; }
+    public ICommand NewCompositionCommand { get; }
     public ICommand EditConnectionCommand { get; }
+    public RelayCommand EditSourceConnectionCommand { get; }
+    public AsyncRelayCommand ConvertCommand { get; }
+    public RelayCommand ImportChildCommand { get; }
     public AsyncRelayCommand<string?> OpenRecentCommand { get; }
     public RelayCommand SelectQueryCommand { get; }
     public RelayCommand SelectDesignerCommand { get; }
     public RelayCommand SelectViewerCommand { get; }
 
     /// <summary>Opens a document at a known path (a recent file or a command-line argument) in
-    /// the Viewer — the reading default for an existing report.</summary>
+    /// the Query workspace — the authoring default, and the one place that can show either the
+    /// Result or a source.</summary>
     public async Task<bool> OpenPathAsync(string path)
     {
         await Document.OpenAsync(path);
         if (!Document.HasDocument) return false;
 
         AddRecent(path);
-        SelectedWorkspace = Workspace.Viewer;
+        SelectedWorkspace = Workspace.Query;
         return true;
     }
 
-    /// <summary>Adopts a report the connection assistant just created and opens it in the
-    /// Designer — a new report starts with its layout.</summary>
+    /// <summary>Adopts a report just created. A standard report opens in the Designer (a new
+    /// report starts with its layout); a composition opens in Query, where sources are added
+    /// and joined.</summary>
     public async Task AdoptCreatedAsync(OpenResult created, string path)
     {
         await Document.AdoptAsync(created, path);
         if (!Document.HasDocument) return;
 
         AddRecent(path);
-        SelectedWorkspace = Workspace.Designer;
+        SelectedWorkspace = Document.IsComposed ? Workspace.Query : Workspace.Designer;
     }
 
     /// <summary>Adds a path to the most-recent-first list, removing an earlier occurrence.</summary>
@@ -222,6 +242,19 @@ public sealed class MainWindowViewModel : ObservableObject
             SelectQueryCommand.RaiseCanExecuteChanged();
             SelectDesignerCommand.RaiseCanExecuteChanged();
             SelectViewerCommand.RaiseCanExecuteChanged();
+            ConvertCommand.RaiseCanExecuteChanged();
+            ImportChildCommand.RaiseCanExecuteChanged();
+            EditSourceConnectionCommand.RaiseCanExecuteChanged();
+            return;
         }
+
+        if (e.PropertyName == nameof(DocumentViewModel.CanEditSourceConnection))
+        {
+            EditSourceConnectionCommand.RaiseCanExecuteChanged();
+            return;
+        }
+
+        // Selecting a node keeps the active workspace: Query, Designer, and Viewer all follow
+        // the one selection, so there is nothing to redirect the user to.
     }
 }

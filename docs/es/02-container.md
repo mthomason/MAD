@@ -63,3 +63,24 @@ protocolo de contenido adicional de `UIManagedDocument`.
 
 La versión se escribe como double (`MADocument.m:611`) y se lee como entero en
 las muestras. Los consumidores deberían aceptar cualquiera de las dos formas.
+
+### La cabecera de composición `1.1`
+
+Un documento compuesto escribe la versión de formato **1.1** en lugar de 1.0 y añade un
+miembro `requirements.plist` junto a `meta.plist`. El registro es un plist pequeño:
+
+```xml
+{
+  "format" => 1,
+  "requiredCapabilities" => ["query-composition"]
+}
+```
+
+Un lector comprueba cada capacidad requerida contra la compilación antes de abrir el almacén;
+una capacidad desconocida, un registro ausente o un registro mal formado produce un error
+accionable de «actualice MAD Designer» en lugar de leer mal el documento. Un informe normal
+permanece en **1.0** sin miembro de requisitos: el registro es una adición, así que el resto
+del contenedor no cambia. Las constantes de versión son
+`MADFileFormatMajorVersion`, `MADFileFormatMinorVersion` y
+`MADFileFormatCompositionMinorVersion` en `MAD/Source/MADConstants.m`; el archivo
+escribe y comprueba el registro en `MADArchiveManager.m`.

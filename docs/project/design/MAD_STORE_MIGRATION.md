@@ -42,6 +42,15 @@ and is not part of this store.
 | **Query** | `RptqQuery`, `RptqQueryTable`, `RptqQueryField`, `RptqQueryLinks`, `RptqQueryGroup`, `RptqQueryPredicate`, `RptqQuerySort` | Built by the user in the MAD Query tab. |
 | **Layout** | `RptqDocument`, `RptqDocumentSection`, `RptqDocumentSectionRows`, `RptqDocumentElement` + 8 subclasses, plus value types (`RptqPoint`, `RptqRect`, `RptqSize`, `RptqAlignment`, `RptqBorder`, `RptqTextStyle`, `RptqNumericFormat`, `RptqDirectional*`) | Built by the user in the MAD Designer tab. |
 
+> **Per-node layout decision (2026-11-26, final).** This table records the current
+> document-level layout. Under [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) §0, every
+> node in a composition owns its own report layout. The store revision must associate the five
+> sections with a query (or move them under `RptqQuery`), migrate the current document sections
+> onto the root, and create the five sections for each source. This is a revision beyond the
+> current revision 3 and is scoped in
+> [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md) §3.1. The open migration
+> questions in §7 are unchanged.
+
 The graph is a tree keyed by the `identifier` (`Integer 64`) that every entity carries. The
 32 entities, the four ordered to-many relationships, the four transformable attributes, and
 the one many-to-many join table are as described in the model dump that follows this document's

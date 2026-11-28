@@ -68,7 +68,7 @@
                         </StackPanel>
                     </Button>
                     <ComboBox x:Name="FormatBox" Width="210" Margin="6,0,0,0" VerticalAlignment="Center"
-                              ItemsSource="{x:Static vm:ViewerViewModel.ExportFormats}"
+                              ItemsSource="{Binding Document.Viewer.AvailableExportFormats}"
                               DisplayMemberPath="Title"
                               SelectedIndex="{Binding Document.Viewer.SelectedFormatIndex, Mode=TwoWay}"
                               AutomationProperties.Name="{infra:Loc Viewer.Export}" />
@@ -158,13 +158,34 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
                         <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Document.Viewer.PreviewHtml}" Value="{x:Null}">
+                            <!-- Only before anything is rendered: an empty preview with neither a
+                                 report page nor a row grid. -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Document.Viewer.PreviewHtml}" Value="{x:Null}" />
+                                    <Condition Binding="{Binding Document.Viewer.IsRowGrid}" Value="False" />
+                                </MultiDataTrigger.Conditions>
                                 <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
+                            </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+
+            <!-- A layout-less node is still a valid report of rows: show its materialized
+                 columns and rows in a grid, with the HTML preview hidden. -->
+            <DataGrid x:Name="NodeRowsGrid"
+                      ItemsSource="{Binding Document.Viewer.NodeRows}"
+                      AutoGenerateColumns="True"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      HeadersVisibility="All"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+                      BorderThickness="0"
+                      Visibility="{Binding Document.Viewer.IsRowGrid, Converter={StaticResource BoolToVis}}"
+                      AutomationProperties.Name="{infra:Loc Viewer.NodeRows.Name}" />
         </Grid>
     </DockPanel>
 </UserControl>

@@ -176,6 +176,7 @@ public sealed class DesignerCanvas : Canvas
             Background = DesignPalette.Paper,
             BorderBrush = SystemColors.ActiveBorderBrush,
             BorderThickness = new Thickness(_zoom),
+            ToolTip = Localizer.Get("Designer.Band.Tooltip"),
             Tag = section,
         };
         SetLeft(band, OuterMargin * _zoom);
@@ -213,6 +214,7 @@ public sealed class DesignerCanvas : Canvas
             Background = TintFor(element),
             BorderBrush = selected ? Accent : DesignPalette.ElementOutline,
             BorderThickness = new Thickness((selected ? 1.5 : 0.75) * _zoom),
+            ToolTip = Localizer.Get("Designer.Element.Tooltip"),
             Tag = element,
         };
         SetLeft(border, ex * _zoom);

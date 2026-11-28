@@ -30,8 +30,9 @@ public sealed class QueryViewModel : ObservableObject
 {
     private readonly EngineService _engine;
     private int _handle = -1;
+    private long _queryId;
     private IReadOnlyList<SchemaTable> _schemaTables = Array.Empty<SchemaTable>();
-    private QueryModel _model = new("", "", "", Array.Empty<QueryTable>(), Array.Empty<QueryLink>(), Array.Empty<QueryPredicate>(), Array.Empty<QueryGroup>());
+    private QueryModel _model = new("", "", "", Array.Empty<QueryTable>(), Array.Empty<QueryLink>(), Array.Empty<QueryPredicate>(), Array.Empty<QueryGroup>(), 0, false);
     private IReadOnlyList<QueryTable> _orderedTables = Array.Empty<QueryTable>();
     private IReadOnlySet<long> _rootTableIds = new HashSet<long>();
 
@@ -65,6 +66,11 @@ public sealed class QueryViewModel : ObservableObject
         AddGroupCommand = new AsyncRelayCommand(AddGroupAsync);
         RemoveGroupCommand = new AsyncRelayCommand<long>(RemoveGroupAsync);
         ArrangeTablesCommand = new RelayCommand(ArrangeTables);
+        AddUpstreamCommand = new AsyncRelayCommand<long>(AddUpstreamAsync);
+        AddOutputCommand = new AsyncRelayCommand(AddOutputAsync);
+        RemoveOutputCommand = new AsyncRelayCommand<long>(RemoveOutputAsync);
+        MoveOutputUpCommand = new AsyncRelayCommand<long>(id => MoveOutputAsync(id, -1));
+        MoveOutputDownCommand = new AsyncRelayCommand<long>(id => MoveOutputAsync(id, +1));
         RevertSqlCommand = new RelayCommand(RevertSql);
         ValidateSqlCommand = new AsyncRelayCommand(ValidateSqlAsync);
         CompileAndApplySqlCommand = new AsyncRelayCommand(CompileAndApplySqlAsync);
@@ -74,6 +80,117 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public bool HasDocument => _handle >= 0;
+
+    /// <summary>The queries the document offers, in authoring order.</summary>
+    public void SetQueries(IReadOnlyList<QueryInfo> queries)
+    {
+        Queries = queries ?? Array.Empty<QueryInfo>();
+        OnPropertyChanged(nameof(Queries));
+    }
+
+    /// <summary>The query this workspace edits (its store identifier). Selecting a
+    /// different query reloads the model so every mutation applies to that query.</summary>
+    public long QueryId
+    {
+        get => _queryId;
+        set
+        {
+            if (Set(ref _queryId, value))
+            {
+                OnPropertyChanged(nameof(IsRoot));
+                _ = ReloadAsync();
+            }
+        }
+    }
+
+    /// <summary>True when the selected query is the composed root (the document's default
+    /// report, whose Result identity drives the Columns/Sources areas).</summary>
+    public bool IsRoot => _model.IsRoot;
+
+    /// <summary>True when the selected query is built from other queries — the composed root
+    /// or a nested composing node — so it has no schema tables of its own and no single
+    /// editable SQL statement.</summary>
+    public bool IsComposing => _model.IsComposing;
+
+    /// <summary>True for a leaf query: it is not the report root and not composing, so it owns
+    /// a database and schema tables. A Standard Report's single query is a leaf (the engine's
+    /// <c>isRoot</c> is false for it even though drawing workflows treat it as the report root).</summary>
+    public bool IsLeaf => !IsRoot && !IsComposing;
+
+    /// <summary>SQL is editable only for a leaf source: the composed root (even before it has
+    /// joins) and any composing node have no single editable statement.</summary>
+    public bool CanEditSql => IsLeaf;
+
+    /// <summary>True when the selected query is a source query (a leaf), not the root.</summary>
+    public bool IsNotRoot => !IsRoot;
+
+    /// <summary>True for a composing node that is not the root: nested authoring (adding a
+    /// child) is deferred, so the sidebar says so instead of offering it.</summary>
+    public bool IsComposingNonRoot => IsComposing && !IsRoot;
+
+    public bool ShowNestedAuthoringNote => IsComposingNonRoot;
+
+    /// <summary>The queries a composed root can still add as inputs: every non-root query that
+    /// is not already one of the root's upstream tables.</summary>
+    public IReadOnlyList<QueryInfo> UpstreamSources
+    {
+        get
+        {
+            var used = _model.Tables.Where(t => t.IsUpstream).Select(t => t.UpstreamQuery).ToHashSet();
+            return Queries.Where(q => !q.IsRoot && !used.Contains(q.Id)).ToList();
+        }
+    }
+
+    public bool HasAvailableSources => UpstreamSources.Count > 0;
+
+    /// <summary>The number of sources already wired into the composed root.</summary>
+    public int UpstreamTableCount => _model.Tables.Count(t => t.IsUpstream);
+
+    /// <summary>True when the Result has no sources yet: the sidebar explains how to begin.</summary>
+    public bool ShowSourcesEmpty => IsRoot && UpstreamTableCount == 0;
+
+    /// <summary>True when every source in the document is already joined to the Result.</summary>
+    public bool ShowAllSourcesAdded => IsRoot && UpstreamTableCount > 0 && !HasAvailableSources;
+
+    /// <summary>True when the sidebar has a source the user can still add.</summary>
+    public bool ShowSourcesHint => IsRoot && HasAvailableSources;
+
+    /// <summary>True when the Result has exactly one source: joining needs at least two.</summary>
+    public bool ShowOneSourceHint => IsRoot && UpstreamTableCount == 1;
+
+    /// <summary>The composed root's outputs, in their output order.</summary>
+    public IReadOnlyList<QueryField> Outputs
+        => _model.Tables.SelectMany(t => t.Fields).Where(f => f.IsOutput).OrderBy(f => f.OutputIndex).ToList();
+
+    /// <summary>The root fields that are not yet outputs (the Outputs editor's add picker).</summary>
+    public IReadOnlyList<QueryField> NonOutputFields
+        => _model.Tables.SelectMany(t => t.Fields).Where(f => !f.IsOutput).ToList();
+
+    public string OutputsLabel => Outputs.Count > 0
+        ? Localizer.Format("Query.Outputs.Count", Outputs.Count)
+        : Localizer.Get("Query.Outputs.None");
+
+    private QueryField? _newOutputField;
+    private string _newOutputKey = "";
+
+    /// <summary>The field the Outputs editor is about to add; selecting one pre-fills its key.</summary>
+    public QueryField? NewOutputField
+    {
+        get => _newOutputField;
+        set
+        {
+            if (Set(ref _newOutputField, value) && value != null)
+            {
+                NewOutputKey = value.Name;
+            }
+        }
+    }
+
+    public string NewOutputKey { get => _newOutputKey; set => Set(ref _newOutputKey, value); }
+
+    /// <summary>Every query in the document, for the query selector. Set by the
+    /// document when it loads the document-info.</summary>
+    public IReadOnlyList<QueryInfo> Queries { get; private set; } = Array.Empty<QueryInfo>();
 
     public QueryMode Mode
     {
@@ -108,7 +225,18 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
-    public string? ErrorText { get => _errorText; private set => Set(ref _errorText, value); }
+
+    public string? ErrorText
+    {
+        get => _errorText;
+        private set
+        {
+            if (Set(ref _errorText, value)) OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    /// <summary>True while a mutation failure is waiting to be shown in the status bar.</summary>
+    public bool HasError => !string.IsNullOrEmpty(_errorText);
 
     /// <summary>The visual canvas zoom. The query canvas scales itself with a layout transform,
     /// so the model coordinates and the pointer hit-testing stay in unscaled units.</summary>
@@ -195,6 +323,11 @@ public sealed class QueryViewModel : ObservableObject
     public AsyncRelayCommand AddGroupCommand { get; }
     public AsyncRelayCommand<long> RemoveGroupCommand { get; }
     public RelayCommand ArrangeTablesCommand { get; }
+    public AsyncRelayCommand<long> AddUpstreamCommand { get; }
+    public AsyncRelayCommand AddOutputCommand { get; }
+    public AsyncRelayCommand<long> RemoveOutputCommand { get; }
+    public AsyncRelayCommand<long> MoveOutputUpCommand { get; }
+    public AsyncRelayCommand<long> MoveOutputDownCommand { get; }
     public RelayCommand RevertSqlCommand { get; }
     public AsyncRelayCommand ValidateSqlCommand { get; }
     public AsyncRelayCommand CompileAndApplySqlCommand { get; }
@@ -218,15 +351,33 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     /// <summary>Populates the workspace after a document opens (or its connection changes).</summary>
-    public async Task LoadAsync(int handle, string driver, IReadOnlyList<SchemaTable> schemaTables)
+    public async Task LoadAsync(int handle, string driver, IReadOnlyList<SchemaTable> schemaTables, long queryId)
     {
         _handle = handle;
         _schemaTables = schemaTables;
+        _queryId = queryId;
         OnPropertyChanged(nameof(SchemaTables));
         OnPropertyChanged(nameof(HasDocument));
         _ = driver; // the model's driver token is authoritative; kept for symmetry
 
         await ReloadAsync();
+    }
+
+    /// <summary>Re-reads the selected query's schema via <c>describe?query</c>. A composing node
+    /// answers no schema tables (its inputs are other queries); a leaf answers its own.</summary>
+    public async Task ReloadSchemaAsync()
+    {
+        if (!HasDocument) return;
+        try
+        {
+            DescribeResult describe = await _engine.DescribeAsync(_handle, _queryId);
+            _schemaTables = describe.Tables;
+            OnPropertyChanged(nameof(SchemaTables));
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+        }
     }
 
     /// <summary>Re-reads the query model from the engine.  Call after `apply-connection`, too.</summary>
@@ -235,7 +386,7 @@ public sealed class QueryViewModel : ObservableObject
         if (!HasDocument) return;
         try
         {
-            ApplyModel(await _engine.QueryModelAsync(_handle));
+            ApplyModel(await _engine.QueryModelAsync(_handle, _queryId));
             if (Mode == QueryMode.Designer)
             {
                 SqlEditorText = string.IsNullOrEmpty(_model.SqlSourceText) ? _model.Sql : _model.SqlSourceText;
@@ -249,6 +400,10 @@ public sealed class QueryViewModel : ObservableObject
 
     public void SwitchToMode(QueryMode mode)
     {
+        if (mode == QueryMode.Sql && !CanEditSql)
+        {
+            return; // the composed root has no single editable SQL statement
+        }
         Mode = mode;
         OnPropertyChanged(nameof(IsDesigner));
         OnPropertyChanged(nameof(IsSql));
@@ -266,43 +421,84 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public async Task AddTableAsync(string tableName)
-        => await MutateAsync(() => _engine.AddTableAsync(_handle, tableName));
+        => await MutateAsync(() => _engine.AddTableAsync(_handle, tableName, _queryId));
 
     public async Task RemoveTableAsync(long tableId)
-        => await MutateAsync(() => _engine.RemoveTableAsync(_handle, tableId));
+        => await MutateAsync(() => _engine.RemoveTableAsync(_handle, tableId, _queryId));
 
     public async Task ConnectFieldsAsync(long leftField, long rightField)
-        => await MutateAsync(() => _engine.AddLinkAsync(_handle, leftField, rightField));
+        => await MutateAsync(() => _engine.AddLinkAsync(_handle, leftField, rightField, _queryId));
+
+    /// <summary>Adds a child query as a new input of the composed root (an upstream table).</summary>
+    public async Task AddUpstreamAsync(long childQueryId)
+        => await MutateAsync(() => _engine.AddUpstreamAsync(_handle, childQueryId));
+
+    /// <summary>Adds the selected field as a new root output, appended after the existing
+    /// outputs. Its key is the name the Outputs editor shows.</summary>
+    public async Task AddOutputAsync()
+    {
+        if (NewOutputField is not { } field || string.IsNullOrWhiteSpace(NewOutputKey)) return;
+        var outputs = Outputs.Select(o => (o.Id, o.OutputKey!)).Append((field.Id, NewOutputKey.Trim())).ToList();
+        await SetOutputsAsync(outputs);
+        NewOutputField = null;
+        NewOutputKey = "";
+    }
+
+    public async Task RemoveOutputAsync(long fieldId)
+    {
+        var outputs = Outputs.Where(o => o.Id != fieldId).Select(o => (o.Id, o.OutputKey!)).ToList();
+        await SetOutputsAsync(outputs);
+    }
+
+    public async Task RenameOutputAsync(long fieldId, string key)
+    {
+        if (string.IsNullOrWhiteSpace(key)) return;
+        var outputs = Outputs.Select(o => (o.Id, o.Id == fieldId ? key.Trim() : o.OutputKey!)).ToList();
+        await SetOutputsAsync(outputs);
+    }
+
+    public async Task MoveOutputAsync(long fieldId, int delta)
+    {
+        var list = Outputs.ToList();
+        int index = list.FindIndex(o => o.Id == fieldId);
+        int target = index + delta;
+        if (index < 0 || target < 0 || target >= list.Count) return;
+        (list[index], list[target]) = (list[target], list[index]);
+        await SetOutputsAsync(list.Select(o => (o.Id, o.OutputKey!)).ToList());
+    }
+
+    private async Task SetOutputsAsync(IReadOnlyList<(long Field, string Key)> outputs)
+        => await MutateAsync(() => _engine.SetRootOutputsAsync(_handle, outputs.Select(o => new RootOutput(o.Field, o.Key)).ToList()));
 
     public async Task SetLinkTypeAsync(long linkId, LinkType type)
-        => await MutateAsync(() => _engine.SetLinkTypeAsync(_handle, linkId, (int)type));
+        => await MutateAsync(() => _engine.SetLinkTypeAsync(_handle, linkId, (int)type, _queryId));
 
     public async Task SwapLinkAsync(long linkId)
-        => await MutateAsync(() => _engine.SwapLinkAsync(_handle, linkId));
+        => await MutateAsync(() => _engine.SwapLinkAsync(_handle, linkId, _queryId));
 
     public async Task DeleteLinkAsync(long linkId)
-        => await MutateAsync(() => _engine.DeleteLinkAsync(_handle, linkId));
+        => await MutateAsync(() => _engine.DeleteLinkAsync(_handle, linkId, _queryId));
 
     public async Task AddPredicateAsync()
     {
         if (SelectedFilterField is not { } field || string.IsNullOrEmpty(FilterValue)) return;
         var op = (PredicateOperator)Math.Clamp(SelectedFilterOperatorIndex, 0, 5);
-        await MutateAsync(() => _engine.AddPredicateAsync(_handle, field.Id, (int)op, FilterValue));
+        await MutateAsync(() => _engine.AddPredicateAsync(_handle, field.Id, (int)op, FilterValue, _queryId));
         FilterValue = "";
     }
 
     public async Task RemovePredicateAsync(long predicateId)
-        => await MutateAsync(() => _engine.RemovePredicateAsync(_handle, predicateId));
+        => await MutateAsync(() => _engine.RemovePredicateAsync(_handle, predicateId, _queryId));
 
     public async Task AddGroupAsync()
     {
         if (SelectedGroupField is not { } field) return;
         var sort = SelectedGroupSortIndex == 1 ? GroupSort.Descending : GroupSort.Ascending;
-        await MutateAsync(() => _engine.AddGroupAsync(_handle, field.Id, (int)sort));
+        await MutateAsync(() => _engine.AddGroupAsync(_handle, field.Id, (int)sort, _queryId));
     }
 
     public async Task RemoveGroupAsync(long groupId)
-        => await MutateAsync(() => _engine.RemoveGroupAsync(_handle, groupId));
+        => await MutateAsync(() => _engine.RemoveGroupAsync(_handle, groupId, _queryId));
 
     public void ArrangeTables() => ArrangeRequested?.Invoke();
 
@@ -315,7 +511,7 @@ public sealed class QueryViewModel : ObservableObject
         ErrorText = null;
         try
         {
-            var result = await _engine.ValidateSqlAsync(_handle, SqlEditorText);
+            var result = await _engine.ValidateSqlAsync(_handle, SqlEditorText, _queryId);
             StatusText = Localizer.Format("Query.ValidSql",
                 result.Tables, result.Links, result.Predicates, result.Groups);
         }
@@ -336,7 +532,7 @@ public sealed class QueryViewModel : ObservableObject
         ErrorText = null;
         try
         {
-            var result = await _engine.ApplySqlAsync(_handle, SqlEditorText);
+            var result = await _engine.ApplySqlAsync(_handle, SqlEditorText, _queryId);
             StatusText = Localizer.Format("Query.AppliedSql",
                 result.Tables, result.Links, result.Predicates, result.Groups);
             await ReloadAsync();
@@ -438,6 +634,33 @@ public sealed class QueryViewModel : ObservableObject
         OnPropertyChanged(nameof(AllFields));
         OnPropertyChanged(nameof(FiltersLabel));
         OnPropertyChanged(nameof(GroupsLabel));
+        OnPropertyChanged(nameof(Outputs));
+        OnPropertyChanged(nameof(NonOutputFields));
+        OnPropertyChanged(nameof(OutputsLabel));
+        OnPropertyChanged(nameof(UpstreamSources));
+        OnPropertyChanged(nameof(HasAvailableSources));
+        OnPropertyChanged(nameof(UpstreamTableCount));
+        OnPropertyChanged(nameof(ShowSourcesEmpty));
+        OnPropertyChanged(nameof(ShowAllSourcesAdded));
+        OnPropertyChanged(nameof(ShowSourcesHint));
+        OnPropertyChanged(nameof(ShowOneSourceHint));
+        OnPropertyChanged(nameof(IsRoot));
+        OnPropertyChanged(nameof(IsComposing));
+        OnPropertyChanged(nameof(IsLeaf));
+        OnPropertyChanged(nameof(IsComposingNonRoot));
+        OnPropertyChanged(nameof(ShowNestedAuthoringNote));
+        OnPropertyChanged(nameof(CanEditSql));
+        OnPropertyChanged(nameof(IsNotRoot));
+        if ((_model.IsRoot || _model.IsComposing) && _mode == QueryMode.Sql)
+        {
+            // Switching to the Result or a composing node while in SQL mode drops back to the
+            // visual designer, because it has no single editable statement.
+            Mode = QueryMode.Designer;
+            OnPropertyChanged(nameof(IsDesigner));
+            OnPropertyChanged(nameof(IsSql));
+            OnPropertyChanged(nameof(DesignerSelected));
+            OnPropertyChanged(nameof(SqlSelected));
+        }
         OnPropertyChanged(nameof(PredicateRows));
         OnPropertyChanged(nameof(GroupRows));
     }

@@ -16,6 +16,21 @@
 
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementAggregate.h>
+#import <MAD/RptqDocumentElementBarcode.h>
+#import <MAD/RptqDatabase.h>
 #import <MAD/MADStore.h>
 #import "MADStoreConverter.h"
 
@@ -588,6 +603,840 @@
 				 @"the deleted row is gone after the save");
 	XCTAssertNil([context objectForEntity:@"RptqDatabaseSchemaTable" identifier:12],
 				 @"the deleted row left the context's graph");
+}
+
+#pragma mark - Composition graph (store revision 3)
+
+- (void)testCompositionGraphRoundTripsAndIsRevision3 {
+	RptqStoreContext *context = [self openContextAtPath:@"composed.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+
+	RptqObject *rootQuery = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[rootQuery setValue:@"root" forKey:@"name"];
+	RptqObject *invoicesQuery = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoicesQuery setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsQuery = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[paymentsQuery setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ rootQuery, invoicesQuery, paymentsQuery ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSourceTable setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSourceTable setValue:invoicesQuery forKey:@"inQuery"];
+	RptqObject *paymentsSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSourceTable setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSourceTable setValue:paymentsQuery forKey:@"inQuery"];
+
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[rootInvoicesTable setValue:rootQuery forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoicesQuery forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[rootPaymentsTable setValue:rootQuery forKey:@"inQuery"];
+	[rootPaymentsTable setValue:paymentsQuery forKey:@"upstreamQuery"];
+
+	RptqObject *leftKey = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[leftKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[leftKey setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	RptqObject *rightKey = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[rightKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[rightKey setValue:rootPaymentsTable forKey:@"inQueryTable"];
+
+	RptqObject *join = [context insertObjectForEntity:@"RptqQueryLinks" identifier:400];
+	[join setValue:@1 forKey:@"type"];
+	[join setValue:leftKey forKey:@"hasLeftField"];
+	[join setValue:rightKey forKey:@"hasRightField"];
+	[join setValue:rootQuery forKey:@"inQuery"];
+
+	[document setValue:rootQuery forKey:@"rootQuery"];
+
+	NSError *error = nil;
+	XCTAssertTrue([context saveComposed:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"composed.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	XCTAssertEqual(reread.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqObject *readDocument = [reread objectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *readRoot = [readDocument valueForKey:@"rootQuery"];
+	XCTAssertNotNil(readRoot);
+	XCTAssertEqualObjects([readRoot valueForKey:@"name"], @"root");
+
+	RptqObject *readDatabase = [[readDocument valueForKey:@"hasDatabaseSchemas"] anyObject];
+	NSSet *queries = [readDatabase valueForKey:@"hasQueries"];
+	XCTAssertEqual(queries.count, (NSUInteger)3);
+	RptqObject *readInvoices = nil, *readPayments = nil;
+	for (RptqObject *query in queries) {
+		XCTAssertEqualObjects([[query valueForKey:@"inDatabase"] valueForKey:@"databaseDriverType"], @"Sqlite 3");
+		if ([[query valueForKey:@"name"] isEqualToString:@"invoices"]) readInvoices = query;
+		if ([[query valueForKey:@"name"] isEqualToString:@"payments"]) readPayments = query;
+	}
+	XCTAssertNotNil(readInvoices);
+	XCTAssertNotNil(readPayments);
+
+	NSSet *rootTables = [readRoot valueForKey:@"hasQueryTables"];
+	XCTAssertEqual(rootTables.count, (NSUInteger)2);
+	NSSet *rootUpstreams = [NSSet setWithArray:[[rootTables allObjects] valueForKey:@"upstreamQuery"]];
+	XCTAssertEqual(rootUpstreams.count, (NSUInteger)2);
+
+	NSSet *joinSet = [readRoot valueForKey:@"hasQueryLinks"];
+	XCTAssertEqual(joinSet.count, (NSUInteger)1);
+	RptqObject *readJoin = joinSet.anyObject;
+	XCTAssertEqualObjects([readJoin valueForKey:@"type"], @1);
+	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasLeftField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
+	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasRightField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
+}
+
+/// Each node owns its five structural sections via `ownerQuery`; a save/reopen keeps
+/// three independent layouts intact (store revision 4).
+- (void)testPerNodeLayoutRoundTripsWithThreeLayouts {
+	RptqStoreContext *context = [self openContextAtPath:@"per-node-layout.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:100];
+	root.name = @"root";
+	RptqQuery *leaf1 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:101];
+	leaf1.name = @"leaf1";
+	RptqQuery *leaf2 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:102];
+	leaf2.name = @"leaf2";
+	[database setValue:@[ root, leaf1, leaf2 ] forKey:@"hasQueries"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	// The root's five sections stay on the document; each leaf owns its own five.
+	RptqDocumentSection *reportHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:1];
+	reportHeader.type = MADDocumentSectionTypeReportHeader;
+	reportHeader.visibility = YES;
+	RptqDocumentSection *reportFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:2];
+	reportFooter.type = MADDocumentSectionTypeReportFooter;
+	reportFooter.visibility = YES;
+	RptqDocumentSection *pageHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:3];
+	pageHeader.type = MADDocumentSectionTypePageHeader;
+	pageHeader.visibility = YES;
+	RptqDocumentSection *pageFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:4];
+	pageFooter.type = MADDocumentSectionTypePageFooter;
+	pageFooter.visibility = YES;
+	RptqDocumentSection *detail = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:5];
+	detail.type = MADDocumentSectionTypeBody;
+	detail.visibility = YES;
+	[document setValue:reportHeader forKey:@"hasReportHeaderSection"];
+	[document setValue:reportFooter forKey:@"hasReportFooterSection"];
+	[document setValue:pageHeader forKey:@"hasPageHeaderSection"];
+	[document setValue:pageFooter forKey:@"hasPageFooterSection"];
+	[document setValue:detail forKey:@"hasDetailSection"];
+
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf1 managedObjectContext:context];
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf2 managedObjectContext:context];
+
+	// A leaf1 query field (one schema table + field, one query table + field) so a
+	// data-field element has a field to bind to, and the binding survives the round trip.
+	RptqObject *schemaTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[schemaTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[schemaField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ schemaTable ] forKey:@"hasTables"];
+	[schemaTable setValue:@[ schemaField ] forKey:@"hasFields"];
+	RptqObject *leaf1Table = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[leaf1Table setValue:leaf1 forKey:@"inQuery"];
+	[leaf1Table setValue:schemaTable forKey:@"databaseSchemaTable"];
+	RptqQueryField *leaf1Field = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[leaf1Field setValue:schemaField forKey:@"databaseSchemaField"];
+	[leaf1Field setValue:leaf1Table forKey:@"inQueryTable"];
+	[leaf1Table setValue:@[ leaf1Field ] forKey:@"hasQueryFields"];
+
+	// A data-field element in leaf1's detail section, bound to the leaf's own field.
+	RptqDocumentSection *leaf1Detail = nil;
+	for (RptqDocumentSection *section in leaf1.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) leaf1Detail = section;
+	}
+	XCTAssertNotNil(leaf1Detail);
+	RptqDocumentSectionRows *leaf1Row = leaf1Detail.hasRows.firstObject;
+	XCTAssertNotNil(leaf1Row);
+	RptqDocumentElementLabelDataField *leaf1DataField =
+		(RptqDocumentElementLabelDataField *)[context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	leaf1DataField.referencesQueryField = leaf1Field;
+	leaf1DataField.fieldID = @"amount";
+	leaf1DataField.inSectionRow = leaf1Row;
+
+	NSError *error = nil;
+	XCTAssertTrue([context saveComposed:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"per-node-layout.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	RptqDocument *readDocument = [RptqDocument newDocumentReadFromManagedObjectContext:reread];
+	RptqQuery *readRoot = readDocument.rootQuery;
+	XCTAssertEqualObjects(readRoot.name, @"root");
+
+	// The root's ordered layout is the document's five sections.
+	NSArray<RptqDocumentSection *> *rootSections = [readRoot orderedLayoutSectionsForDocument:readDocument];
+	XCTAssertEqual(rootSections.count, (NSUInteger)5);
+
+	// Each leaf owns its own five sections, and leaf1's data-field element survives,
+	// still bound to the leaf's own (remapped) field.
+	RptqQuery *readLeaf1 = nil;
+	for (RptqQuery *query in readRoot.inDatabase.hasQueries) {
+		if (query == readRoot) continue;
+		XCTAssertEqual(query.hasLayoutSections.count, (NSUInteger)5);
+		for (RptqDocumentSection *section in query.hasLayoutSections) {
+			XCTAssertEqualObjects(section.ownerQuery.name, query.name);
+		}
+		if ([query.name isEqualToString:@"leaf1"]) readLeaf1 = query;
+	}
+	XCTAssertNotNil(readLeaf1);
+
+	RptqDocumentSection *readLeaf1Detail = nil;
+	for (RptqDocumentSection *section in readLeaf1.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) readLeaf1Detail = section;
+	}
+	XCTAssertEqual(readLeaf1Detail.hasRows.firstObject.hasObjects.count, (NSUInteger)1);
+	RptqDocumentElementLabelDataField *readElement =
+		(RptqDocumentElementLabelDataField *)readLeaf1Detail.hasRows.firstObject.hasObjects.firstObject;
+	XCTAssertNotNil(readElement);
+	XCTAssertEqualObjects(readElement.fieldID, @"amount");
+	XCTAssertNotNil(readElement.referencesQueryField);
+	XCTAssertEqualObjects(readElement.referencesQueryField.databaseSchemaField.name, @"amount");
+}
+
+/// A layoutless source (a query with no sections of its own) imports with five empty
+/// sections, so the imported child is authorable immediately.
+- (void)testImportLayoutlessSourceYieldsEmptySections {
+	RptqStoreContext *source = [self openContextAtPath:@"layoutless-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"t" fieldName:@"f" host:@"/tmp/t.sqlite"];
+
+	RptqStoreContext *destination = [self openContextAtPath:@"layoutless-dest.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(imported);
+	XCTAssertEqual(imported.hasLayoutSections.count, (NSUInteger)5);
+}
+
+/// A source with a designed layout imports its five sections onto the imported query
+/// (the source document's sections map to the imported root via `ownerQuery`).
+- (void)testImportCopiesSourceLayout {
+	RptqStoreContext *source = [self openContextAtPath:@"layout-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"t" fieldName:@"f" host:@"/tmp/t.sqlite"];
+
+	// Five document sections on the source (its single query is the root).
+	RptqObject *sourceDocument = [source objectForEntity:@"RptqDocument" identifier:1];
+	for (int i = 1; i <= 5; i++) {
+		RptqObject *section = [source insertObjectForEntity:@"RptqDocumentSection" identifier:i];
+		[section setValue:@(i) forKey:@"type"];
+		[section setValue:@YES forKey:@"visibility"];
+	}
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:1] forKey:@"hasReportHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:2] forKey:@"hasReportFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:3] forKey:@"hasPageHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:4] forKey:@"hasPageFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:5] forKey:@"hasDetailSection"];
+
+	RptqStoreContext *destination = [self openContextAtPath:@"layout-dest.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(imported);
+	XCTAssertEqual(imported.hasLayoutSections.count, (NSUInteger)5);
+	for (RptqDocumentSection *section in imported.hasLayoutSections) {
+		XCTAssertEqualObjects(section.ownerQuery.name, imported.name);
+	}
+}
+
+#pragma mark - Importing a query graph
+
+/// Builds an ordinary single-query graph -- one database, its credential, one schema
+/// table and field, and one query with a query table and field -- using fixed
+/// identifiers so two independent documents collide exactly.
+- (void)buildStandardQueryGraphInContext:(RptqStoreContext *)context
+							  tableName:(NSString *)tableName
+							  fieldName:(NSString *)fieldName
+								   host:(NSString *)host {
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[database setValue:@10 forKey:@"databaseDriverTypeEnum"];
+	RptqObject *credential = [context insertObjectForEntity:@"RptqDatabaseCredentals" identifier:0];
+	[credential setValue:host.lastPathComponent forKey:@"dbname"];
+	[credential setValue:host forKey:@"host"];
+	[database setValue:credential forKey:@"ownedByUser"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:tableName forKey:@"name"];
+	RptqObject *field = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[field setValue:fieldName forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ field ] forKey:@"hasFields"];
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	RptqObject *queryField = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[queryField setValue:field forKey:@"databaseSchemaField"];
+	[queryField setValue:queryTable forKey:@"inQueryTable"];
+	[queryTable setValue:@[ queryField ] forKey:@"hasQueryFields"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	[database setValue:@[ query ] forKey:@"hasQueries"];
+}
+
+- (void)testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath {
+	// Source and destination use the same identifiers, so nothing would coexist
+	// without the remap.
+	RptqStoreContext *source = [self openContextAtPath:@"source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"invoices" fieldName:@"amount" host:@"invoices.sqlite"];
+	NSError *sourceSaveError = nil;
+	XCTAssertTrue([source save:&sourceSaveError], @"source save failed: %@", sourceSaveError);
+
+	RptqStoreContext *destination = [self openContextAtPath:@"destination.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:destination tableName:@"orders" fieldName:@"total" host:@"orders.sqlite"];
+	NSError *destinationSaveError = nil;
+	XCTAssertTrue([destination save:&destinationSaveError], @"destination save failed: %@", destinationSaveError);
+
+	NSURL *childURL = [self.directory URLByAppendingPathComponent:@"child.mad"];
+	NSError *error = nil;
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source
+												 relativePathBaseURL:childURL
+																error:&error];
+	XCTAssertNotNil(importedRoot, @"import failed: %@", error);
+	XCTAssertNotEqual(importedRoot.identifier, (int64_t)100, @"the imported query must be remapped");
+
+	// Two queries, two databases, two tables, two fields -- the originals plus the
+	// imported copies.
+	XCTAssertEqual([destination objectsForEntity:@"RptqQuery"].count, (NSUInteger)2);
+	XCTAssertEqual([destination objectsForEntity:@"RptqDatabase"].count, (NSUInteger)2);
+	// The imported database joins the destination document's schema list.
+	RptqObject *destinationDocumentRow = [destination objectForEntity:@"RptqDocument" identifier:1];
+	XCTAssertEqual([[destinationDocumentRow valueForKey:@"hasDatabaseSchemas"] count], (NSUInteger)2);
+	XCTAssertEqual([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count, (NSUInteger)2);
+	XCTAssertEqual([destination objectsForEntity:@"RptqDatabaseSchemaField"].count, (NSUInteger)2);
+	XCTAssertEqual([destination objectsForEntity:@"RptqQueryTable"].count, (NSUInteger)2);
+	XCTAssertEqual([destination objectsForEntity:@"RptqQueryField"].count, (NSUInteger)2);
+
+	// The imported query wires to its own imported database, schema table, and field.
+	RptqObject *importedDatabase = [importedRoot valueForKey:@"inDatabase"];
+	XCTAssertNotEqual(importedDatabase.identifier, (int64_t)10);
+	NSSet *importedTables = [importedDatabase valueForKey:@"hasTables"];
+	XCTAssertEqual(importedTables.count, (NSUInteger)1);
+	RptqObject *importedTable = importedTables.anyObject;
+	XCTAssertEqualObjects([importedTable valueForKey:@"name"], @"invoices");
+	RptqObject *importedField = [[importedTable valueForKey:@"hasFields"] firstObject];
+	XCTAssertEqualObjects([importedField valueForKey:@"name"], @"amount");
+
+	RptqObject *importedQueryTable = [[importedRoot valueForKey:@"hasQueryTables"] anyObject];
+	XCTAssertNotNil(importedQueryTable);
+	RptqObject *importedQueryField = [[importedQueryTable valueForKey:@"hasQueryFields"] anyObject];
+	XCTAssertNotNil(importedQueryField);
+	XCTAssertEqualObjects([[importedQueryField valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"amount");
+	XCTAssertEqualObjects([[importedQueryTable valueForKey:@"databaseSchemaTable"] valueForKey:@"name"], @"invoices");
+
+	// The relative SQLite path resolves against the child's location.
+	RptqObject *importedCredential = [importedDatabase valueForKey:@"ownedByUser"];
+	XCTAssertEqualObjects([importedCredential valueForKey:@"host"],
+						  [childURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"invoices.sqlite"].path);
+
+	// The source is untouched: its identifiers did not move.
+	RptqObject *sourceQuery = [source objectForEntity:@"RptqQuery" identifier:100];
+	XCTAssertNotNil(sourceQuery);
+	RptqObject *sourceTable = [[[sourceQuery valueForKey:@"inDatabase"] valueForKey:@"hasTables"] anyObject];
+	XCTAssertEqualObjects([sourceTable valueForKey:@"name"], @"invoices");
+}
+
+- (void)testImportComposedGraphBringsRootAndLeaves {
+	RptqStoreContext *source = [self openContextAtPath:@"composed-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+
+	RptqObject *document = [source insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [source insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *invoicesTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField ] forKey:@"hasFields"];
+
+	RptqObject *rootQuery = [source insertObjectForEntity:@"RptqQuery" identifier:100];
+	[rootQuery setValue:@"root" forKey:@"name"];
+	RptqObject *invoicesQuery = [source insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoicesQuery setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsQuery = [source insertObjectForEntity:@"RptqQuery" identifier:102];
+	[paymentsQuery setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ rootQuery, invoicesQuery, paymentsQuery ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSourceTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSourceTable setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSourceTable setValue:invoicesQuery forKey:@"inQuery"];
+	RptqObject *paymentsSourceTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSourceTable setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSourceTable setValue:paymentsQuery forKey:@"inQuery"];
+
+	RptqObject *rootInvoicesTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[rootInvoicesTable setValue:rootQuery forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoicesQuery forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[rootPaymentsTable setValue:rootQuery forKey:@"inQuery"];
+	[rootPaymentsTable setValue:paymentsQuery forKey:@"upstreamQuery"];
+
+	[document setValue:rootQuery forKey:@"rootQuery"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	XCTAssertTrue([source saveComposed:NULL]);
+
+	RptqStoreContext *destination = [self openContextAtPath:@"composed-destination.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	RptqObject *destinationDocument = [destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(importedRoot, @"import failed: %@", error);
+	XCTAssertEqualObjects([importedRoot valueForKey:@"name"], @"root");
+
+	// The whole graph came along: root + two leaves, and the two schema tables.
+	XCTAssertEqual([destination objectsForEntity:@"RptqQuery"].count, (NSUInteger)3);
+	XCTAssertEqual([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count, (NSUInteger)2);
+
+	NSSet *importedRootTables = [importedRoot valueForKey:@"hasQueryTables"];
+	XCTAssertEqual(importedRootTables.count, (NSUInteger)2);
+	NSMutableSet *upstreamNames = [NSMutableSet set];
+	for (RptqObject *table in importedRootTables) {
+		RptqObject *upstream = [table valueForKey:@"upstreamQuery"];
+		XCTAssertNotNil(upstream);
+		[upstreamNames addObject:[upstream valueForKey:@"name"]];
+	}
+	XCTAssertEqualObjects(upstreamNames, ([NSSet setWithArray:@[ @"invoices", @"payments" ]]));
+
+	// The imported root is not the destination document's root (that relationship is
+	// not copied across the import).
+	XCTAssertNil([destinationDocument valueForKey:@"rootQuery"]);
+}
+
+/// A designed layout imports its elements with every field reference remapped to the
+/// imported query's field (data-field, aggregate, and barcode each carry one).
+- (void)testImportLayoutWithElementsRemapsFieldRefs {
+	RptqStoreContext *source = [self openContextAtPath:@"layout-elements-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"invoices" fieldName:@"amount" host:@"/tmp/invoices.sqlite"];
+
+	// One detail section with one row holding the three element kinds, each bound to
+	// the source's single query field.
+	RptqObject *sourceDocument = [source objectForEntity:@"RptqDocument" identifier:1];
+	RptqDocumentSection *detail = (RptqDocumentSection *)[source insertObjectForEntity:@"RptqDocumentSection" identifier:1];
+	detail.type = MADDocumentSectionTypeBody;
+	detail.visibility = YES;
+	RptqDocumentSectionRows *row = (RptqDocumentSectionRows *)[source insertObjectForEntity:@"RptqDocumentSectionRows" identifier:0];
+	row.inSection = detail;
+	detail.hasRows = [[NSOrderedSet alloc] initWithObject:row];
+	[sourceDocument setValue:detail forKey:@"hasDetailSection"];
+
+	RptqQueryField *sourceField = (RptqQueryField *)[source objectForEntity:@"RptqQueryField" identifier:300];
+
+	RptqDocumentElementLabelDataField *dataField =
+		(RptqDocumentElementLabelDataField *)[source insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	dataField.referencesQueryField = sourceField;
+	dataField.fieldID = @"amount";
+	dataField.inSectionRow = row;
+
+	RptqDocumentElementAggregate *aggregate =
+		(RptqDocumentElementAggregate *)[source insertObjectForEntity:@"RptqDocumentElementAggregate" identifier:0];
+	aggregate.aggregateField = sourceField;
+	aggregate.inSectionRow = row;
+
+	RptqDocumentElementBarcode *barcode =
+		(RptqDocumentElementBarcode *)[source insertObjectForEntity:@"RptqDocumentElementBarcode" identifier:0];
+	barcode.referencesField1 = sourceField;
+	barcode.inSectionRow = row;
+
+	NSError *sourceSaveError = nil;
+	XCTAssertTrue([source save:&sourceSaveError], @"source save failed: %@", sourceSaveError);
+
+	RptqStoreContext *destination = [self openContextAtPath:@"layout-elements-dest.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(imported, @"import failed: %@", error);
+
+	// The imported query owns the detail section; its one row carries the three
+	// elements, each rebound to the imported field rather than the source's.
+	RptqDocumentSection *importedDetail = nil;
+	for (RptqDocumentSection *section in imported.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) importedDetail = section;
+	}
+	XCTAssertNotNil(importedDetail);
+	XCTAssertEqual(importedDetail.hasRows.firstObject.hasObjects.count, (NSUInteger)3);
+
+	RptqQueryField *importedField = nil;
+	for (RptqQueryTable *table in imported.hasQueryTables) {
+		importedField = table.hasQueryFields.anyObject;
+	}
+	XCTAssertNotNil(importedField);
+	XCTAssertNotEqual(importedField.identifier, sourceField.identifier);
+	XCTAssertEqualObjects(importedField.databaseSchemaField.name, @"amount");
+
+	for (RptqDocumentElement *element in importedDetail.hasRows.firstObject.hasObjects) {
+		if ([element isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
+			RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)element;
+			XCTAssertEqualObjects(df.referencesQueryField, importedField);
+			XCTAssertEqualObjects(df.fieldID, @"amount");
+		} else if ([element isKindOfClass:[RptqDocumentElementAggregate class]]) {
+			XCTAssertEqualObjects([(RptqDocumentElementAggregate *)element aggregateField], importedField);
+		} else if ([element isKindOfClass:[RptqDocumentElementBarcode class]]) {
+			XCTAssertEqualObjects([(RptqDocumentElementBarcode *)element referencesField1], importedField);
+		} else {
+			XCTFail(@"unexpected element kind %@", element.entity);
+		}
+	}
+}
+
+/// A nested four-node graph (root → intermediate composer → two leaves) imports with
+/// every node's layout and its composing/leaf identity intact.
+- (void)testImportNestedFourNodeGraph {
+	RptqStoreContext *source = [self openContextAtPath:@"nested-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+
+	RptqObject *document = [source insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [source insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *invoicesTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+
+	// Four nodes: root (composing) over mid (composing) over two leaves.
+	RptqQuery *root = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	RptqQuery *mid = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:101];
+	[mid setValue:@"mid" forKey:@"name"];
+	RptqQuery *invoices = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:102];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	RptqQuery *payments = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:103];
+	[payments setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ root, mid, invoices, payments ] forKey:@"hasQueries"];
+
+	// The two leaves each own a schema-backed query table.
+	RptqObject *invoicesSource = [source insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSource setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSource setValue:invoices forKey:@"inQuery"];
+	RptqObject *paymentsSource = [source insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSource setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSource setValue:payments forKey:@"inQuery"];
+
+	// The intermediate composer consumes the two leaves.
+	RptqObject *midInvoices = [source insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[midInvoices setValue:mid forKey:@"inQuery"];
+	[midInvoices setValue:invoices forKey:@"upstreamQuery"];
+	RptqObject *midPayments = [source insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[midPayments setValue:mid forKey:@"inQuery"];
+	[midPayments setValue:payments forKey:@"upstreamQuery"];
+
+	// The root consumes the intermediate composer.
+	RptqObject *rootMid = [source insertObjectForEntity:@"RptqQueryTable" identifier:204];
+	[rootMid setValue:root forKey:@"inQuery"];
+	[rootMid setValue:mid forKey:@"upstreamQuery"];
+
+	[document setValue:root forKey:@"rootQuery"];
+	[RptqDocumentSection createStructuralSectionsForQuery:invoices managedObjectContext:source];
+	[RptqDocumentSection createStructuralSectionsForQuery:payments managedObjectContext:source];
+	[RptqDocumentSection createStructuralSectionsForQuery:mid managedObjectContext:source];
+	XCTAssertTrue([source saveComposed:NULL]);
+
+	RptqStoreContext *destination = [self openContextAtPath:@"nested-destination.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(importedRoot, @"import failed: %@", error);
+
+	// All four nodes came along, and the nested composer is still composing.
+	XCTAssertEqual([destination objectsForEntity:@"RptqQuery"].count, (NSUInteger)4);
+	RptqQuery *importedMid = nil;
+	for (RptqObject *object in [destination objectsForEntity:@"RptqQuery"]) {
+		RptqQuery *query = (RptqQuery *)object;
+		if ([query.name isEqualToString:@"mid"]) importedMid = query;
+	}
+	XCTAssertNotNil(importedMid);
+	XCTAssertTrue([importedMid isComposing]);
+	XCTAssertEqual(importedMid.hasQueryTables.count, (NSUInteger)2);
+	for (RptqQueryTable *table in importedMid.hasQueryTables) {
+		XCTAssertNotNil(table.upstreamQuery);
+	}
+	// The nested composer's own five sections imported, owned by it.
+	XCTAssertEqual(importedMid.hasLayoutSections.count, (NSUInteger)5);
+	for (RptqDocumentSection *section in importedMid.hasLayoutSections) {
+		XCTAssertEqualObjects(section.ownerQuery.name, @"mid");
+	}
+}
+
+#pragma mark - Composed output-key naming
+
+- (RptqQueryField *)fieldWithSchemaName:(NSString *)schemaName
+						   sourceAlias:(NSString *)sourceAlias
+								context:(RptqStoreContext *)context {
+	RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:0];
+	[schemaField setValue:schemaName forKey:@"name"];
+	RptqObject *upstream = [context insertObjectForEntity:@"RptqQuery" identifier:0];
+	[upstream setValue:sourceAlias forKey:@"name"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqQueryTable" identifier:0];
+	[table setValue:upstream forKey:@"upstreamQuery"];
+	RptqQueryField *field = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:0];
+	[field setValue:schemaField forKey:@"databaseSchemaField"];
+	[field setValue:table forKey:@"inQueryTable"];
+	return field;
+}
+
+- (void)testComposeOutputKeysBareNamesDisambiguate {
+	RptqStoreContext *context = [self openContextAtPath:@"naming.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqQueryField *invoiceId = [self fieldWithSchemaName:@"invoice_id" sourceAlias:@"invoices" context:context];
+	RptqQueryField *invoiceAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"invoices" context:context];
+	RptqQueryField *paymentAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ invoiceId, invoiceAmount, paymentAmount ]
+														 existingKeys:[NSSet set]];
+	XCTAssertEqualObjects(keys, (@[ @"invoice_id", @"invoices.amount", @"payments.amount" ]));
+}
+
+- (void)testComposeOutputKeysPreserveExistingAndAvoidTaken {
+	RptqStoreContext *context = [self openContextAtPath:@"naming2.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqQueryField *kept = [self fieldWithSchemaName:@"amount" sourceAlias:@"invoices" context:context];
+	kept.outputKey = @"kept_amount";
+	RptqQueryField *newAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+
+	// The preserved key survives; the new field's bare name is unique among the
+	// unnamed fields, so it stays bare.
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ kept, newAmount ]
+														 existingKeys:[NSSet set]];
+	XCTAssertEqualObjects(keys, (@[ @"kept_amount", @"amount" ]));
+
+	// A bare name already taken elsewhere is qualified with the source alias.
+	RptqQueryField *colliding = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+	NSArray<NSString *> *keys2 = [RptqQuery composeOutputKeysForFields:@[ colliding ]
+														 existingKeys:[NSSet setWithArray:@[ @"amount" ]]];
+	XCTAssertEqualObjects(keys2, (@[ @"payments.amount" ]));
+}
+
+#pragma mark - Converting a standard report to a composition
+
+- (void)testConvertToCompositionMovesGroupsAndRebindsLabels {
+	RptqStoreContext *context = [self openContextAtPath:@"convert.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	// A standard report: one database, one table with two fields, one query.
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	RptqObject *invoiceIdQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[invoiceIdQueryField setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[invoiceIdQueryField setValue:queryTable forKey:@"inQueryTable"];
+	RptqObject *amountQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[amountQueryField setValue:amountField forKey:@"databaseSchemaField"];
+	[amountQueryField setValue:queryTable forKey:@"inQueryTable"];
+	[queryTable setValue:@[ invoiceIdQueryField, amountQueryField ] forKey:@"hasQueryFields"];
+
+	// A group on invoice_id, and a data label bound to amount.
+	RptqObject *group = [context insertObjectForEntity:@"RptqQueryGroup" identifier:400];
+	[group setValue:invoiceIdQueryField forKey:@"hasField"];
+	[group setValue:@1 forKey:@"sort"];
+	[group setValue:@0 forKey:@"weight"];
+	[group setValue:query forKey:@"inQuery"];
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	[label setValue:amountQueryField forKey:@"referencesQueryField"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	RptqQuery *root = [model convertToCompositionWithChildName:@"invoices" error:&error];
+	XCTAssertNotNil(root, @"convert failed: %@", error);
+	XCTAssertEqualObjects([model valueForKey:@"rootQuery"], root);
+	XCTAssertEqualObjects([root valueForKey:@"name"], @"root");
+
+	// The child is named, and its groups are gone.
+	RptqObject *child = [model valueForKey:@"mainQuery"];
+	XCTAssertEqualObjects([child valueForKey:@"name"], @"invoices");
+	XCTAssertEqual([[child valueForKey:@"hasQueryGroups"] count], (NSUInteger)0);
+
+	// The root has one upstream table and two projected fields with output keys.
+	NSSet *rootTables = [root valueForKey:@"hasQueryTables"];
+	XCTAssertEqual(rootTables.count, (NSUInteger)1);
+	RptqObject *rootTable = rootTables.anyObject;
+	XCTAssertNotNil([rootTable valueForKey:@"upstreamQuery"]);
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	XCTAssertEqual(outputs.count, (NSUInteger)2);
+	XCTAssertEqualObjects(outputs[0].outputKey, @"invoice_id");
+	XCTAssertEqualObjects(outputs[1].outputKey, @"amount");
+
+	// The group moved to the root and binds to the root's invoice_id output.
+	NSSet *rootGroups = [root valueForKey:@"hasQueryGroups"];
+	XCTAssertEqual(rootGroups.count, (NSUInteger)1);
+	RptqObject *rootGroup = rootGroups.anyObject;
+	XCTAssertEqualObjects([[rootGroup valueForKey:@"hasField"] valueForKey:@"outputKey"], @"invoice_id");
+
+	// The label rebinds to the root's amount output, not the child field.
+	RptqObject *rebound = [label valueForKey:@"referencesQueryField"];
+	XCTAssertNotEqual(rebound.identifier, [amountQueryField valueForKey:@"identifier"]);
+	XCTAssertEqualObjects([rebound valueForKey:@"outputKey"], @"amount");
+}
+
+- (void)testAddChildQueryProjectsFieldsAndDisambiguatesCollisions {
+	RptqStoreContext *context = [self openContextAtPath:@"addchild.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:database forKey:@"inDatabase"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+
+	// Child "invoices": invoice_id + amount.
+	RptqObject *invoices = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	[invoices setValue:database forKey:@"inDatabase"];
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[invoicesTable setValue:invoices forKey:@"inQuery"];
+	RptqObject *iId = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[iId setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[iId setValue:invoicesTable forKey:@"inQueryTable"];
+	RptqObject *iAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:302];
+	[iAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[iAmount setValue:invoicesTable forKey:@"inQueryTable"];
+
+	// Child "payments": amount only.
+	RptqObject *payments = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[payments setValue:@"payments" forKey:@"name"];
+	[payments setValue:database forKey:@"inDatabase"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[paymentsTable setValue:payments forKey:@"inQuery"];
+	RptqObject *pAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:303];
+	[pAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[pAmount setValue:paymentsTable forKey:@"inQueryTable"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	XCTAssertNotNil([model addChildQuery:(RptqQuery *)invoices error:&error]);
+	XCTAssertNotNil([model addChildQuery:(RptqQuery *)payments error:&error]);
+
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	XCTAssertEqual(outputs.count, (NSUInteger)3);
+	XCTAssertEqualObjects(outputs[0].outputKey, @"invoice_id");
+	XCTAssertEqualObjects(outputs[1].outputKey, @"amount");
+	XCTAssertEqualObjects(outputs[2].outputKey, @"payments.amount");
+}
+
+- (void)testOrdinaryReportStaysRevision2 {
+	RptqStoreContext *context = [self openContextAtPath:@"ordinary.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+
+	NSError *error = nil;
+	XCTAssertTrue([context save:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreCurrentVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"ordinary.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	XCTAssertEqual(reread.store.storeVersion, MADStoreCurrentVersion);
+	XCTAssertNil([[reread objectForEntity:@"RptqDocument" identifier:1] valueForKey:@"rootQuery"]);
+}
+
+- (void)testFailedCompositionSaveRollsBackToRevision2 {
+	NSURL *url = [self.directory URLByAppendingPathComponent:@"failed.sqlite"];
+	MADStore *store = [MADStore storeWithURL:url];
+	XCTAssertTrue([store openWithError:NULL]);
+
+	MADStoreObject *document = [MADStoreObject objectWithEntity:@"RptqDocument" identifier:1];
+	[document setReference:@100 forName:@"rootQuery"];
+	MADStoreObject *query = [MADStoreObject objectWithEntity:@"RptqQuery" identifier:100];
+	[query setAttributeValue:@"root" forName:@"name"];
+	MADStoreObject *bad = [MADStoreObject objectWithEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[bad setAttributeValue:@1 forName:@"identifier"];
+
+	MADStoreGraph *graph = [MADStoreGraph new];
+	[graph addObject:document];
+	[graph addObject:query];
+	[graph addObject:bad];
+
+	NSError *error = nil;
+	XCTAssertFalse([store writeGraph:graph replacingAll:NO composed:YES error:&error]);
+	XCTAssertEqual(store.storeVersion, MADStoreCurrentVersion);
+	[store close];
+
+	MADStore *reread = [MADStore storeWithURL:url];
+	XCTAssertTrue([reread openWithError:NULL]);
+	XCTAssertEqual(reread.storeVersion, MADStoreCurrentVersion);
+	[reread close];
 }
 
 @end

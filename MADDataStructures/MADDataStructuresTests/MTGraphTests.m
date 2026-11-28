@@ -124,10 +124,10 @@
 	[graph addEdgeWithOrigin:a destination:b object:nil andWeight:nil];
 	[graph addEdgeWithOrigin:b destination:c object:nil andWeight:nil];
 	
-	NSError *error;
-	BOOL isDAG;
+	NSError *error = nil;
+	BOOL isDAG = NO;
 	MTLinkedList *result = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDAG];
-	
+
 	XCTAssertTrue(isDAG);
 	XCTAssertNil(error);
 	XCTAssertEqual([result count], 3);
@@ -143,12 +143,15 @@
 	[graph addEdgeWithOrigin:b destination:c object:nil andWeight:nil];
 	[graph addEdgeWithOrigin:c destination:a object:nil andWeight:nil];
 	
-	NSError *error;
-	BOOL isDAG;
+	NSError *error = nil;
+	BOOL isDAG = YES;
 	MTLinkedList *result = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDAG];
-	
+
 	XCTAssertFalse(isDAG);
 	XCTAssertEqual([result count], 3);
+	XCTAssertNotNil(error);
+	XCTAssertEqualObjects(error.domain, @"MTGraphErrorDomain");
+	XCTAssertEqual(error.code, 100);
 }
 
 #pragma mark - Edge Cases
@@ -160,10 +163,10 @@
 	XCTAssertEqual([graph numberOfEdges], 0);
 	XCTAssertNil([graph vertexForObject:@"Nonexistent"]);
 	
-	NSError *error;
-	BOOL isDAG;
+	NSError *error = nil;
+	BOOL isDAG = NO;
 	MTLinkedList *emptySort = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDAG];
-	
+
 	XCTAssertTrue(isDAG);
 	XCTAssertEqual([emptySort count], 0);
 }

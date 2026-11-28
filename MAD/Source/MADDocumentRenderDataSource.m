@@ -33,6 +33,14 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
 }
 
+@interface MADDocumentRenderDataSource ()
+// YES when an export pinned a specific result with -pinResult:explicitly:YES.  The
+// formatter's own -pinRenderResultToCurrentResult pins with explicitly:NO, so a
+// format that follows an export leaves the export's generation in place rather than
+// re-pinning to whatever the live current result is by then.
+@property (nonatomic, readwrite) BOOL resultPinnedExplicitly;
+@end
+
 @implementation MADDocumentRenderDataSource
 
 - (instancetype)initWithDocument:(id <MADDocumentRenderProtocol>)document {
@@ -42,11 +50,22 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return self;
 }
 
+- (void)pinResult:(MADDataResult *)result explicitly:(BOOL)explicitly {
+	self.result = result;
+	self.resultPinnedExplicitly = explicitly;
+}
+
 #pragma mark - MADPrintPageRendererDataSourceProtocol
 
 - (MADDatabase *)database { return self.document.database; }
 
-- (MADDataTableFast *)dataTable { return self.document.dataTable; }
+- (MADDataTableFast *)dataTable {
+	MADDataResult *result = self.result;
+	return result.dataTable ?: self.document.dataTable;
+}
+
+- (void)beginReadTransaction { [self.dataTable beginReadTransaction]; }
+- (void)commitReadTransaction { [self.dataTable commitReadTransaction]; }
 
 - (MADReportFormatter *)reportFormatter { return self.document.reportFormatter; }
 
@@ -142,25 +161,21 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 }
 
 - (NSUInteger)rowIDFirstOfReport {
-	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType sectionType;
-	NSArray<__kindof MADSectionRepresentation *> *pageLayout = nil;
-	bool found = false;
-
-	for (pageLayout in self.reportFormatter.reportLayout) {
+	// Indexed read, not fast enumeration: MADArrayCaching is an NSEnumerator whose
+	// cursor is not reset between enumerations, so a second `for … in` over the
+	// same report would skip pages already visited (rowIDLastOfReport reads by
+	// index for the same reason).
+	MADReportFormatter *formatter = self.reportFormatter;
+	NSUInteger pageCount = formatter.numberOfPages;
+	for (NSUInteger pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+		NSArray<__kindof MADSectionRepresentation *> *pageLayout = formatter.reportLayout[pageIndex];
 		for (MADSectionRepresentation *pageSection in pageLayout) {
-			sectionType = pageSection.sectionType;
-			if (sectionType == MADDocumentSectionTypeBody) {
-				rowID = pageSection.detailRowId;
-				found = true;
-				break;
+			if (pageSection.sectionType == MADDocumentSectionTypeBody) {
+				return pageSection.detailRowId;
 			}
 		}
-		if (found) {
-			break;
-		}
 	}
-	return rowID;
+	return NSUIntegerMax;
 }
 
 - (NSUInteger)rowIDLastOfReport {

@@ -216,12 +216,29 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 	}
 }
 
+- (NSDictionary *)buildInfoDictionary {
+	return [AppDelegate buildInfoForBundle: nil];
+}
+
 - (NSString *)versionText {
-	return [[NSString alloc] initWithFormat:NSLocalizedString(@"v%@", @"v%@"), [AppDelegate bundleVersionShortString]];
+	NSString *version = [self buildInfoDictionary][@"MADEngineVersion"];
+	if (![version isKindOfClass: [NSString class]] || version.length == 0) {
+		version = [AppDelegate bundleVersionShortString];
+	}
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"v%@", @"v%@"), version ?: @"unknown"];
 }
 
 - (NSString *)buildText {
-	return [[NSString alloc] initWithFormat:NSLocalizedString(@"r%@", @"r%@"), [AppDelegate bundleGitCommitCount]];
+	NSDictionary *info = [self buildInfoDictionary];
+	NSString *revision = info[@"MADEngineRevision"];
+	NSString *commit = info[@"MADSourceCommitShort"];
+	if ([revision isKindOfClass: [NSString class]] && [commit isKindOfClass: [NSString class]]) {
+		if ([info[@"MADSourceDirty"] boolValue]) {
+			commit = [commit stringByAppendingString: @"*"];
+		}
+		return [[NSString alloc] initWithFormat: @"%@ · %@", revision, commit];
+	}
+	return @"unknown";
 }
 
 - (IBAction)cancel:(id)sender {

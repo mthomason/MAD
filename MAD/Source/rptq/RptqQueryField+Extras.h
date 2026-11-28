@@ -34,6 +34,7 @@
 	+ (NSString *)keyInQueryTableAlias;
 	+ (NSString *)keySchemaFieldName;
 	+ (NSString *)keySchemaFieldDataType;
+	+ (NSString *)keyOutputKey;
 
 @end
 

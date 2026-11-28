@@ -7,9 +7,10 @@ lang: es-419
 
 # La dirección: de los informes a los datos componibles
 
-Actualizado el 2026-11-22. Esta página expone la dirección hacia la que MAD está diseñado
+Actualizado el 2026-11-27. Esta página expone la dirección hacia la que MAD está diseñado
 para crecer. Separa lo que se distribuye hoy de lo que se propone, y enlaza los registros
-de diseño públicos en lugar de las notas de trabajo internas: el
+de diseño públicos en lugar de las notas de trabajo internas: la
+[guía de composición](composition.html), el
 [diseño del objeto de datos](developers/data-object.html), los
 [informes de varias fuentes](developers/multi-source.html) y la
 [especificación del formato](README.html).
@@ -32,6 +33,11 @@ El motor ya tiene las piezas que necesita una dirección más amplia:
   esquema y filas en forma de tabla.
 * Materialización local en SQLite (`MADDataTableFast`) que hace prácticas las
   agrupaciones, los agregados y el renderizado repetido en un teléfono.
+* **Composición** dentro del mismo documento: un documento `.mad` puede contener un grafo de
+  informes —un **Resultado** más sus **orígenes**— donde cada nodo conserva su
+  propia consulta, conexión, diseño y tabla materializada. El documento
+  declara la capacidad `query-composition`, y MAD Designer para macOS
+  y Windows crean y ven cada informe del grafo.
 * Aplicaciones nativas para iOS y macOS, una aplicación nativa para Windows y el mismo
   motor ejecutándose sin interfaz gráfica en Linux y Windows mediante `mad serve` y la
   CLI `mad`.
@@ -43,35 +49,38 @@ de forma idéntica.
 
 ## Hacia dónde va
 
-Las direcciones siguientes son propuestas. Se basan en la arquitectura anterior, pero
-ninguna se distribuye hoy a menos que esta página indique lo contrario.
+Las direcciones siguientes se basan en la arquitectura anterior. Algunas se distribuyen
+hoy —la composición dentro del mismo documento está en MAD Designer para macOS y Windows
+0.8— y las secciones indican qué partes están construidas y cuáles siguen siendo propuestas.
 
 ### Objetos de datos componibles
 
 En una base de datos, se selecciona de tablas base como `employee` o `sales_data`. Un
 informe enlaza varias tablas entre sí, y su salida es una tabla SQLite ad hoc y
-materializada. Hoy nada puede apuntar una consulta a la salida de otro informe: la caché
-de resultados existe, pero se indexa por un hash de nombre de archivo en lugar de por una
-identidad direccionable.
+materializada. **Dentro de un solo documento, la composición ahora hace
+exactamente eso:** el Resultado consulta las tablas materializadas de sus orígenes, y cada
+origen se direcciona como una tabla que otro informe une. Un origen es un informe completo
+—consulta, diseño y filas—, no una tabla desnuda. Consulte la
+[guía de composición](composition.html).
 
-Dar a esa salida una identidad estable haría que el resultado de un informe fuese una
-tabla de la que otros informes pueden seleccionar y con la que pueden hacer join. Un
-informe construido sobre un informe se convierte en un grafo acíclico dirigido (DAG) de
-tablas derivadas: una capa semántica portátil en la que diseñar un informe es también
-diseñar una fuente de datos reutilizable. El
+Lo que no está construido es una **identidad estable compartida entre documentos**, para que un
+informe de un `.mad` pueda apuntar a un informe de otro. La caché de resultados se
+indexa por un hash de nombre de archivo en lugar de por una identidad direccionable, y
+la composición entre documentos está diferida. Dar a la salida esa identidad
+extendería el grafo dentro del documento a una capa semántica portátil entre archivos. El
 [diseño del objeto de datos](developers/data-object.html) describe el modelo y lo que
 hace falta para formalizarlo.
 
 ### Materialización local de varias fuentes
 
 Cada driver materializa su conjunto de resultados en la misma representación local de
-tabla SQLite. Una vez que un documento puede contener varias definiciones de consulta y
-direccionar cada salida como una tabla, un solo informe podría unir una tabla de
-PostgreSQL con una tabla de SQL Server y una tabla de MySQL, combinadas localmente en
-SQLite sin un servidor de federación en medio. Cada fuente entiende sus propios datos;
-MAD entiende las tablas resultantes. El
-[diseño de varias fuentes](developers/multi-source.html) registra la arquitectura y las
-fases, no todas construidas.
+tabla SQLite. **Esto se distribuye hoy dentro de un solo documento:** un Informe de composición
+puede unir una tabla de PostgreSQL con una tabla de SQL Server y una tabla de MySQL, combinadas
+localmente en SQLite sin un servidor de federación en medio. Cada origen
+entiende sus propios datos; MAD entiende las tablas resultantes. El
+[diseño de varias fuentes](developers/multi-source.html) registra la arquitectura;
+la composición dentro del mismo documento está construida, mientras que la federación entre documentos
+queda por delante.
 
 ### Uso embebido y sin interfaz
 
@@ -198,10 +207,10 @@ extensibilidad y una experiencia accesible. Una empresa debería poder obtener r
 
 ## Lo que esto no es
 
-Una promesa, una hoja de ruta con fechas o una afirmación de que las propuestas anteriores
-se distribuyan. Esta página registra una dirección. Cada capacidad todavía tiene que
-diseñarse, probarse y documentarse como todo lo demás del repositorio, y algunas de estas
-direcciones pueden cambiar a medida que se construyen.
+Una promesa, una hoja de ruta con fechas o una afirmación de que todas las propuestas anteriores
+se distribuyan. Esta página registra una dirección. La composición dentro del mismo documento está construida hoy; las
+demás direcciones todavía tienen que diseñarse, probarse y documentarse como
+todo lo demás del repositorio, y algunas pueden cambiar a medida que se construyen.
 
 ## El principio rector
 

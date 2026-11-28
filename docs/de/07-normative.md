@@ -50,6 +50,7 @@ seiner Bytes auf ein WAL, das ein Checkpoint in die Hauptdatei überführen wür
 | Eintrag | Erforderlich | Inhalt |
 |---|---|---|
 | `meta.plist` | ja | `generator`, `version` |
+| `requirements.plist` | für zusammengesetzte Dokumente | `format`, `requiredCapabilities` (z. B. `query-composition`) |
 | `StoreContent/<name>` | ja | die Dokumentdefinition |
 | `StoreContent/<name>-wal` / `-shm` | nein | nur vorhanden, wenn kein Checkpoint ausgeführt wurde (Header-Flag-Bit 0 = 0) |
 | `AdditionalContent/` | nein | `thumbnail@2x.png` |
@@ -59,8 +60,12 @@ seiner Bytes auf ein WAL, das ein Checkpoint in die Hauptdatei überführen wür
 - **v0** – was heute ausgeliefert wird: keine Magic, möglicherweise ein WAL,
   `version` 1. Leser müssen es auf unbestimmte Zeit akzeptieren; beide
   Beispieldokumente sind v0.
-- **v1** – Magic-Header, Speicher mit Checkpoint, `version` 1, neue Einträge wie
-  oben.
+- **v1.0** – Magic-Header, Speicher mit Checkpoint, `version` 1, neue Einträge wie
+  oben. Ein gewöhnlicher Bericht wird als 1.0 geschrieben.
+- **v1.1** – ein zusammengesetztes Dokument: derselbe Header und dieselben
+  Mitglieder wie v1.0, Minor-Version 1, plus `requirements.plist`. Ein Leser, der
+  nur 1.0 kennt, verweigert ein 1.1-Dokument mit einem Upgrade-Fehler, statt einen
+  Speicher zu öffnen, dessen Schema er nicht lesen kann.
 
 Ein Schreiber erzeugt v1 und ansonsten unverändertes `meta.plist`. Ein Leser
 erkennt v0 am Fehlen der Magic.

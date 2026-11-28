@@ -13,7 +13,7 @@
 #import <MAD/RptqStoreContext.h>
 #import <MADDataStructures/MTProtocolCompare.h>
 
-@class RptqDocument, RptqDatabase, RptqDatabaseSchemaTable;
+@class RptqDocument, RptqDatabase, RptqQuery, RptqDatabaseSchemaTable;
 
 @interface RptqQueryTable (Extras)
 	<MTProtocolCompare>
@@ -21,6 +21,14 @@
 	+ (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
 									   database:(RptqDatabase *)database
 						forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
+
+	/// As above, but counts the copies of the schema table in @c query rather than
+	/// in the database's default query.  The drop index is a per-query namespace:
+	/// two queries may both hold the first copy of @c Orders, and both are
+	/// @c Orders0.
+	+ (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+										 query:(RptqQuery *)query
+					   forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	+ (instancetype)queryTableWithObjectID:(int64_t)objectID
 					  managedObjectContext:(RptqStoreContext *)managedObjectContext;

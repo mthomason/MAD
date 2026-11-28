@@ -28,7 +28,7 @@ public sealed class DesignerCanvasTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             await vm.AddElementAsync("label", vm.Sections.Single(s => s.Type == SectionType.Body).Id, 10, 20);
 
             Exception? renderError = null;
@@ -69,6 +69,58 @@ public sealed class DesignerCanvasTests
     }
 
     [Fact]
+    public async Task BandsAndElements_ExplainTheirInteractions()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-designer-tip-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+            var vm = new DesignerViewModel(service);
+            await vm.LoadAsync(open.Handle, 0);
+            await vm.AddElementAsync("label", vm.Sections.Single(s => s.Type == SectionType.Body).Id, 10, 20);
+
+            Exception? failure = null;
+            string? bandTip = null;
+            string? elementTip = null;
+
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    var canvas = new DesignerCanvas { Width = 900, Height = 900 };
+                    canvas.Attach(vm);
+                    canvas.Measure(new Size(900, 900));
+                    canvas.Arrange(new Rect(0, 0, 900, 900));
+                    canvas.UpdateLayout();
+
+                    var band = canvas.Children.OfType<Border>().First(b => b.Tag is LayoutSection);
+                    var element = canvas.Children.OfType<Border>().First(b => b.Tag is LayoutElement);
+                    bandTip = ToolTipService.GetToolTip(band) as string;
+                    elementTip = ToolTipService.GetToolTip(element) as string;
+                }
+                catch (Exception ex)
+                {
+                    failure = ex;
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+
+            Assert.Null(failure);
+            Assert.Equal(Localizer.Get("Designer.Band.Tooltip"), bandTip);
+            Assert.Equal(Localizer.Get("Designer.Element.Tooltip"), elementTip);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
     public async Task DraggingAnElement_AtZoomAndScroll_KeepsItAboveTheLaterBands()
     {
         string sqlite = CopyChinookToTemp();
@@ -78,7 +130,7 @@ public sealed class DesignerCanvasTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
 
             LayoutSection reportHeader = vm.Sections.Single(s => s.Type == SectionType.ReportHeader);
             LayoutSection body = vm.Sections.Single(s => s.Type == SectionType.Body);

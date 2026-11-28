@@ -68,7 +68,15 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl extension:(NSString *)extension {
-	NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension: extension];
+	// The guts directory is the working directory a document is extracted into and
+	// archived back out of.  It used to be named by the document's basename, so two
+	// same-named documents in different folders collided on one directory and the
+	// last one to open won.  The full, normalized path names the document itself, so
+	// the same document finds its directory again while same-named documents stay
+	// apart (the same key the row cache is named by).
+	NSString *key = madUrl.standardizedURL.path ?: madUrl.absoluteString;
+	NSString *destinationName = [NSString stringWithFormat:@"%@.%@",
+								 [MADURLFactory filenameID:key.hash], extension];
 	NSURL *destinationDirectoryUrl = [MADURLFactory newURLLocalTemporaryDirectory];
 	return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
 													isDirectory: YES];

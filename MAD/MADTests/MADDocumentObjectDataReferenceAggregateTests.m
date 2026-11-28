@@ -231,4 +231,17 @@
 	XCTAssertEqualObjects(formatted, @"abc");
 }
 
+- (void)testFormattedStringUsesTheAggregateFieldsScale {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field = [self queryFieldNamed:@"Total" tableName:@"Invoice" context:context document:document];
+	field.databaseSchemaField.dataType = MADDataTypeDecimal;
+	field.databaseSchemaField.decimals = 2;
+	RptqDocumentElementAggregate *element = [self aggregateElementInContext:context field:field];
+	MADDocumentObjectDataReferenceAggregate *reference = [self referenceForElement:element datasource:nil];
+
+	// The aggregate keeps the summed field's scale when it names no count of its own.
+	XCTAssertEqualObjects([reference formattedStringForValue:@(1234.5)], @"1234.50");
+}
+
 @end

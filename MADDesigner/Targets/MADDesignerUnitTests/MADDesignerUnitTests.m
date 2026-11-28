@@ -82,6 +82,12 @@
 }
 @end
 
+// The build-identity reader lives on the app delegate; declared locally because
+// the app target's headers are reached through the host, not imported.
+@interface AppDelegate : NSObject
++ (NSDictionary *)buildInfoForBundle:(nullable NSBundle *)bundle;
+@end
+
 // The initializer exists on the class but is not in its header; the app reaches it
 // through the group operation.  Declared locally so the test can build the chain the
 // same way.
@@ -902,6 +908,22 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	} @finally {
 		MADUnitTestForceMADViewerMode = NO;
 	}
+}
+
+#pragma mark - Build identity
+
+- (void)testBuildInfoIsUnknownWhenTheFileIsAbsent {
+	NSDictionary *info = [AppDelegate buildInfoForBundle: [NSBundle bundleForClass: [self class]]];
+	XCTAssertNil(info, @"a bundle without MADBuildInfo.plist must answer nil");
+}
+
+- (void)testBuildInfoReadsTheBundledPlist {
+	NSDictionary *info = [AppDelegate buildInfoForBundle: nil];
+	if (info == nil) {
+		XCTSkip(@"MADBuildInfo.plist is not in this build");
+	}
+	XCTAssertNotNil(info[@"MADSourceCommitShort"]);
+	XCTAssertNotNil(info[@"MADAppVersion"]);
 }
 
 @end

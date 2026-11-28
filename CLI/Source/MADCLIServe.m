@@ -35,16 +35,22 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
+#import <MAD/MADOperationRefresh.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExportSource.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDatabaseSchemaTable+Extras.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import <MAD/RptqDocumentSectionRows+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 
 #import <MADFoundation/MADCredential.h>
@@ -52,6 +58,8 @@
 
 #import <MAD/MADDatabase+Constructor.h>
 #import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
@@ -113,6 +121,7 @@ static NSString * const MADCLIServeMethodDescribe	= @"describe";
 static NSString * const MADCLIServeMethodQuery		= @"query";
 static NSString * const MADCLIServeMethodRefresh	= @"refresh";
 static NSString * const MADCLIServeMethodExport		= @"export";
+static NSString * const MADCLIServeMethodNodeResult	= @"node-result";
 static NSString * const MADCLIServeMethodWrite		= @"write";
 static NSString * const MADCLIServeMethodShutdown	= @"shutdown";
 static NSString * const MADCLIServeMethodCreate			= @"create";
@@ -144,6 +153,15 @@ static NSString * const MADCLIServeMethodSetElementBoxModel = @"set-element-box-
 static NSString * const MADCLIServeMethodSetSection		= @"set-section";
 static NSString * const MADCLIServeMethodSetPaperSize	= @"set-paper-size";
 static NSString * const MADCLIServeMethodBarcodeTypes	= @"barcode-types";
+static NSString * const MADCLIServeMethodEngineInfo	= @"engine-info";
+static NSString * const MADCLIServeMethodDocumentInfo	= @"document-info";
+static NSString * const MADCLIServeMethodAddRoot			= @"add-root";
+static NSString * const MADCLIServeMethodAddSource		= @"add-source";
+static NSString * const MADCLIServeMethodAddUpstream	= @"add-upstream";
+static NSString * const MADCLIServeMethodImportChild	= @"import-child";
+static NSString * const MADCLIServeMethodConvert		= @"convert";
+static NSString * const MADCLIServeMethodSetRootOutputs	= @"set-root-outputs";
+static NSString * const MADCLIServeMethodCreateEmpty	= @"create-empty";
 
 #pragma mark - Session state
 
@@ -272,6 +290,35 @@ static MADCredential *MADCLIServeCredential(NSString *credentials, NSError **err
 			andPassword: [credentials substringFromIndex: colon.location + 1]];
 }
 
+/// Parses `sourceCredentials`, an object keyed by a query id (as a decimal string)
+/// whose value is that source's `user:password`.  It is the per-source form of
+/// `refresh`; the single `credentials` member stays the fallback.  Answers nil with
+/// no error when the member is absent, and nil with a usage error when it is malformed.
+static NSDictionary<NSNumber *, MADCredential *> *MADCLIServeSourceCredentials(NSDictionary *params, NSError **error) {
+	id raw = params[@"sourceCredentials"];
+	if (raw == nil) return nil;
+	if (![raw isKindOfClass: [NSDictionary class]]) {
+		if (error) *error = MADCLIServeUsageError(@"sourceCredentials must be an object keyed by query id.");
+		return nil;
+	}
+	NSMutableDictionary<NSNumber *, MADCredential *> *credentials = [NSMutableDictionary dictionary];
+	for (id key in (NSDictionary *)raw) {
+		if (![key isKindOfClass: [NSString class]] || [(NSString *)key longLongValue] <= 0) {
+			if (error) *error = MADCLIServeUsageError(@"sourceCredentials keys must be decimal query ids.");
+			return nil;
+		}
+		id value = ((NSDictionary *)raw)[key];
+		if (![value isKindOfClass: [NSString class]]) {
+			if (error) *error = MADCLIServeUsageError(@"sourceCredentials values must be user:password strings.");
+			return nil;
+		}
+		MADCredential *credential = MADCLIServeCredential(value, error);
+		if (credential == nil) return nil;
+		credentials[@([(NSString *)key longLongValue])] = credential;
+	}
+	return credentials;
+}
+
 /// Maps the connection window's wire driver token to a MADDatabaseType.  "sqlserver"
 /// is the wire name for the TDS driver (Microsoft SQL Server).
 static MADDatabaseType MADCLIServeDatabaseTypeForToken(NSString *token) {
@@ -362,9 +409,7 @@ static MADDatabaseConnection *MADCLIServeBuildConnection(NSDictionary *params, M
 /// (`mad.report/1`'s `columns`): key, name, table and type.  A document whose query
 /// produces no SQL yields an empty list rather than an error -- it still has a stored
 /// schema to describe.
-static NSArray <NSDictionary *> *MADCLIServeColumns(id <MADDocumentDataProtocol> document) {
-	NSError *error = nil;
-	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document error: &error];
+static NSArray <NSDictionary *> *MADCLIServeColumnsForSource(MADReportExportSource *source) {
 	NSMutableArray <NSDictionary *> *columns = [NSMutableArray array];
 	for (NSString *key in source.columnKeys) {
 		NSMutableDictionary *column = [NSMutableDictionary dictionary];
@@ -377,28 +422,80 @@ static NSArray <NSDictionary *> *MADCLIServeColumns(id <MADDocumentDataProtocol>
 	return columns;
 }
 
+static NSArray <NSDictionary *> *MADCLIServeColumns(id <MADDocumentDataProtocol> document) {
+	NSError *error = nil;
+	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document error: &error];
+	return source != nil ? MADCLIServeColumnsForSource(source) : @[];
+}
+
+/// A query's output columns, from its own fields rather than a materialized result:
+/// a composing node's ordered outputs (by outputKey), a leaf's per-table fields.
+/// This is what `describe` with a `query` returns, so it works before any refresh.
+static NSArray <NSDictionary *> *MADCLIServeColumnsForQuery(RptqQuery *query) {
+	NSMutableArray <NSDictionary *> *columns = [NSMutableArray array];
+	if ([query isComposing]) {
+		for (RptqQueryField *field in [query orderedOutputFieldsWithError:NULL] ?: @[]) {
+			NSString *key = field.outputKey ?: (field.databaseSchemaField.name ?: @"");
+			NSString *table = field.inQueryTable.upstreamQuery.name ?: @"";
+			[columns addObject: @{
+				@"key": key,
+				@"name": field.databaseSchemaField.name ?: @"",
+				@"table": table.length > 0 ? table : [NSNull null],
+				@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+			}];
+		}
+	} else {
+		for (RptqQueryTable *table in [query.hasQueryTables allObjects]) {
+			NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+			for (RptqQueryField *field in table.hasQueryFields) {
+				NSString *name = field.databaseSchemaField.name ?: @"";
+				NSString *key = alias.length > 0 ? [NSString stringWithFormat:@"%@.%@", alias, name] : name;
+				[columns addObject: @{
+					@"key": key,
+					@"name": name,
+					@"table": alias.length > 0 ? alias : [NSNull null],
+					@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+				}];
+			}
+		}
+	}
+	return columns;
+}
+
+/// One database's schema, the same tables/fields `mad schema` prints, as JSON.
+static NSArray <NSDictionary *> *MADCLIServeTablesForDatabase(RptqDatabase *schema) {
+	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
+	NSMutableArray <NSDictionary *> *tables = [NSMutableArray array];
+	NSArray <RptqDatabaseSchemaTable *> *sorted =
+		[[schema.hasTables allObjects] sortedArrayUsingDescriptors: @[byName]];
+	for (RptqDatabaseSchemaTable *table in sorted) {
+		NSMutableArray <NSDictionary *> *fields = [NSMutableArray array];
+		for (RptqDatabaseSchemaField *field in table.hasFields) {
+			[fields addObject: @{
+				@"name": field.name ?: @"",
+				@"type": MADCLIServeTypeName(field.dataType),
+				@"primaryKey": @(field.primaryKey),
+			}];
+		}
+		[tables addObject: @{ @"name": table.name ?: @"", @"fields": fields }];
+	}
+	return tables;
+}
+
 /// The stored database schema, the same tables/fields `mad schema` prints, as JSON.
 static NSArray <NSDictionary *> *MADCLIServeTables(id <MADDocumentDataProtocol> document) {
 	RptqDocument *model = document.activeDocumentModel;
-	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
 	NSMutableArray <NSDictionary *> *tables = [NSMutableArray array];
-
 	for (RptqDatabase *schema in model.hasDatabaseSchemas) {
-		NSArray <RptqDatabaseSchemaTable *> *sorted =
-			[[schema.hasTables allObjects] sortedArrayUsingDescriptors: @[byName]];
-		for (RptqDatabaseSchemaTable *table in sorted) {
-			NSMutableArray <NSDictionary *> *fields = [NSMutableArray array];
-			for (RptqDatabaseSchemaField *field in table.hasFields) {
-				[fields addObject: @{
-					@"name": field.name ?: @"",
-					@"type": MADCLIServeTypeName(field.dataType),
-					@"primaryKey": @(field.primaryKey),
-				}];
-			}
-			[tables addObject: @{ @"name": table.name ?: @"", @"fields": fields }];
-		}
+		[tables addObjectsFromArray: MADCLIServeTablesForDatabase(schema)];
 	}
 	return tables;
+}
+
+/// A leaf query's own database schema (its `inDatabase` only -- not a sibling's).
+static NSArray <NSDictionary *> *MADCLIServeTablesForQuery(RptqQuery *query) {
+	RptqDatabase *database = query.inDatabase;
+	return database != nil ? MADCLIServeTablesForDatabase(database) : @[];
 }
 
 static void MADCLIServeOpen(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -593,7 +690,23 @@ static void MADCLIServeApplyConnection(NSDictionary *params, NSMutableDictionary
 	[database closeConnection: dbHandle];
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
-	if ([document isKindOfClass: [MADHeadlessDocument class]]) {
+	// A composed source edits only its own database row; omitting `query` (a Standard
+	// Report) reconnects the document as before.
+	int64_t queryIdentifier = [params[@"query"] isKindOfClass: [NSNumber class]]
+		? [params[@"query"] longLongValue] : 0;
+	if (queryIdentifier > 0) {
+		if (![document isKindOfClass: [MADHeadlessDocument class]]) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, @"query-scoped apply-connection requires a headless document.");
+			return;
+		}
+		NSError *applyError = nil;
+		if (![(MADHeadlessDocument *)document applyDatabaseConnection: connection
+												  forQueryIdentifier: queryIdentifier
+																error: &applyError]) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(applyError));
+			return;
+		}
+	} else if ([document isKindOfClass: [MADHeadlessDocument class]]) {
 		[(MADHeadlessDocument *)document applyDatabaseConnection: connection];
 	} else {
 		[document updateDatabaseWithConnection: connection];
@@ -615,28 +728,76 @@ static MADCLIServeDocument *MADCLIServeLookup(NSDictionary *params, NSMutableDic
 	return entry;
 }
 
+static RptqQuery *MADCLIServeResolveLayoutQuery(id <MADDocumentDataProtocol> document, NSDictionary *params, NSError **outError);
+
 static void MADCLIServeDescribe(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	BOOL explicitQuery = [params[@"query"] isKindOfClass: [NSNumber class]] && [params[@"query"] longLongValue] > 0;
+
+	// `columns` come from the query's own fields (its ordered outputs for a composing
+	// node, its per-table fields for a leaf), not a materialized result, so a scoped
+	// describe works before any refresh.
+	NSArray <NSDictionary *> *columns = nil;
+	NSString *driver = nil;
+	if (!explicitQuery) {
+		columns = MADCLIServeColumns(document);
+		driver = MADCLIServeDriverName(document);
+	} else {
+		columns = MADCLIServeColumnsForQuery(query);
+		driver = [query isComposing] ? @"sqlite3"
+			: (query.inDatabase != nil ? MADCLIServeTokenForDatabaseType((MADDatabaseType)query.inDatabase.databaseDriverTypeEnum) : @"");
+	}
+
+	NSArray <NSDictionary *> *tables = nil;
+	if (!explicitQuery) {
+		// No query: today's behavior, every database's schema concatenated.
+		tables = MADCLIServeTables(document);
+	} else if ([query isComposing]) {
+		// A composing node's inputs are its children, not schema tables.
+		tables = @[];
+	} else {
+		tables = MADCLIServeTablesForQuery(query);
+	}
+
 	MADCLIServeWriteResult(requestID, @{
-		@"driver": MADCLIServeDriverName(document),
-		@"columns": MADCLIServeColumns(document),
-		@"tables": MADCLIServeTables(document),
+		@"driver": driver,
+		@"columns": columns,
+		@"tables": tables,
 	});
 }
 
-/// The generated SQL, the way the Mac's Query workspace shows it: all fields first
-/// (-SQLOnlyActiveFields:NO), falling back to the active-field select when the query has no
-/// report elements to reference -- so a fresh document still yields SQL.
-static NSString *MADCLIServeGeneratedSQL(id <MADDocumentDataProtocol> document) {
+/// The query the report layout and data resolve against: the composed root when the
+/// document has one, otherwise the document's single source query.
+static RptqQuery *MADCLIServeReportQuery(id <MADDocumentDataProtocol> document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *root = model.rootQuery;
+	return root ?: model.defaultDatabase.defaultQuery;
+}
+
+/// The generated SQL for a query, the way the Mac's Query workspace shows it: all
+/// fields first (-SQLOnlyActiveFields:NO), falling back to the active-field select
+/// when the query has no report elements to reference.  The composed root has no
+/// single source statement (the refresh coordinator compiles it from its sources),
+/// so it answers the empty string.  A leaf's dialect comes from the document's
+/// database; for the SQLite sources this milestone authors, that is the source's own
+/// dialect.
+static NSString *MADCLIServeGeneratedSQLForQuery(id <MADDocumentDataProtocol> document, RptqQuery *query) {
+	if (query == nil || [query isComposing]) return @"";
+	MADQueryFull *compiler = [[MADQueryFull alloc] initWithQuery: query andQueryLimit: NSUIntegerMax];
+	compiler.database = document.database;
 	NSError *error = nil;
-	NSString *generated = [document.mainQuery SQLOnlyActiveFields: NO
-											managedObjectContext: document.storeContext
-														   error: &error];
+	NSString *generated = [compiler SQLOnlyActiveFields: NO managedObjectContext: document.storeContext error: &error];
 	if (generated.length == 0) {
-		generated = [document.mainQuery copySQLWithManagedObjectContext: document.storeContext error: &error];
+		generated = [compiler copySQLWithManagedObjectContext: document.storeContext error: &error];
 	}
 	return generated ?: @"";
 }
@@ -646,7 +807,34 @@ static void MADCLIServeQuery(NSDictionary *params, NSMutableDictionary <NSNumber
 	if (entry == nil) return;
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
-	MADCLIServeWriteResult(requestID, @{ @"sql": MADCLIServeGeneratedSQL(document) });
+	MADCLIServeWriteResult(requestID, @{ @"sql": MADCLIServeGeneratedSQLForQuery(document, MADCLIServeReportQuery(document)) });
+}
+
+/// A failed refresh, with the source that failed when the engine named one.  The
+/// engine puts the leaf query's name, identifier and connection string in the
+/// error's userInfo, which is what lets the WPF app prompt for that one source
+/// instead of guessing.
+static void MADCLIServeWriteRefreshError(id requestID, NSInteger code, NSError *error) {
+	NSMutableDictionary *errorObject = [NSMutableDictionary dictionary];
+	errorObject[@"code"] = @(code);
+	errorObject[@"message"] = MADCLIDescriptionForError(error) ?: @"error";
+
+	id name = error.userInfo[MADOperationRefreshSourceNameKey];
+	id queryIdentifier = error.userInfo[MADOperationRefreshSourceQueryIdentifierKey];
+	id connectionString = error.userInfo[MADOperationRefreshSourceConnectionStringKey];
+	if (name != nil || queryIdentifier != nil || connectionString != nil) {
+		NSMutableDictionary *source = [NSMutableDictionary dictionary];
+		if ([name isKindOfClass: [NSString class]]) source[@"name"] = name;
+		if ([queryIdentifier isKindOfClass: [NSNumber class]]) source[@"queryId"] = queryIdentifier;
+		if ([connectionString isKindOfClass: [NSString class]]) source[@"connectionString"] = connectionString;
+		errorObject[@"source"] = source;
+	}
+
+	NSMutableDictionary *response = [NSMutableDictionary dictionary];
+	response[@"id"] = requestID ?: [NSNull null];
+	response[@"ok"] = @NO;
+	response[@"error"] = errorObject;
+	MADCLIServeWrite(requestID, response);
 }
 
 static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -672,9 +860,15 @@ static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumb
 		}
 	}
 
+	NSDictionary<NSNumber *, MADCredential *> *sourceCredentials = MADCLIServeSourceCredentials(params, &error);
+	if (sourceCredentials == nil && error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
 	NSDate *started = [NSDate date];
-	if (![entry.document refreshWithCredentials: credentials error: &error]) {
-		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(error));
+	if (![entry.document refreshWithCredentials: credentials sourceCredentials: sourceCredentials error: &error]) {
+		MADCLIServeWriteRefreshError(requestID, MADCLIExitQueryFailed, error);
 		return;
 	}
 	NSTimeInterval elapsed = -[started timeIntervalSinceNow];
@@ -682,6 +876,56 @@ static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumb
 	MADCLIServeWriteResult(requestID, @{
 		@"rowCount": @(document.numberOfResults),
 		@"elapsed": @(elapsed),
+	});
+}
+
+/// A node's materialized rows: the selected query's output columns and rows, read
+/// from its retained result (the root's published result, or a non-root node's from
+/// the per-node map).  `refresh` stays whole-document; this is the query-scoped read.
+static void MADCLIServeNodeResult(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document query: query error: &error];
+	if (source == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSMutableArray <NSDictionary *> *columns = [NSMutableArray arrayWithCapacity: source.columnKeys.count];
+	for (NSString *key in source.columnKeys) {
+		[columns addObject: @{
+			@"key": key,
+			@"name": [source columnName: key] ?: key,
+			@"table": [source columnTable: key] ?: [NSNull null],
+			@"type": [source columnType: key] ?: [NSNull null],
+		}];
+	}
+
+	NSMutableArray <NSArray *> *rows = [NSMutableArray array];
+	for (NSDictionary <NSString *, id> *row in [source rowEnumerator]) {
+		NSMutableArray *values = [NSMutableArray arrayWithCapacity: source.columnKeys.count];
+		for (NSString *key in source.columnKeys) {
+			id value = row[key];
+			[values addObject: value != nil ? value : [NSNull null]];
+		}
+		[rows addObject: values];
+	}
+
+	MADCLIServeWriteResult(requestID, @{
+		@"query": @(query.identifier),
+		@"name": query.name ?: @"",
+		@"rowCount": @(source.numberOfRows),
+		@"columns": columns,
+		@"rows": rows,
 	});
 }
 
@@ -739,11 +983,30 @@ static void MADCLIServeExport(NSDictionary *params, NSMutableDictionary <NSNumbe
 	}
 
 	BOOL deterministic = [params[@"deterministic"] isKindOfClass: [NSNumber class]] && [params[@"deterministic"] boolValue];
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
 	id <MADReportExporting> exporter = [[(Class)exporterClass alloc] init];
-	if (![exporter exportDocument: entry.document.document
-							toURL: outURL
-						  options: deterministic ? MADReportExportOptionsDeterministic : MADReportExportOptionsNone
-							error: &error]) {
+	MADReportExportOptions exportOptions = deterministic ? MADReportExportOptionsDeterministic : MADReportExportOptionsNone;
+	BOOL rootNode = query.rootOfDocument != nil || query == MADCLIServeReportQuery(document);
+	BOOL ok = NO;
+	if ([exporter respondsToSelector: @selector(exportDocument:query:toURL:options:error:)]) {
+		ok = [exporter exportDocument: document query: query toURL: outURL options: exportOptions error: &error];
+	} else if (!rootNode) {
+		// A format that has not learned to render a specific node must not silently
+		// render the root for a non-root query.
+		if (temporaryURL) [[NSFileManager defaultManager] removeItemAtURL: temporaryURL error: NULL];
+		MADCLIServeWriteError(requestID, MADCLIExitUsage,
+			[NSString stringWithFormat: @"--format %@ cannot export a specific node.", format]);
+		return;
+	} else {
+		ok = [exporter exportDocument: document toURL: outURL options: exportOptions error: &error];
+	}
+	if (!ok) {
 		if (temporaryURL) [[NSFileManager defaultManager] removeItemAtURL: temporaryURL error: NULL];
 		MADCLIServeWriteError(requestID, MADCLIExitExportFailed, MADCLIDescriptionForError(error));
 		return;
@@ -820,6 +1083,42 @@ static RptqQuery *MADCLIServeMainQuery(id <MADDocumentDataProtocol> document) {
 	return model.defaultDatabase.defaultQuery;
 }
 
+/// The query a request targets: the `query` parameter (an identifier) when present,
+/// else the document's default query.  A `query` that does not resolve answers nil
+/// and fills `outError` with an actionable message; the document is untouched.
+static RptqQuery *MADCLIServeResolveQuery(id <MADDocumentDataProtocol> document,
+										  NSDictionary *params,
+										  NSError **outError) {
+	int64_t queryID = [params[@"query"] isKindOfClass: [NSNumber class]] ? [params[@"query"] longLongValue] : 0;
+	if (queryID > 0) {
+		RptqQuery *query = (RptqQuery *)[document.storeContext objectForEntity: NSStringFromClass([RptqQuery class])
+																	 identifier: queryID];
+		if (query == nil && outError != NULL) {
+			*outError = MADCLIServeUsageError([NSString stringWithFormat: @"no query %lld in this document.", queryID]);
+		}
+		return query;
+	}
+	return MADCLIServeMainQuery(document);
+}
+
+/// The query a layout/describe/result/export request targets: the `query` parameter
+/// when present, else the report query (the composed root, or the single source).  An
+/// unknown `query` answers nil and fills `outError`; the document is untouched.
+static RptqQuery *MADCLIServeResolveLayoutQuery(id <MADDocumentDataProtocol> document,
+												NSDictionary *params,
+												NSError **outError) {
+	int64_t queryID = [params[@"query"] isKindOfClass: [NSNumber class]] ? [params[@"query"] longLongValue] : 0;
+	if (queryID > 0) {
+		RptqQuery *query = (RptqQuery *)[document.storeContext objectForEntity: NSStringFromClass([RptqQuery class])
+																	 identifier: queryID];
+		if (query == nil && outError != NULL) {
+			*outError = MADCLIServeUsageError([NSString stringWithFormat: @"no query %lld in this document.", queryID]);
+		}
+		return query;
+	}
+	return MADCLIServeReportQuery(document);
+}
+
 /// The document cast to the query-editing protocol (group/delete helpers) both the Mac and
 /// headless documents conform to; nil when the document cannot edit its query.
 static id <MADSQLQueryDocument> MADCLIServeQueryDocument(id <MADDocumentDataProtocol> document) {
@@ -833,16 +1132,19 @@ static id <MADSQLQueryDocument> MADCLIServeQueryDocument(id <MADDocumentDataProt
 /// identifiers, the generated SQL, the entered SQL, and the driver token.  This is what the
 /// WPF Query workspace round-trips: every mutation method below answers this same shape so
 /// the client replaces its snapshot atomically.
-static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> document) {
+static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> document, RptqQuery *query) {
 	RptqStoreContext *context = document.storeContext;
-	RptqQuery *query = MADCLIServeMainQuery(document);
 
 	NSString *driver = @"";
-	if (document.database.databaseConnection != nil) {
-		driver = MADCLIServeTokenForDatabaseType(document.database.databaseConnection.databaseType);
+	if ([query isComposing]) {
+		// A composing node (root or a non-root composer) compiles against the local
+		// SQLite composer.
+		driver = @"sqlite3";
+	} else if (query.inDatabase != nil && query.inDatabase.databaseDriverTypeEnum != MADDatabaseTypeNotSet) {
+		driver = MADCLIServeTokenForDatabaseType((MADDatabaseType)query.inDatabase.databaseDriverTypeEnum);
 	}
 
-	NSString *sql = MADCLIServeGeneratedSQL(document);
+	NSString *sql = MADCLIServeGeneratedSQLForQuery(document, query);
 
 	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES
 															  selector: @selector(localizedCaseInsensitiveCompare:)];
@@ -856,14 +1158,18 @@ static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> docu
 				@"id": @(field.identifier),
 				@"name": field.databaseSchemaField.name ?: @"",
 				@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+				@"outputKey": (field.outputKey.length > 0 ? field.outputKey : [NSNull null]),
+				@"outputIndex": @(field.outputIndex),
 			}];
 		}
 		[fields sortUsingDescriptors: @[byName]];
+		BOOL isUpstream = (table.upstreamQuery != nil);
 		[tables addObject: @{
 			@"id": @(table.identifier),
-			@"name": table.databaseSchemaTable.name ?: @"",
+			@"name": isUpstream ? (table.upstreamQuery.name ?: @"") : (table.databaseSchemaTable.name ?: @""),
 			@"alias": table.alias ?: @"",
 			@"dropIndex": @(table.dropIndex),
+			@"upstreamQuery": @(isUpstream ? table.upstreamQuery.identifier : 0),
 			@"fields": fields,
 		}];
 	}
@@ -904,6 +1210,9 @@ static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> docu
 	[groups sortUsingDescriptors: @[byID]];
 
 	return @{
+		@"queryId": @(query.identifier),
+		@"isRoot": @(query.rootOfDocument != nil ? YES : NO),
+		@"isComposing": @([query isComposing]),
 		@"driver": driver,
 		@"sql": sql,
 		@"sqlSourceText": query.sqlSourceText ?: @"",
@@ -917,7 +1226,14 @@ static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> docu
 static void MADCLIServeQueryModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(entry.document.document));
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -932,8 +1248,13 @@ static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNum
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	RptqStoreContext *context = document.storeContext;
-	RptqDatabase *database = [RptqDocument newDocumentReadFromManagedObjectContext: context].defaultDatabase;
-	RptqQuery *query = database.defaultQuery;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	RptqDatabase *database = query.inDatabase;
 
 	RptqDatabaseSchemaTable *schemaTable = nil;
 	for (RptqDatabaseSchemaTable *candidate in database.hasTables) {
@@ -950,8 +1271,8 @@ static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNum
 	// Mirrors MADMacQueryViewController -addSchemaTableToQuery: a query table plus one query
 	// field per schema field.
 	RptqQueryTable *queryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
-																	 database: database
-													  forManagedObjectContext: context];
+																	   query: query
+													 forManagedObjectContext: context];
 	NSMutableSet <RptqQueryField *> *queryFields = [NSMutableSet setWithCapacity: schemaTable.hasFields.count];
 	for (RptqDatabaseSchemaField *schemaField in schemaTable.hasFields) {
 		RptqQueryField *field = [RptqQueryField newQueryField: context];
@@ -962,7 +1283,7 @@ static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNum
 	queryTable.hasQueryFields = queryFields;
 	[query addHasQueryTablesObject: queryTable];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeRemoveTable(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -981,8 +1302,12 @@ static void MADCLIServeRemoveTable(NSDictionary *params, NSMutableDictionary <NS
 		return;
 	}
 	RptqStoreContext *context = document.storeContext;
-	RptqQuery *query = MADCLIServeMainQuery(document);
-
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	int64_t tableID = [params[@"table"] longLongValue];
 	RptqQueryTable *table = (RptqQueryTable *)[context objectForEntity: NSStringFromClass([RptqQueryTable class]) identifier: tableID];
 	if (table == nil) {
@@ -1018,7 +1343,7 @@ static void MADCLIServeRemoveTable(NSDictionary *params, NSMutableDictionary <NS
 	[query removeHasQueryTablesObject: table];
 	[context deleteObject: table error: NULL];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeAddLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1034,8 +1359,12 @@ static void MADCLIServeAddLink(NSDictionary *params, NSMutableDictionary <NSNumb
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	RptqStoreContext *context = document.storeContext;
-	RptqQuery *query = MADCLIServeMainQuery(document);
-
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryField *left = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: leftID];
 	RptqQueryField *right = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: rightID];
 	if (left == nil || right == nil) {
@@ -1043,14 +1372,14 @@ static void MADCLIServeAddLink(NSDictionary *params, NSMutableDictionary <NSNumb
 		return;
 	}
 	if (left.inQueryTable.identifier == right.inQueryTable.identifier) {
-		MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document)); // no-op, like the Mac
+		MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query)); // no-op, like the Mac
 		return;
 	}
 
 	for (RptqQueryLinks *existing in query.hasQueryLinks) {
 		if ((existing.hasLeftField.identifier == leftID && existing.hasRightField.identifier == rightID) ||
 			(existing.hasLeftField.identifier == rightID && existing.hasRightField.identifier == leftID)) {
-			MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document)); // already linked
+			MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query)); // already linked
 			return;
 		}
 	}
@@ -1061,7 +1390,7 @@ static void MADCLIServeAddLink(NSDictionary *params, NSMutableDictionary <NSNumb
 												 managedObjectContext: context];
 	[query addHasQueryLinksObject: link];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeSetLinkType(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1075,6 +1404,12 @@ static void MADCLIServeSetLinkType(NSDictionary *params, NSMutableDictionary <NS
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryLinks *link = (RptqQueryLinks *)[document.storeContext objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
 	if (link == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query link %lld.", linkID]);
@@ -1082,7 +1417,7 @@ static void MADCLIServeSetLinkType(NSDictionary *params, NSMutableDictionary <NS
 	}
 	link.type = (int16_t)[params[@"type"] integerValue];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeSwapLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1096,6 +1431,12 @@ static void MADCLIServeSwapLink(NSDictionary *params, NSMutableDictionary <NSNum
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryLinks *link = (RptqQueryLinks *)[document.storeContext objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
 	if (link == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query link %lld.", linkID]);
@@ -1113,7 +1454,7 @@ static void MADCLIServeSwapLink(NSDictionary *params, NSMutableDictionary <NSNum
 		link.fieldRightID = oldLeft.databaseSchemaField.name.copy;
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeDeleteLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1128,14 +1469,19 @@ static void MADCLIServeDeleteLink(NSDictionary *params, NSMutableDictionary <NSN
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	RptqStoreContext *context = document.storeContext;
-	RptqQuery *query = MADCLIServeMainQuery(document);
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryLinks *link = (RptqQueryLinks *)[context objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
 	if (link != nil) {
 		[query removeHasQueryLinksObject: link];
 		[context deleteObject: link error: NULL];
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeAddPredicate(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1151,6 +1497,11 @@ static void MADCLIServeAddPredicate(NSDictionary *params, NSMutableDictionary <N
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: leftID
 																			comparsonOperator: (MADPredicateOperator)[params[@"operator"] integerValue]
 																				andRightValue: value
@@ -1160,9 +1511,9 @@ static void MADCLIServeAddPredicate(NSDictionary *params, NSMutableDictionary <N
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
 		return;
 	}
-	[MADCLIServeMainQuery(document) addHasQueryPredicateObject: predicate];
+	[query addHasQueryPredicateObject: predicate];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeRemovePredicate(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1177,14 +1528,19 @@ static void MADCLIServeRemovePredicate(NSDictionary *params, NSMutableDictionary
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	RptqStoreContext *context = document.storeContext;
-	RptqQuery *query = MADCLIServeMainQuery(document);
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	RptqQueryPredicate *predicate = (RptqQueryPredicate *)[context objectForEntity: NSStringFromClass([RptqQueryPredicate class]) identifier: predicateID];
 	if (predicate != nil) {
 		[query removeHasQueryPredicateObject: predicate];
 		[context deleteObject: predicate error: NULL];
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeAddGroup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1198,17 +1554,38 @@ static void MADCLIServeAddGroup(NSDictionary *params, NSMutableDictionary <NSNum
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
-	id <MADSQLQueryDocument> qdoc = MADCLIServeQueryDocument(document);
-	if (qdoc == nil) {
-		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document cannot edit its query.");
+	RptqStoreContext *context = document.storeContext;
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
 		return;
 	}
-
 	MADSortOrder sort = ([params[@"sort"] isKindOfClass: [NSNumber class]] && [params[@"sort"] integerValue] == 1)
 		? MADSortOrderDecending : MADSortOrderAccending;
-	[qdoc addQueryGroupWithQueryField: fieldID andSortOrder: sort];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	// Mirrors MADHeadlessDocument -addQueryGroupWithQueryField:andSortOrder:, but the
+	// group is added to the selected query rather than the document's default one.
+	RptqQueryField *groupField = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: fieldID];
+	if (groupField == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"unknown query field.");
+		return;
+	}
+	RptqQueryGroup *group = [RptqQueryGroup newQueryGroupQueryWithSortOrder: sort andManagedObjectContext: context];
+	group.hasField = groupField;
+	RptqDocumentSection *header = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader forManagedObjectContext: context];
+	RptqDocumentSectionRows *headerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: context];
+	headerRow.inSection = header;
+	header.hasRows = [NSMutableOrderedSet orderedSetWithObject: headerRow];
+	[group addHasSectionObject: header];
+	RptqDocumentSection *footer = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter forManagedObjectContext: context];
+	RptqDocumentSectionRows *footerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: context];
+	footerRow.inSection = footer;
+	footer.hasRows = [NSMutableOrderedSet orderedSetWithObject: footerRow];
+	[group addHasSectionObject: footer];
+	[query addHasQueryGroupsObject: group];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
 }
 
 static void MADCLIServeRemoveGroup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1227,9 +1604,397 @@ static void MADCLIServeRemoveGroup(NSDictionary *params, NSMutableDictionary <NS
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document cannot edit its query.");
 		return;
 	}
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
 	[qdoc removeGroupWitObjectID: groupID fromManagedObjectContext: document.storeContext];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, query));
+}
+
+#pragma mark - Composition authoring (Phase 6g)
+
+/// The source connection a query's persisted credential row describes, in the same
+/// wire shape `connection` uses, plus `requiresCredentials` and the stored username
+/// hint.  Answers nil for a query with no source database (a composing node), so a
+/// client prompts only for real leaves.
+static NSDictionary *MADCLIServeSourceConnectionDict(id <MADDocumentDataProtocol> document, RptqQuery *query) {
+	RptqDatabase *database = query.inDatabase;
+	RptqDatabaseCredentals *credRow = database.ownedByUser;
+	if (credRow == nil) return nil;
+
+	NSURL *documentURL = [document respondsToSelector: @selector(fileURL)] ? [(id)document fileURL] : nil;
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: credRow documentURL: documentURL];
+	if (connection == nil) return nil;
+
+	MADDatabaseType type = connection.databaseType;
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	result[@"driver"] = MADCLIServeTokenForDatabaseType(type);
+	result[@"connectionString"] = connection.connectionString ?: @"";
+	result[@"requiresCredentials"] = @([connection requiresCredentials]);
+	if (credRow.domain.length > 0) result[@"usernameHint"] = credRow.domain;
+
+	if (type == MADDatabaseTypeSqlite3) {
+		if ([connection conformsToProtocol: @protocol(MADDatabaseConnectionsPropertiesURL)]) {
+			NSURL *databaseURL = ((id <MADDatabaseConnectionsPropertiesURL>)connection).databaseUrl;
+			result[@"file"] = databaseURL.path ?: @"";
+		}
+	} else if ([connection conformsToProtocol: @protocol(MADConnectionsPropertiesProtocol)]) {
+		id <MADConnectionsPropertiesProtocol> serverConnection = (id <MADConnectionsPropertiesProtocol>)connection;
+		result[@"host"] = serverConnection.host ?: @"";
+		result[@"port"] = @(serverConnection.port);
+		result[@"database"] = serverConnection.database ?: @"";
+		if (type == MADDatabaseTypeTDS) {
+			result[@"server"] = serverConnection.server ?: @"";
+		}
+	}
+	return result;
+}
+
+/// One query in document-info: its identity, whether it is the root or a composer,
+/// and, for a leaf, the source connection a client may need to configure or prompt
+/// for.  A Standard Report's single query carries its connection here too.
+static NSDictionary *MADCLIServeDocumentInfoQuery(id <MADDocumentDataProtocol> document,
+												  RptqQuery *query,
+												  BOOL isRoot) {
+	BOOL isComposing = query.hasQueryTables.anyObject.upstreamQuery != nil;
+	NSMutableDictionary *entry = [NSMutableDictionary dictionary];
+	entry[@"id"] = @(query.identifier);
+	entry[@"name"] = query.name ?: @"";
+	entry[@"isRoot"] = @(isRoot);
+	entry[@"isComposing"] = isComposing ? @YES : @NO;
+	// Only a real source leaf has a connection to configure or prompt for.  A
+	// composing node's `inDatabase` names its first source's database but this node
+	// does not connect with it, and the root is never a source.
+	if (!isRoot && !isComposing) {
+		NSDictionary *connection = MADCLIServeSourceConnectionDict(document, query);
+		if (connection != nil) entry[@"connection"] = connection;
+	}
+	return entry;
+}
+
+/// The document's type and its queries, in authoring order (the composed root first,
+/// then each source).  A single-query document reports `composed == false` and one
+/// query; an empty document reports no queries.
+static NSDictionary *MADCLIServeDocumentInfoDict(id <MADDocumentDataProtocol> document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *root = model.rootQuery;
+	NSMutableArray <NSDictionary *> *queries = [NSMutableArray array];
+	if (root != nil) {
+		[queries addObject: MADCLIServeDocumentInfoQuery(document, root, YES)];
+	}
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query == root) continue;
+			[queries addObject: MADCLIServeDocumentInfoQuery(document, query, NO)];
+		}
+	}
+	if (queries.count == 0) {
+		RptqQuery *single = model.defaultDatabase.defaultQuery;
+		if (single != nil) [queries addObject: MADCLIServeDocumentInfoQuery(document, single, NO)];
+	}
+	return @{
+		@"composed": (root != nil ? @YES : @NO),
+		@"rootQuery": @(root != nil ? root.identifier : 0),
+		@"queries": queries,
+	};
+}
+
+static void MADCLIServeDocumentInfo(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	MADCLIServeWriteResult(requestID, MADCLIServeDocumentInfoDict(entry.document.document));
+}
+
+static void MADCLIServeCreateEmpty(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	NSError *error = nil;
+	NSString *path = MADCLIServeStringParam(params, @"path", &error);
+	if (path == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	NSURL *url = [NSURL fileURLWithPath: MADCLIResolveArgumentPath(path)];
+	NSError *directoryError = nil;
+	if (![[NSFileManager defaultManager] createDirectoryAtURL: [url URLByDeletingLastPathComponent]
+									  withIntermediateDirectories: YES
+														attributes: nil
+															 error: &directoryError]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage,
+			[NSString stringWithFormat: @"create: cannot create %@: %@",
+				[url URLByDeletingLastPathComponent].path, directoryError.localizedDescription]);
+		return;
+	}
+	MADHeadlessDocument *document = [MADHeadlessDocument createEmptyDocumentAtURL: url error: &error];
+	if (document == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitBadDocument, MADCLIDescriptionForError(error));
+		return;
+	}
+	NSInteger handle = 0;
+	for (NSNumber *candidate in documents.allKeys) {
+		if (candidate.integerValue >= handle) handle = candidate.integerValue + 1;
+	}
+	MADCLIDocument *cliDocument = [[MADCLIDocument alloc] initWithDocument: document];
+	MADCLIServeDocument *entry = [[MADCLIServeDocument alloc] init];
+	entry.document = cliDocument;
+	entry.sourceURL = url;
+	documents[@(handle)] = entry;
+	MADCLIServeWriteResult(requestID, @{
+		@"handle": @(handle),
+		@"filename": url.lastPathComponent ?: @"",
+		@"driver": MADCLIServeDriverName(document),
+	});
+}
+
+static void MADCLIServeAddRoot(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	NSString *name = MADCLIServeOptionalString(params, @"name");
+	if (name == nil) name = @"root";
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	if (model.rootQuery != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"this document already has a composed root.");
+		return;
+	}
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity: NSStringFromClass([RptqQuery class]) identifier: 0];
+	root.name = name;
+	root.inDatabase = model.hasDatabaseSchemas.anyObject; // a placeholder so ordinary accessors resolve
+	model.rootQuery = root;
+
+	MADCLIServeWriteResult(requestID, MADCLIServeDocumentInfoDict(document));
+}
+
+static void MADCLIServeAddSource(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	NSString *name = MADCLIServeOptionalString(params, @"name");
+	if (name == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"name must be a non-empty string.");
+		return;
+	}
+
+	NSError *error = nil;
+	MADCredential *credentials = nil;
+	MADDatabaseConnection *connection = MADCLIServeBuildConnection(params, &credentials, &error);
+	if (connection == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection: connection];
+	id dbHandle = [database connectWithConnection: connection credentals: credentials connectionError: &error];
+	if (dbHandle == nil || error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+	NSArray <MADDatabaseTable *> *tables = [database getTablesFromConnection: dbHandle error: &error];
+	if (tables == nil || error != nil) {
+		[database closeConnection: dbHandle];
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+	NSMutableDictionary <NSString *, NSArray <MADDatabaseField *> *> *fieldsByTable = [NSMutableDictionary dictionary];
+	for (MADDatabaseTable *table in tables) {
+		if (table.name.length == 0) continue;
+		NSArray <MADDatabaseField *> *fields = [database fieldsForTable: table.name connection: dbHandle error: NULL];
+		if (fields != nil) fieldsByTable[table.name] = fields;
+	}
+	[database closeConnection: dbHandle];
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	NSSet *before = [model.hasDatabaseSchemas copy];
+	[model storeDatabaseConnectionDefination: database forManagedObjectContext: context];
+
+	RptqDatabase *newDatabase = nil;
+	for (RptqDatabase *candidate in model.hasDatabaseSchemas) {
+		if (![before containsObject: candidate]) { newDatabase = candidate; break; }
+	}
+	if (newDatabase == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"could not register the new source database.");
+		return;
+	}
+	RptqQuery *newQuery = newDatabase.hasQueries.anyObject;
+	newQuery.name = name;
+	// A new source query owns its five structural sections from the start, so the
+	// designer can author it immediately (per-node layout, store revision 4).
+	[RptqDocumentSection createStructuralSectionsForQuery: newQuery managedObjectContext: context];
+
+	for (MADDatabaseTable *table in tables) {
+		NSArray <MADDatabaseField *> *fields = fieldsByTable[table.name];
+		if (fields.count == 0) continue;
+		RptqDatabaseSchemaTable *schemaTable = [RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext: context andTable: table];
+		[newDatabase addHasTablesObject: schemaTable];
+		NSMutableArray <RptqDatabaseSchemaField *> *schemaFields = [NSMutableArray arrayWithCapacity: fields.count];
+		for (MADDatabaseField *field in fields) {
+			[schemaFields addObject: [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext: context andField: field]];
+		}
+		schemaTable.hasFields = [NSOrderedSet orderedSetWithArray: schemaFields];
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeDocumentInfoDict(document));
+}
+
+static void MADCLIServeAddUpstream(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	int64_t childID = [params[@"query"] isKindOfClass: [NSNumber class]] ? [params[@"query"] longLongValue] : 0;
+	if (childID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"query must be the child query's id.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqQuery *root = model.rootQuery;
+	if (root == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"this document has no composed root.");
+		return;
+	}
+	RptqQuery *child = (RptqQuery *)[context objectForEntity: NSStringFromClass([RptqQuery class]) identifier: childID];
+	if (child == nil || child == root) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"no child query %lld.", childID]);
+		return;
+	}
+	for (RptqQueryTable *existing in root.hasQueryTables) {
+		if (existing.upstreamQuery == child) {
+			MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, root)); // already an input
+			return;
+		}
+	}
+
+	RptqQueryTable *table = (RptqQueryTable *)[context insertObjectForEntity: NSStringFromClass([RptqQueryTable class]) identifier: 0];
+	table.inQuery = root;
+	table.upstreamQuery = child;
+	NSMutableSet <RptqQueryField *> *fields = [NSMutableSet set];
+	for (RptqQueryTable *sourceTable in child.hasQueryTables) {
+		for (RptqQueryField *sourceField in sourceTable.hasQueryFields) {
+			if (sourceField.databaseSchemaField == nil) continue;
+			RptqQueryField *qf = [RptqQueryField newQueryField: context];
+			qf.inQueryTable = table;
+			qf.databaseSchemaField = sourceField.databaseSchemaField;
+			[fields addObject: qf];
+		}
+	}
+	table.hasQueryFields = fields;
+	[root addHasQueryTablesObject: table];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, root));
+}
+
+static void MADCLIServeImportChild(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	NSString *path = MADCLIServeOptionalString(params, @"path");
+	if (path == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"path must be a non-empty string.");
+		return;
+	}
+	NSString *name = MADCLIServeOptionalString(params, @"name");
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSURL *sourceURL = [NSURL fileURLWithPath: MADCLIResolveArgumentPath(path)];
+	NSError *error = nil;
+	MADHeadlessDocument *source = [MADHeadlessDocument documentWithContentsOfURL: sourceURL error: &error];
+	if (source == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitBadDocument, MADCLIDescriptionForError(error));
+		return;
+	}
+	RptqStoreContext *sourceContext = source.storeContext;
+	if (sourceContext == nil || ![sourceContext loadAllWithError: &error]) {
+		MADCLIServeWriteError(requestID, MADCLIExitBadDocument, MADCLIDescriptionForError(error));
+		return;
+	}
+	RptqQuery *imported = [document.storeContext importQueryGraphFromContext: sourceContext
+														relativePathBaseURL: sourceURL
+																	   error: &error];
+	if (imported == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitBadDocument, MADCLIDescriptionForError(error));
+		return;
+	}
+	if (name.length > 0) imported.name = name;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *root = model.rootQuery;
+	if (root == nil) {
+		root = (RptqQuery *)[document.storeContext insertObjectForEntity: NSStringFromClass([RptqQuery class]) identifier: 0];
+		root.name = @"root";
+		root.inDatabase = model.hasDatabaseSchemas.anyObject;
+		model.rootQuery = root;
+	}
+	RptqQueryTable *table = [model addChildQuery: imported error: &error];
+	if (table == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeDocumentInfoDict(document));
+}
+
+static void MADCLIServeConvert(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	NSString *childName = MADCLIServeOptionalString(params, @"childName");
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSError *error = nil;
+	RptqQuery *root = [model convertToCompositionWithChildName: childName error: &error];
+	if (root == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	MADCLIServeWriteResult(requestID, MADCLIServeDocumentInfoDict(document));
+}
+
+static void MADCLIServeSetRootOutputs(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *root = model.rootQuery;
+	if (root == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"this document has no composed root.");
+		return;
+	}
+	NSArray *outputs = [params[@"outputs"] isKindOfClass: [NSArray class]] ? params[@"outputs"] : nil;
+	if (outputs == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"outputs must be an array.");
+		return;
+	}
+
+	for (RptqQueryTable *table in root.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			field.outputKey = nil;
+			field.outputIndex = 0;
+		}
+	}
+
+	int64_t index = 0;
+	for (NSDictionary *item in outputs) {
+		if (![item isKindOfClass: [NSDictionary class]]) continue;
+		int64_t fieldID = [item[@"field"] isKindOfClass: [NSNumber class]] ? [item[@"field"] longLongValue] : 0;
+		NSString *key = [item[@"key"] isKindOfClass: [NSString class]] ? item[@"key"] : nil;
+		if (fieldID == 0 || key.length == 0) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, @"each output needs a field and a key.");
+			return;
+		}
+		RptqQueryField *field = (RptqQueryField *)[document.storeContext objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: fieldID];
+		if (field == nil) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query field %lld.", fieldID]);
+			return;
+		}
+		field.outputKey = key;
+		field.outputIndex = index++;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document, root));
 }
 
 #pragma mark - SQL entry (Phase 6b)
@@ -1237,9 +2002,17 @@ static void MADCLIServeRemoveGroup(NSDictionary *params, NSMutableDictionary <NS
 /// Parses `sql` and resolves it against the document's schema (and, when `apply`, runs the
 /// compiler).  Returns the plan, or nil with `outError` -- the same MADSQLParser →
 /// MADSQLStatementResolver → MADSQLQueryCompiler path the Mac's SQL editor takes.
-static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> document, NSString *sql, BOOL apply, NSError **outError) {
+static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> document, RptqQuery *query, NSString *sql, BOOL apply, NSError **outError) {
+	if ([query isComposing]) {
+		if (outError) *outError = MADCLIServeUsageError(@"SQL editing is not supported for a composed node.");
+		return nil;
+	}
 	RptqStoreContext *context = document.storeContext;
-	RptqDatabase *database = [RptqDocument newDocumentReadFromManagedObjectContext: context].defaultDatabase;
+	RptqDatabase *database = query.inDatabase;
+	if (database == nil) {
+		if (outError) *outError = MADCLIServeUsageError(@"this query has no source database to compile SQL against.");
+		return nil;
+	}
 
 	NSMutableDictionary <NSString *, NSArray <NSString *> *> *schema = [NSMutableDictionary dictionary];
 	for (RptqDatabaseSchemaTable *table in database.hasTables) {
@@ -1276,7 +2049,7 @@ static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> docum
 		}
 		MADSQLQueryCompiler *compiler = [[MADSQLQueryCompiler alloc] initWithPlan: plan
 																		  document: qdoc
-																			 query: database.defaultQuery
+																			 query: query
 																		   context: context];
 		if (![compiler applyWithError: &error]) {
 			if (outError) *outError = error;
@@ -1307,8 +2080,16 @@ static void MADCLIServeValidateSQL(NSDictionary *params, NSMutableDictionary <NS
 		return;
 	}
 
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *resolveError = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &resolveError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(resolveError));
+		return;
+	}
+
 	NSError *compileError = nil;
-	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, NO, &compileError);
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(document, query, sql, NO, &compileError);
 	if (plan == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
 		return;
@@ -1327,8 +2108,16 @@ static void MADCLIServeApplySQL(NSDictionary *params, NSMutableDictionary <NSNum
 		return;
 	}
 
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *resolveError = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &resolveError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(resolveError));
+		return;
+	}
+
 	NSError *compileError = nil;
-	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, YES, &compileError);
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(document, query, sql, YES, &compileError);
 	if (plan == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
 		return;
@@ -1341,26 +2130,10 @@ static void MADCLIServeApplySQL(NSDictionary *params, NSMutableDictionary <NSNum
 /// The report's sections in the order the designer draws them — the same order
 /// MADMacDocument -orderedSections yields: Report Header, Page Header, Group Headers,
 /// Detail, Group Footers, Page Footer, Report Footer.
-static NSArray <RptqDocumentSection *> *MADCLIServeOrderedSections(id <MADDocumentDataProtocol> document) {
+static NSArray <RptqDocumentSection *> *MADCLIServeOrderedSections(id <MADDocumentDataProtocol> document, RptqQuery *query) {
 	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
-	NSMutableArray <RptqDocumentSection *> *sections = [NSMutableArray array];
-	if (doc.hasReportHeaderSection) [sections addObject: doc.hasReportHeaderSection];
-	if (doc.hasPageHeaderSection) [sections addObject: doc.hasPageHeaderSection];
-
-	RptqQuery *query = doc.defaultDatabase.defaultQuery;
-	NSArray <RptqQueryGroup *> *groups = [query sortedQueryGroups] ?: @[];
-	for (RptqQueryGroup *group in groups) {
-		RptqDocumentSection *header = [RptqDocumentSection headerSectionInSections: group.hasSection];
-		if (header) [sections addObject: header];
-	}
-	if (doc.hasDetailSection) [sections addObject: doc.hasDetailSection];
-	for (RptqQueryGroup *group in [groups reverseObjectEnumerator]) {
-		RptqDocumentSection *footer = [RptqDocumentSection footerSectionInSections: group.hasSection];
-		if (footer) [sections addObject: footer];
-	}
-	if (doc.hasPageFooterSection) [sections addObject: doc.hasPageFooterSection];
-	if (doc.hasReportFooterSection) [sections addObject: doc.hasReportFooterSection];
-	return sections;
+	if (query == nil) query = doc.rootQuery ?: doc.defaultDatabase.defaultQuery;
+	return [query orderedLayoutSectionsForDocument: doc];
 }
 
 /// The English band title, matching MADMacDocument -displayTitleForSection: (localization is 6e).
@@ -1427,9 +2200,9 @@ static void MADCLIServeGrowSectionForElement(RptqDocumentSection *section, RptqD
 	}
 }
 
-static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProtocol> document, RptqDocumentElement *element) {
+static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProtocol> document, RptqQuery *query, RptqDocumentElement *element) {
 	if (element.inSectionRow && element.inSectionRow.inSection) return element.inSectionRow.inSection;
-	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 		for (RptqDocumentSectionRows *row in section.hasRows) {
 			if ([row.hasObjects containsObject: element]) return section;
 		}
@@ -1437,8 +2210,23 @@ static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProt
 	return nil;
 }
 
-static RptqQueryField *MADCLIServeFirstQueryField(id <MADDocumentDataProtocol> document) {
-	RptqQuery *query = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext].defaultDatabase.defaultQuery;
+/// YES when the section is part of the query's own layout (its five structural sections
+/// or its group bands), so a cross-node section id cannot touch another node.
+static BOOL MADCLIServeSectionBelongsToQuery(id <MADDocumentDataProtocol> document, RptqQuery *query, RptqDocumentSection *section) {
+	if (section == nil || query == nil) return NO;
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	for (RptqDocumentSection *candidate in [query orderedLayoutSectionsForDocument: doc]) {
+		if (candidate == section) return YES;
+	}
+	return NO;
+}
+
+static BOOL MADCLIServeElementBelongsToQuery(id <MADDocumentDataProtocol> document, RptqQuery *query, RptqDocumentElement *element) {
+	if (element == nil || query == nil) return NO;
+	return MADCLIServeSectionBelongsToQuery(document, query, element.inSectionRow.inSection);
+}
+
+static RptqQueryField *MADCLIServeFirstQueryField(RptqQuery *query) {
 	for (RptqQueryTable *table in query.hasQueryTables) {
 		for (RptqQueryField *field in table.hasQueryFields) {
 			return field;
@@ -1549,12 +2337,13 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 	return dictionary;
 }
 
-static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> document) {
+static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> document, RptqQuery *query) {
 	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	if (query == nil) query = doc.rootQuery ?: doc.defaultDatabase.defaultQuery;
 
 	NSMutableArray <NSDictionary *> *sections = [NSMutableArray array];
 	NSMutableArray <NSDictionary *> *elements = [NSMutableArray array];
-	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 		NSString *groupField = nil;
 		if (section.type == MADDocumentSectionTypeGroupHeader || section.type == MADDocumentSectionTypeGroupFooter) {
 			groupField = [section.inGroup fieldNameNice];
@@ -1576,23 +2365,34 @@ static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> doc
 	}
 
 	NSMutableArray <NSDictionary *> *fields = [NSMutableArray array];
-	RptqQuery *query = doc.defaultDatabase.defaultQuery;
-	NSMutableArray <RptqQueryTable *> *tables = [[query.hasQueryTables allObjects] mutableCopy];
-	[tables sortUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: @"dropIndex" ascending: YES]]];
-	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"databaseSchemaField.name"
-															 ascending: YES
-															  selector: @selector(localizedCaseInsensitiveCompare:)];
-	for (RptqQueryTable *table in tables) {
-		NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
-		NSArray <RptqQueryField *> *sorted = [[table.hasQueryFields allObjects] sortedArrayUsingDescriptors: @[byName]];
-		for (RptqQueryField *field in sorted) {
-			NSString *name = field.databaseSchemaField.name ?: @"";
-			[fields addObject: @{
-				@"id": @(field.identifier),
-				@"name": name,
-				@"table": alias,
-				@"display": [NSString stringWithFormat: @"%@.%@", alias, name],
-			}];
+	if ([query isComposing]) {
+		// A composing node's (root or non-root composer) designer field list is its
+		// ordered outputs (by outputKey), so a placed data field binds to a persisted
+		// output key rather than a source alias.
+		NSArray <RptqQueryField *> *outputs = [query orderedOutputFieldsWithError: NULL] ?: @[];
+		for (RptqQueryField *field in outputs) {
+			NSString *name = field.outputKey ?: (field.databaseSchemaField.name ?: @"");
+			NSString *table = field.inQueryTable.upstreamQuery.name ?: @"";
+			[fields addObject: @{ @"id": @(field.identifier), @"name": name, @"table": table, @"display": name }];
+		}
+	} else {
+		NSMutableArray <RptqQueryTable *> *tables = [[query.hasQueryTables allObjects] mutableCopy];
+		[tables sortUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: @"dropIndex" ascending: YES]]];
+		NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"databaseSchemaField.name"
+																 ascending: YES
+																  selector: @selector(localizedCaseInsensitiveCompare:)];
+		for (RptqQueryTable *table in tables) {
+			NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+			NSArray <RptqQueryField *> *sorted = [[table.hasQueryFields allObjects] sortedArrayUsingDescriptors: @[byName]];
+			for (RptqQueryField *field in sorted) {
+				NSString *name = field.databaseSchemaField.name ?: @"";
+				[fields addObject: @{
+					@"id": @(field.identifier),
+					@"name": name,
+					@"table": alias,
+					@"display": [NSString stringWithFormat: @"%@.%@", alias, name],
+				}];
+			}
 		}
 	}
 
@@ -1607,7 +2407,16 @@ static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> doc
 static void MADCLIServeLayoutModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(entry.document.document));
+	NSError *error = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(entry.document.document, params, &error);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	// A legacy revision-3 leaf has no sections; materialize its five empty sections so
+	// the client always has section ids to author against (persisted by the next save).
+	[query ensureStructuralSectionsInContext: entry.document.document.storeContext];
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(entry.document.document, query));
 }
 
 // The symbologies the designer's picker offers: MADBarcode's own name table, so
@@ -1648,10 +2457,21 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
 	if (section == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
+		return;
+	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, section)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", sectionID, query.identifier]);
 		return;
 	}
 	MADCLIServeEnsureFirstRow(section, context);
@@ -1667,7 +2487,7 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 	} else if ([kind isEqualToString: @"data-field"]) {
 		RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
 		df.type = (int16_t)MADPrintPageElementTypeLabelDynamic;
-		RptqQueryField *bound = MADCLIServeFirstQueryField(document);
+		RptqQueryField *bound = MADCLIServeFirstQueryField(query);
 		if (bound) {
 			df.referencesQueryField = bound;
 			df.fieldID = bound.databaseSchemaField.name;
@@ -1690,7 +2510,7 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 		} else {
 			agg.groupType = MTAggregateGroupByTypeReport;
 		}
-		agg.aggregateField = MADCLIServeFirstQueryField(document);
+		agg.aggregateField = MADCLIServeFirstQueryField(query);
 		w = 144.0; h = 22.0;
 		element = agg;
 	} else if ([kind isEqualToString: @"image"]) {
@@ -1739,7 +2559,7 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 	element.inSectionRow = section.hasRows.firstObject;
 	MADCLIServeGrowSectionForElement(section, element);
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeRemoveElements(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1752,11 +2572,19 @@ static void MADCLIServeRemoveElements(NSDictionary *params, NSMutableDictionary 
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in params[@"elements"]) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
-		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
+		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 			for (RptqDocumentSectionRows *row in section.hasRows) {
 				if ([row.hasObjects containsObject: element]) {
 					[row removeHasObjectsObject: element];
@@ -1766,7 +2594,7 @@ static void MADCLIServeRemoveElements(NSDictionary *params, NSMutableDictionary 
 		element.inSectionRow = nil;
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1781,10 +2609,21 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *target = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: targetSectionID];
 	if (target == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", targetSectionID]);
+		return;
+	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, target)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", targetSectionID, query.identifier]);
 		return;
 	}
 	MADCLIServeEnsureFirstRow(target, context);
@@ -1793,7 +2632,8 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
-		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
+		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 			for (RptqDocumentSectionRows *row in section.hasRows) {
 				if ([row.hasObjects containsObject: element]) {
 					[row removeHasObjectsObject: element];
@@ -1805,7 +2645,7 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 		MADCLIServeGrowSectionForElement(target, element);
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetElementGeometry(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1819,11 +2659,19 @@ static void MADCLIServeSetElementGeometry(NSDictionary *params, NSMutableDiction
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSDictionary *item in array) {
 		if (![item isKindOfClass: [NSDictionary class]]) continue;
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [item[@"id"] longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		double x = [item[@"x"] isKindOfClass: [NSNumber class]] ? [item[@"x"] doubleValue] : 0.0;
 		double y = [item[@"y"] isKindOfClass: [NSNumber class]] ? [item[@"y"] doubleValue] : 0.0;
 		double w = [item[@"w"] isKindOfClass: [NSNumber class]] ? [item[@"w"] doubleValue] : 0.0;
@@ -1832,7 +2680,7 @@ static void MADCLIServeSetElementGeometry(NSDictionary *params, NSMutableDiction
 		[element setSizeWidth: (float)w height: (float)h];
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1847,10 +2695,21 @@ static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictiona
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: elementID];
 	if (element == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown element %lld.", elementID]);
+		return;
+	}
+	if (!MADCLIServeElementBelongsToQuery(document, query, element)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"element %lld is not part of query %lld's layout.", elementID, query.identifier]);
 		return;
 	}
 
@@ -1927,7 +2786,7 @@ static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictiona
 		}
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetElementTypography(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1941,10 +2800,18 @@ static void MADCLIServeSetElementTypography(NSDictionary *params, NSMutableDicti
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		if ([params[@"fontname"] isKindOfClass: [NSString class]]) element.fontname = params[@"fontname"];
 		if ([params[@"fontsize"] isKindOfClass: [NSNumber class]]) element.fontsize = [params[@"fontsize"] doubleValue];
 		if ([params[@"bold"] isKindOfClass: [NSNumber class]]) element.textStyle.bold = [params[@"bold"] boolValue];
@@ -1955,7 +2822,7 @@ static void MADCLIServeSetElementTypography(NSDictionary *params, NSMutableDicti
 		if ([params[@"vAlign"] isKindOfClass: [NSNumber class]]) element.alignment.vertical = (int16_t)[params[@"vAlign"] integerValue];
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetElementBoxModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -1969,10 +2836,18 @@ static void MADCLIServeSetElementBoxModel(NSDictionary *params, NSMutableDiction
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		if ([params[@"borderTop"] isKindOfClass: [NSNumber class]]) element.border.width.top = (float)[params[@"borderTop"] doubleValue];
 		if ([params[@"borderBottom"] isKindOfClass: [NSNumber class]]) element.border.width.bottom = (float)[params[@"borderBottom"] doubleValue];
 		if ([params[@"borderLeft"] isKindOfClass: [NSNumber class]]) element.border.width.left = (float)[params[@"borderLeft"] doubleValue];
@@ -1987,7 +2862,7 @@ static void MADCLIServeSetElementBoxModel(NSDictionary *params, NSMutableDiction
 		}
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetSection(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -2001,17 +2876,28 @@ static void MADCLIServeSetSection(NSDictionary *params, NSMutableDictionary <NSN
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
 	if (section == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
 		return;
 	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, section)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", sectionID, query.identifier]);
+		return;
+	}
 	if ([params[@"height"] isKindOfClass: [NSNumber class]]) [section setInterfaceHeight: [params[@"height"] doubleValue]];
 	if ([params[@"visible"] isKindOfClass: [NSNumber class]]) section.visibility = [params[@"visible"] boolValue];
 	if ([params[@"pageBreak"] isKindOfClass: [NSNumber class]]) [section setProducesFormFeed: [params[@"pageBreak"] boolValue]];
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 static void MADCLIServeSetPaperSize(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -2039,7 +2925,7 @@ static void MADCLIServeSetPaperSize(NSDictionary *params, NSMutableDictionary <N
 		}
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, nil));
 }
 
 static RptqDocumentElement *MADCLIServeDuplicateElement(RptqDocumentElement *src, RptqStoreContext *context) {
@@ -2148,11 +3034,19 @@ static void MADCLIServeDuplicateElements(NSDictionary *params, NSMutableDictiona
 	}
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *queryError = nil;
+	RptqQuery *query = MADCLIServeResolveLayoutQuery(document, params, &queryError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
+		return;
+	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *src = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (src == nil) continue;
-		RptqDocumentSection *section = MADCLIServeSectionForElement(document, src);
+		if (!MADCLIServeElementBelongsToQuery(document, query, src)) continue;
+		RptqDocumentSection *section = MADCLIServeSectionForElement(document, query, src);
 		if (section == nil) continue;
 		MADCLIServeEnsureFirstRow(section, context);
 
@@ -2170,7 +3064,7 @@ static void MADCLIServeDuplicateElements(NSDictionary *params, NSMutableDictiona
 		MADCLIServeGrowSectionForElement(section, dup);
 	}
 
-	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document, query));
 }
 
 #pragma mark - Dispatch
@@ -2187,10 +3081,14 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 	}
 
 	@try {
-		if ([method isEqualToString: MADCLIServeMethodOpen]) {
+		if ([method isEqualToString: MADCLIServeMethodEngineInfo]) {
+			MADCLIServeWriteResult(requestID, MADCLIEngineInfoDictionary());
+		} else if ([method isEqualToString: MADCLIServeMethodOpen]) {
 			MADCLIServeOpen(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodCreate]) {
 			MADCLIServeCreate(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodCreateEmpty]) {
+			MADCLIServeCreateEmpty(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodTestConnection]) {
 			MADCLIServeTestConnection(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodConnection]) {
@@ -2203,6 +3101,20 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeQuery(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodQueryModel]) {
 			MADCLIServeQueryModel(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodDocumentInfo]) {
+			MADCLIServeDocumentInfo(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddRoot]) {
+			MADCLIServeAddRoot(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddSource]) {
+			MADCLIServeAddSource(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddUpstream]) {
+			MADCLIServeAddUpstream(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodImportChild]) {
+			MADCLIServeImportChild(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodConvert]) {
+			MADCLIServeConvert(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetRootOutputs]) {
+			MADCLIServeSetRootOutputs(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodAddTable]) {
 			MADCLIServeAddTable(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodRemoveTable]) {
@@ -2255,6 +3167,8 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeRefresh(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodExport]) {
 			MADCLIServeExport(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodNodeResult]) {
+			MADCLIServeNodeResult(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodWrite]) {
 			MADCLIServeWriteCopy(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodShutdown]) {

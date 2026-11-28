@@ -24,7 +24,7 @@ public sealed class UndoRedoTests
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
 
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             long detailId = vm.Sections.Single(s => s.Type == SectionType.Body).Id;
             long pageHeaderId = vm.Sections.Single(s => s.Type == SectionType.PageHeader).Id;
 
@@ -71,7 +71,7 @@ public sealed class UndoRedoTests
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
 
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             long detailId = vm.Sections.Single(s => s.Type == SectionType.Body).Id;
 
             await vm.AddElementAsync("label", detailId, 10, 20);
@@ -105,7 +105,7 @@ public sealed class UndoRedoTests
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
 
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             long detailId = vm.Sections.Single(s => s.Type == SectionType.Body).Id;
             long pageHeaderId = vm.Sections.Single(s => s.Type == SectionType.PageHeader).Id;
 

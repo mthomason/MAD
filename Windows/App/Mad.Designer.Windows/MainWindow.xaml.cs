@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using Mad.Designer.Windows.Engine;
@@ -25,18 +26,84 @@ public partial class MainWindow : Window
             openAbout: OpenAboutWindow,
             exportPath: ShowExportSaveDialog,
             newDocument: () => OpenConnectionWindow(false),
+            newComposition: NewComposition,
             editConnection: () => OpenConnectionWindow(true),
+            importChild: ImportChild,
             recentFiles: _recentFiles.Get(),
             saveAsPath: ShowSaveDocumentDialog,
             credentials: _credentials,
-            persistRecent: _recentFiles.Add);
+            persistRecent: _recentFiles.Add,
+            sourceCredentialPrompt: PromptForSourceCredential,
+            editSourceConnection: () => _ = OpenSourceConnectionWindowAsync());
         DataContext = _viewModel;
+        _viewModel.Document.PropertyChanged += OnDocumentPropertyChanged;
+        _viewModel.Document.Composition.PropertyChanged += OnCompositionPropertyChanged;
+        ApplyCompositionLayout();
         WindowSizing.FitToWorkArea(this);
     }
 
-    private void OpenAboutWindow()
+    private const double CompositionDockedWidth = 300.0;
+    private double _dockedCompositionWidth = CompositionDockedWidth;
+
+    /// <summary>The Composition pane is absent for a Standard Report, docked at a sensible
+    /// width for a composition, and takes the content area when expanded.</summary>
+    private void ApplyCompositionLayout()
     {
-        var window = new AboutWindow { DataContext = new AboutViewModel(), Owner = this };
+        bool composed = _viewModel.Document.HasDocument && _viewModel.Document.IsComposed;
+        if (!composed)
+        {
+            CompositionColumn.Width = new GridLength(0);
+            CompositionSplitterColumn.Width = new GridLength(0);
+            WorkspaceColumn.Width = new GridLength(1, GridUnitType.Star);
+            return;
+        }
+
+        if (_viewModel.Document.Composition.IsExpanded)
+        {
+            if (CompositionColumn.ActualWidth > 0) _dockedCompositionWidth = CompositionColumn.ActualWidth;
+            CompositionColumn.Width = new GridLength(1, GridUnitType.Star);
+            CompositionSplitterColumn.Width = new GridLength(0);
+            WorkspaceColumn.Width = new GridLength(0);
+        }
+        else
+        {
+            CompositionColumn.Width = new GridLength(Math.Max(240, _dockedCompositionWidth));
+            CompositionSplitterColumn.Width = new GridLength(5);
+            WorkspaceColumn.Width = new GridLength(1, GridUnitType.Star);
+        }
+    }
+
+    private void OnDocumentPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is not (nameof(DocumentViewModel.IsComposed) or nameof(DocumentViewModel.HasDocument)))
+        {
+            return;
+        }
+        if (!_viewModel.Document.IsComposed)
+        {
+            _viewModel.Document.Composition.Collapse();
+        }
+        ApplyCompositionLayout();
+    }
+
+    private void OnCompositionPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(CompositionViewModel.IsExpanded)) ApplyCompositionLayout();
+    }
+
+    private void CompositionExpand_Click(object sender, RoutedEventArgs e)
+        => _viewModel.Document.Composition.ToggleExpanded();
+
+    private async void OpenAboutWindow()
+    {
+        // Ask the engine this app launched for its identity.  A null answer -- an older
+        // engine, an engine that failed to start -- makes the About line read "unknown".
+        var engine = await _engine.EngineInfoAsync();
+        var window = new AboutWindow
+        {
+            DataContext = new AboutViewModel(BuildInfo.Load(), engine),
+            Owner = this,
+        };
         window.Show();
     }
 
@@ -76,6 +143,41 @@ public partial class MainWindow : Window
         await _viewModel.OpenPathAsync(path);
     }
 
+    /// <summary>File ▸ New Composition…: creates an empty composition (a root, no children),
+    /// then opens it in the Query workspace so the author can add sources and join them.</summary>
+    private async void NewComposition()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Filter = Localizer.Get("Dialog.SaveMadFilter"),
+            FileName = Localizer.Get("Dialog.DefaultReportFile"),
+        };
+        if (dialog.ShowDialog() != true) return;
+
+        try
+        {
+            OpenResult created = await _engine.CreateEmptyAsync(dialog.FileName);
+            await _engine.AddRootAsync(created.Handle, "root");
+            await _viewModel.AdoptCreatedAsync(created, dialog.FileName);
+        }
+        catch (Exception exception)
+        {
+            _viewModel.Document.ReportFailure(exception.Message);
+        }
+    }
+
+    /// <summary>File ▸ Import…: imports an existing .mad as a child of the composed root.</summary>
+    private async void ImportChild()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = Localizer.Get("Dialog.OpenMadFilter"),
+        };
+        if (dialog.ShowDialog() != true) return;
+
+        await _viewModel.Document.ImportChildAsync(dialog.FileName);
+    }
+
     /// <summary>Opens the connection assistant in create mode (New Document) or edit mode
     /// (Database Connection…), and adopts the result back into the open document.</summary>
     private async void OpenConnectionWindow(bool isEdit)
@@ -100,11 +202,63 @@ public partial class MainWindow : Window
                 if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
                 {
                     await _viewModel.Document.ApplyConnectionAsync(spec);
+                    // The edit sheet's checkbox was previously ignored; honor it only
+                    // after the reconnect and refresh proved the credential works.
+                    if (!_viewModel.Document.HasError && window.ViewModel.SaveCredentials
+                        && spec.CredentialKey is string key)
+                    {
+                        _credentials.Save(key, spec.Username ?? "", spec.Password ?? "");
+                    }
                 }
             }
             else if (window.ViewModel.Created is OpenResult created && window.ViewModel.CreatePath is string path)
             {
                 await _viewModel.AdoptCreatedAsync(created, path);
+            }
+        }
+        catch (Exception exception)
+        {
+            _viewModel.Document.ReportFailure(exception.Message);
+        }
+    }
+
+    /// <summary>Prompts for one composition source's password.  Host, port, database and
+    /// the username hint are prefilled and the password is empty; the status line names
+    /// the source.  Answers null when the user cancels.</summary>
+    private Task<SourceCredentialResult?> PromptForSourceCredential(SourceCredentialPrompt prompt)
+    {
+        var window = new ConnectionWindow(_engine, _credentials, isEdit: true, prompt.Initial,
+            statusPrompt: prompt.Message, prefillStoredCredentials: false) { Owner = this };
+        window.ShowDialog();
+        if (!window.ViewModel.Submitted || window.ViewModel.ResultSpec is not ConnectionSpec spec)
+        {
+            return Task.FromResult<SourceCredentialResult?>(null);
+        }
+        return Task.FromResult<SourceCredentialResult?>(
+            new SourceCredentialResult(spec, window.ViewModel.SaveCredentials));
+    }
+
+    /// <summary>Per-source "Connection…": edits the selected source's connection only,
+    /// then reloads and refreshes through the per-source credential path.</summary>
+    private async Task OpenSourceConnectionWindowAsync()
+    {
+        QueryInfo? source = _viewModel.Document.SelectedSourceQuery;
+        if (source == null) return;
+
+        try
+        {
+            ConnectionSpec? initial = await _viewModel.Document.GetSourceConnectionAsync(source.Id);
+            if (initial == null) return;
+
+            string prompt = Localizer.Format("Document.SourceConnection.Prompt", source.Name);
+            var window = new ConnectionWindow(_engine, _credentials, isEdit: true, initial,
+                statusPrompt: prompt) { Owner = this };
+            window.ShowDialog();
+
+            if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
+            {
+                await _viewModel.Document.ApplySourceConnectionAsync(
+                    source.Id, spec, window.ViewModel.SaveCredentials);
             }
         }
         catch (Exception exception)

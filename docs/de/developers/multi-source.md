@@ -7,13 +7,20 @@ description: "Berichte als Tabellen und Treiber für alles, was eine Tabelle zur
 
 # Berichte mit mehreren Quellen — Berichte als Tabellen und Treiber für alles
 
-Diese Seite beschreibt kombinierbare Berichte: das Ergebnis eines Berichts wird eine Tabelle, die ein anderer Bericht abfragen kann, und ein Treiber kann alles fronten, was Zeilen zurückgibt. Es ist eine Designaufzeichnung; §8 benennt die Phasen, und nicht alle sind gebaut.
+Diese Seite beschreibt kombinierbare Berichte: das Ergebnis eines Berichts wird eine Tabelle, die ein anderer Bericht abfragen kann, und ein Treiber kann alles fronten, was Zeilen zurückgibt. Es ist eine Designaufzeichnung; §8 benennt die Phasen. **Die Komposition im selben Dokument (Phase 3) ist gebaut**; die übrigen Phasen sind es nicht.
 
 **Umfang:** die Architektur, die der Benutzer am 2026-11-22 beschrieb: ein Benutzer entwirft einen Bericht gegen eine Datenquelle (MySQL, SQL Server, PostgreSQL, SQLite oder eine Web-API wie die Seller API von eBay); das Ergebnis dieses Berichts ist eine materialisierte SQLite-Tabelle; und ein anderer Bericht kann eine Abfrage gegen diesen Bericht entwerfen — die Ausgabe eines Berichts mit der Ausgabe eines anderen Berichts und mit Basisquellen in einem Abfragegraphen joinen. Beim Refresh durchläuft die Engine den Graphen von unten nach oben, führt jedes Blatt gegen seine eigene Quelle aus, materialisiert jedes Ergebnis und führt schließlich die komponierende Abfrage über die Materialisierungen aus. Die Naht für Nicht-SQL-Treiber ist Teil davon: ein Treiber, der eine API frontet, erhält eine strukturierte Abfrage, keinen SQL-Text, und gibt Zeilen in Tabellenform zurück.
 **Datum:** 2026-11-22, gelesen bei `eba4225a1`; Entscheidungen eingearbeitet am 2026-11-22 (§9.2).
-**Status:** Designbericht. Er legt die Idee und das Design dar; er implementiert nichts und fügt `TASKS.md` keine Arbeit hinzu. Der Code-Audit, der die Datenobjekt-Hälfte begründet, ist [`MAD_DATA_OBJECT.md`](data-object.md); die Richtung ist [`docs/vision.md`](../vision.md). Dieses Dokument fügt das Kompositionsmodell für mehrere Quellen hinzu (zuerst Unterberichte innerhalb eines Dokuments), die Treiber-API, die Nicht-SQL-Quellen erstklassig macht, und eine kombinierte Phasenreihenfolge.
+**Status:** Designbericht, teilweise verwirklicht. Die Komposition im selben Dokument wurde in MAD Designer für macOS und Windows 0.8 ausgeliefert; die dateiübergreifende Komposition und der generische API-Treiber bleiben Entwürfe. Der Code-Audit, der die Datenobjekt-Hälfte begründet, ist [`MAD_DATA_OBJECT.md`](data-object.md); die Richtung ist [`docs/vision.md`](../vision.md); die öffentliche Anleitung ist [Kompositionsberichte](../composition.html). Dieses Dokument fügt das Kompositionsmodell für mehrere Quellen hinzu (zuerst Unterberichte innerhalb eines Dokuments), die Treiber-API, die Nicht-SQL-Quellen erstklassig macht, und eine kombinierte Phasenreihenfolge.
 
 ---
+
+> **Normatives Modell:** Der Ausführungsvertrag, den diese Seite motiviert, ist jetzt normativ
+> an einer Stelle in [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md)
+> festgehalten. Wo diese Seite (oder `data-object.md`) davon abweicht, gilt die Spezifikation.
+> §0 der Spezifikation ist **endgültig**: Jeder Knoten einer Komposition ist ein vollständiger
+> Bericht mit eigenem Layout und eigenen Daten, und die Wurzel ist der Standardbericht des
+> Dokuments, nicht der einzige sichtbare.
 
 ## 1. Die Idee, auf einer Seite
 
@@ -67,7 +74,7 @@ Zwei weitere Fakten zählen für das Kompositionsdesign:
 2. Jedes Blatt gegen seine eigene Quelle ausführen, durch seinen eigenen Treiber, in seine eigene Materialisierung.
 3. Die vom komponierenden Objekt benötigten Materialisierungen anhängen oder öffnen.
 4. Die komponierende Abfrage gegen die lokale SQLite-Datenbank ausführen und ihr Ergebnis materialisieren.
-5. Den Graphen hinauf wiederholen. Die Wurzel ist ein gewöhnlicher Bericht; ihr Cache ist das, was der Betrachter liest.
+5. Den Graphen hinauf wiederholen. Die Wurzel ist ein gewöhnlicher Bericht; der Betrachter liest den Cache des ausgewählten Berichts — standardmäßig die Wurzel, jede beliebige Quelle, wenn der Benutzer sie auswählt.
 
 Das Paging bleibt unverändert. Die Engine zieht weiterhin das vollständige Ergebnis in den lokalen Cache; die UI blättert über den Cache. Für einen API-Treiber ist „Pagination“ eine **interne Schleife** über die Seiten der API, um seine Materialisierung zu füllen; es ist kein Streaming- oder Paging-Vertrag mit der Engine. Die `limit`/`offset` des Plans existieren für Vorschauen im Design-Modus und für einen Treiber, der seinen Abruf begrenzen will, nicht für das Paging des Betrachters.
 
@@ -304,14 +311,14 @@ So geordnet, dass jede Phase grün ausliefert und die Ein-Abfrage-App weiter fun
 | 0 | **Die Treibernaht.** `MADQueryPlan` + Werttypen hinzufügen und die drei Enums nach `MADAPI` verschieben; das optionale `executeQueryPlan:` hinzufügen; Fähigkeiten hinzufügen; Refresh den Plan bevorzugen und auf SQL zurückfallen lassen. Den Plan in einem vorhandenen Treiber als Referenz implementieren und die Plan-zu-SQL-Äquivalenz mit Tests festlegen. Keine Verhaltensänderung. | — |
 | 1 | **Der Datenobjekt-Vertrag.** Die SELECT-Listen-Konstruktion von der Ausführung trennen; describe/execute hinzufügen; das Ergebnisschema als `MADDataColumn`s zurückgeben; Refresh den Vertrag aufrufen lassen. Das ist `MAD_DATA_OBJECT.md` Phase 1. | 0 (überlappt) |
 | 2 | **Die Abfrage besitzt sich selbst.** `MADQueryFull` verwendet die Abfrage, die es erhielt; `dataTableForQuery:` löst pro Abfrage auf; `MADQueryActiveQueryFields` beschränkt auf eine Abfrage; `MADModelDocument` spiegelt jede Abfrage. | 1 |
-| 3 | **Komposition im selben Dokument.** Eine Abfragetabelle darf auf ein anderes Datenobjekt (Unterbericht) verweisen; topologischer Refresh; `ATTACH`-Unterstützung in `MADDatabaseSqlite3`; die komponierende Abfrage führt gegen den lokalen Cache aus. Das ist das Modell des Benutzers mit einer portablen Datei. | 1, 2 |
+| 3 | **Komposition im selben Dokument — in 0.8 ausgeliefert.** Eine Abfragetabelle darf auf ein anderes Datenobjekt (Unterbericht) verweisen; topologischer Refresh; `ATTACH`-Unterstützung in `MADDatabaseSqlite3`; die komponierende Abfrage führt gegen den lokalen Cache aus. Das ist das Modell des Benutzers mit einer portablen Datei. | 1, 2 |
 | 4 | **Dateiübergreifende Komposition (aufgeschoben).** Ein Verweis auf einen anderen `.mad`-Bericht; Dokumentidentität und Pfadauflösung; live vs. festgeschrieben; Dateikoordination; Zugangsdatenrichtlinie; Behandlung fehlender/umbenannter Dateien. Niedrigere Priorität: die Komposition im selben Dokument erfüllt das Modell des Benutzers. | 3 |
 | 5 | **Der generische API-Treiber.** Ein manifestgesteuerter HTTP/JSON-Treiber; Schema aus dem Manifest; Plan-zu-Anfrage-Abbildung; Paginationsschleife; Typzuordnung; das erweiterbare Feld `options` der Zugangsdaten; eBay Seller als durchgearbeitetes Beispiel. | 0, 1 (und 3 für Joins) |
 | 6 | **Oberflächen und Dokumentation.** Registraturgesteuerte Treiberlisten und Join-Regeln; Refresh-UI pro Knoten; CLI-Verben; das Tutorial zum Schreiben von Treibern aktualisiert um die Plan-/Fähigkeiten-Naht. | 0–5 |
 
 Keine Phase: **das Laden von Plug-and-Play-Treibern** (§5.1) ist eine Funktion für macOS/Linux/Windows und Server, die getrennt von diesem Design verfolgt wird; nichts in den Phasen 0–6 hängt davon ab, und Phase 0 sollte lediglich eine Kopplung an eine feste Treiberliste vermeiden, damit dynamisches Laden möglich bleibt.
 
-Phase 0 ist der Teil „nicht weit entfernt“: es sind neue Werttypen, eine optionale Methode, ein Zweig im Refresh und Tests. Es erfordert nicht, dass sich Speicher, UI oder Kompositionsmodell ändern. Phase 3 ist, wo das `ATTACH`-Modell des Benutzers landet, und sie ist kleiner, als sie klingt, weil SQLite bereits ein Treiber ist und der Compiler bereits einen Graphen sortiert.
+Phase 0 ist der Teil „nicht weit entfernt“: es sind neue Werttypen, eine optionale Methode, ein Zweig im Refresh und Tests. Es erfordert nicht, dass sich Speicher, UI oder Kompositionsmodell ändern. Phase 3 ist, wo das `ATTACH`-Modell des Benutzers landete, und sie war kleiner, als sie klingt, weil SQLite bereits ein Treiber ist und der Compiler bereits einen Graphen sortiert.
 
 ## 9. Entscheidungen
 

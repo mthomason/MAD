@@ -38,8 +38,26 @@ descritores `MADStoreSchema` mantidos manualmente (`MAD/Source/rptq/store/`), ge
 `-createSchemaSQL` e verificado de forma cruzada contra o modelo compilado por `MADStoreTests`.
 O store registra a versão do seu esquema em `PRAGMA user_version`: a versão 1 é o esquema
 como foi lançado inicialmente (ausente ou 0), a versão 2 adiciona `RptqQuery.sqlSourceText` — o SQL
-colado pelo usuário, mantido integralmente (`docs/developers/sql-entry.md` §8) — e `MADStore` aplica as etapas
-faltantes ao abrir o documento. Campos da tabela `RptqQuery`:
+colado pelo usuário, mantido integralmente (`docs/developers/sql-entry.md` §8) — a versão 3 adiciona os
+campos de composição, e a versão 4 adiciona layouts por nó. `MADStore` aplica as etapas
+faltantes ao abrir o documento; cada descritor marca a revisão que o introduziu com
+`introducedInVersion` em `MAD/Source/rptq/store/MADStoreSchema.m`.
+
+A composição adicionou, na revisão 3:
+
+| Acréscimo | Propósito |
+|---|---|
+| `RptqQuery.name` | Um nome legível por humanos para um relatório no grafo. |
+| `RptqDocument.rootQuery` | O relatório padrão do documento (o Resultado). |
+| `RptqQueryTable.upstreamQuery` | Uma tabela cuja origem é outra consulta, não uma tabela de esquema remota. |
+| `RptqQueryField.outputIndex`, `RptqQueryField.outputKey` | O nome e a ordem estáveis das colunas de saída de um relatório compositor. |
+
+A revisão 4 adiciona `RptqDocumentSection.ownerQuery`: cada consulta pode ter suas próprias seções
+e elementos de layout, de modo que cada relatório de uma composição tenha suas próprias bandas e
+vinculações de campo. Um leitor deve aplicar cada etapa até o `user_version` do documento; um leitor
+mais antigo recusa um documento mais novo em vez de ler um esquema parcial.
+
+Campos da tabela `RptqQuery`:
 
 | Coluna | Tipo | Notas |
 |---|---|---|

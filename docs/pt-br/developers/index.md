@@ -18,6 +18,8 @@ incorporá-la, controlá-la a partir de um script, adicionar uma fonte de dados 
   contêiner, o armazenamento e o alvo normativo `v1`.
 * [MAD Designer para macOS](../macos.html) — o aplicativo nativo em `AppKit`.
 * [MAD Designer para Windows](../windows.html) — o aplicativo nativo em WPF.
+* [Relatórios de composição](../composition.html) — combine relatórios em um documento;
+  cada fonte mantém sua própria consulta, layout e dados.
 * [Visão](../vision.html) — relatórios como fontes de dados compostíveis.
 
 ## Engine e CLI
@@ -25,9 +27,9 @@ incorporá-la, controlá-la a partir de um script, adicionar uma fonte de dados 
 * [A ferramenta de linha de comando `mad`](cli.html) — abrir, inspecionar, consultar, atualizar e
   exportar um documento sem uma interface gráfica.
 * [O objeto de dados](data-object.html) — a definição, o esquema e o
-  conjunto de resultados de um relatório como um único contrato.
+  conjunto de resultados de um relatório como um único contrato, e como a composição o concretiza.
 * [Relatórios multifonte](multi-source.html) — relatórios como tabelas e drivers
-  para qualquer coisa que retorne uma tabela.
+  para qualquer coisa que retorne uma tabela; a composição no mesmo documento está construída.
 * [Colar SQL no designer de consultas](sql-entry.html) — o subconjunto suportado,
   o analisador e o caminho de aplicação.
 

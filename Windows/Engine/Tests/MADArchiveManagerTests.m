@@ -281,9 +281,80 @@ static void testTheHeadlessDocumentWritesACopy(void) {
 	[[NSFileManager defaultManager] removeItemAtURL: copy error: NULL];
 }
 
+static NSURL *MADArchiveGutsWithFile(NSString *name) {
+	NSURL *guts = MADArchiveTemporaryURL(@"guts");
+	[[NSFileManager defaultManager] createDirectoryAtURL: guts withIntermediateDirectories: YES attributes: nil error: NULL];
+	[[@"guts" dataUsingEncoding:NSUTF8StringEncoding] writeToURL: [guts URLByAppendingPathComponent: name] atomically: YES];
+	return guts;
+}
+
+static uint16_t MADArchiveHeaderMinor(NSURL *archive) {
+	NSData *data = [NSData dataWithContentsOfFile: archive.path];
+	if (data.length < 16) return 0;
+	const uint8_t *bytes = data.bytes;
+	return (uint16_t)(bytes[10] | (bytes[11] << 8));
+}
+
+/// A composed document is written as container 1.1 with a requirements record;
+/// an ordinary one is 1.0 without.  Reading a composed archive back checks the
+/// record and succeeds.
+static void testComposedArchiveIsContainer11WithARequirementsRecord(void) {
+	NSURL *guts = MADArchiveGutsWithFile(@"meta.plist");
+	NSURL *composedArchive = MADArchiveTemporaryURL(@"composed.mad");
+
+	MADArchiveManager *composed = [[MADArchiveManager alloc] initWithFileWrapperURL: guts archiveURL: composedArchive];
+	composed.composed = YES;
+	MAD_PASS([composed archive: YES], "the composed archive writes");
+	MAD_PASS(MADArchiveHeaderMinor(composedArchive) == 1, "the composed header is 1.1");
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: [guts URLByAppendingPathComponent: @"requirements.plist"].path],
+			 "the requirements record is written into the guts");
+
+	NSURL *ordinaryArchive = MADArchiveTemporaryURL(@"ordinary.mad");
+	MADArchiveManager *ordinary = [[MADArchiveManager alloc] initWithFileWrapperURL: guts archiveURL: ordinaryArchive];
+	ordinary.composed = NO;
+	MAD_PASS([ordinary archive: YES], "the ordinary archive writes");
+	MAD_PASS(MADArchiveHeaderMinor(ordinaryArchive) == 0, "the ordinary header is 1.0");
+
+	NSURL *destination = MADArchiveTemporaryURL(@"reopened");
+	MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: destination archiveURL: composedArchive];
+	NSError *error = nil;
+	MAD_PASS([reader unarchiveWithError: &error], "the composed archive reads back: %s", [[error description] UTF8String]);
+}
+
+/// A 1.1 archive whose requirements record is missing, malformed, or declares an
+/// unknown capability is refused with an actionable error.
+static void testComposedArchiveRequirementsAreChecked(void) {
+	{
+		NSURL *guts = MADArchiveGutsWithFile(@"meta.plist");
+		MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: guts archiveURL: MADArchiveTemporaryURL(@"x.mad")];
+		NSError *error = nil;
+		MAD_PASS(![reader checkRequirementsWithError: &error], "a missing requirements record is refused");
+		MAD_PASS(error != nil, "the missing-record refusal carries an error");
+	}
+	{
+		NSURL *guts = MADArchiveGutsWithFile(@"meta.plist");
+		NSDictionary *record = @{ @"format": @1, @"requiredCapabilities": @[ @"no-such-capability" ] };
+		[record writeToURL: [guts URLByAppendingPathComponent: @"requirements.plist"] atomically: YES];
+		MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: guts archiveURL: MADArchiveTemporaryURL(@"x.mad")];
+		NSError *error = nil;
+		MAD_PASS(![reader checkRequirementsWithError: &error], "an unknown required capability is refused");
+		MAD_PASS(error != nil, "the unknown-capability refusal carries an error");
+	}
+	{
+		NSURL *guts = MADArchiveGutsWithFile(@"meta.plist");
+		NSDictionary *record = @{ @"format": @1, @"requiredCapabilities": @[ MADDocumentCapabilityQueryComposition ] };
+		[record writeToURL: [guts URLByAppendingPathComponent: @"requirements.plist"] atomically: YES];
+		MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: guts archiveURL: MADArchiveTemporaryURL(@"x.mad")];
+		NSError *error = nil;
+		MAD_PASS([reader checkRequirementsWithError: &error], "a supported capability passes: %s", [[error description] UTF8String]);
+	}
+}
+
 MAD_TEST_MAIN("MADArchiveManagerTests",
 	MAD_TEST(testUnarchiveReadsAContainer),
 	MAD_TEST(testArchiveRoundTripIsByteIdentical),
 	MAD_TEST(testTheOrdinaryWriterKeepsTheRealMetadata),
 	MAD_TEST(testTheReproducibleWriterIsByteIdentical),
-	MAD_TEST(testTheHeadlessDocumentWritesACopy));
+	MAD_TEST(testTheHeadlessDocumentWritesACopy),
+	MAD_TEST(testComposedArchiveIsContainer11WithARequirementsRecord),
+	MAD_TEST(testComposedArchiveRequirementsAreChecked));

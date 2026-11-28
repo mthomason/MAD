@@ -26,6 +26,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADDocumentDataProtocol;
+@class RptqQuery;
 
 typedef NS_OPTIONS(NSUInteger, MADReportExportOptions) {
 	MADReportExportOptionsNone				= 0,
@@ -62,6 +63,17 @@ typedef NS_OPTIONS(NSUInteger, MADReportExportOptions) {
 /// Writes the document's data in this format to url, or to the standard output when
 /// url is nil (only for a format whose +requiresOutputPath is NO).
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+                 toURL:(nullable NSURL *)url
+               options:(MADReportExportOptions)options
+                 error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Writes one node's data and layout in this format.  `query` nil, or the root, writes
+/// the document's default result (the existing `exportDocument:toURL:options:error:`).
+/// A non-root node reads its retained result and layout.  A format that only reads the
+/// root may ignore a non-nil `query`; the row exporters honor it.
+@optional
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+                 query:(nullable RptqQuery *)query
                  toURL:(nullable NSURL *)url
                options:(MADReportExportOptions)options
                  error:(NSError * _Nullable __autoreleasing *)error;

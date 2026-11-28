@@ -26,6 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
 @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
+/// The generation token used for the row file's name (`<identifier>.maddb`).  The
+/// table keeps its `tag`, and so its `t<tag>` name, which lets a staged generation
+/// be written beside the live one and published by swapping the column map.  Set
+/// it before the table first opens a connection.
+@property (nonatomic, copy, nullable) NSString *cacheFileIdentifier;
+
+/// The row database file this table reads and writes.
+@property (nonatomic, strong, readonly, nullable) NSURL *rowDatabaseURL;
+
 /// The cache file lives in this directory.  Pass one when no cache delegate is
 /// available -- in a test, say -- and the table resolves its cache URL from it
 /// instead of reaching for the application delegate.  `nil` keeps the existing
@@ -56,6 +65,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// balances the pair; these never touch the inserts (writer) connection.
 - (void)beginReadTransaction;
 - (void)commitReadTransaction;
+
+/// Finalize prepared statements and close both SQLite connections (the inserts
+/// writer and the selects reader), so the row file and column map can be removed
+/// immediately.  Windows cannot delete a file while a handle to it is open, and
+/// the reader otherwise stays open for the table's whole lifetime.  Idempotent.
+- (void)closeConnections;
 
 @end
 

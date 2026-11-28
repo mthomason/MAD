@@ -10,6 +10,9 @@
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MADFoundation/madlog.h>
 
+static NSString * const MADOperationRefreshInitializeErrorDomain =
+	@"com.everydayapps.operation.refresh.initialize";
+
 @interface MADOperationRefreshInitializeMainDataTable ()
 
 	@property (nonatomic, weak) id <MADDocumentDataProtocol> document;
@@ -34,8 +37,19 @@
 		return [self finish];
 	}
 
-	[self.document resetCache];
-	
+	NSError *error = nil;
+	MADDataResult *pending = [self.document beginRefreshResultWithError:&error];
+	if (pending == nil) {
+		NSError *failure = error ?: [NSError errorWithDomain: MADOperationRefreshInitializeErrorDomain
+														code: 1
+													userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"The refresh result could not be prepared.",
+														  @"The staged refresh table could not be created.")
+		}];
+		[self finishWithError:failure];
+		return;
+	}
+
 	[self finish];
 }
 

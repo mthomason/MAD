@@ -110,3 +110,6 @@ __pycache__/
 # The documentation's developer build guides are source, not build output.
 !docs/developers/build/
 !docs/*/developers/build/
+
+# LLVM profile output from coverage-instrumented local runs
+*.profraw

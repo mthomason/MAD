@@ -25,6 +25,8 @@ jobs:
           python3 -I scripts/docs/check_links_test.py
           python3 -I scripts/docs/check_translations_test.py
           python3 -I scripts/docs/check_site_facts_test.py
+          python3 -I scripts/dev/versions_test.py
+          python3 -I scripts/dev/build_info_test.py
 
       - name: Check links
         run: python3 -I scripts/docs/check_links.py
@@ -34,3 +36,6 @@ jobs:
 
       - name: Check facts and leaks
         run: python3 -I scripts/docs/check_site_facts.py --docs docs --repo .
+
+      - name: Check the version manifest
+        run: python3 -I scripts/dev/versions.py check

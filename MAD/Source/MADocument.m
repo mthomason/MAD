@@ -137,6 +137,9 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
 @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *currentResult;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *pendingResult;
+@property (nonatomic, readwrite, copy) NSDictionary<NSNumber *, MADDataResult *> *nodeResults;
 @property (nonatomic, readwrite, strong) MADDatabase *database;
 @property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
 
@@ -159,6 +162,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @end
 
 @implementation MADocument
+@synthesize renderQueryIdentifier = _renderQueryIdentifier;
 
 @dynamic filename;
 @dynamic refreshed;
@@ -216,15 +220,127 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 }
 
 - (void)resetCache {
-	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
+	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.documentStore.cacheNamespaceHash];
 	datatable.cacheDelegate = self;
 	NSError *error = nil;
-	[datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
+	BOOL loaded = [datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
 	if (error != nil && error.code != -215) {
 		os_log_error(GetMadLog(), "Error: %@", error);
 	}
 	self.dataTable = datatable;
+	self.currentResult = loaded ? [MADDataResult resultWithDataTable: datatable
+														columnMapURL: self.urlDataTableCache] : nil;
+	self.nodeResults = nil;
+}
 
+#pragma mark - Publication
+
+- (MADDataResult *)beginRefreshResultWithError:(NSError * __autoreleasing *)error {
+	// Establish the last published result from the cache before staging the next
+	// one, so a failed refresh has something to leave usable.
+	if (self.currentResult == nil) {
+		[self resetCache];
+	}
+
+	NSString *generation = NSUUID.UUID.UUIDString;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
+	table.cacheFileIdentifier = generation;
+	table.cacheDelegate = self;
+	NSURL *columnMapURL = [self.cachedFilesDirectory URLByAppendingPathComponent:
+		[generation stringByAppendingPathExtension:@"mdcache"]];
+
+	self.pendingResult = [[MADDataResult alloc] initWithIdentifier: generation
+														 dataTable: table
+													rowDatabaseURL: table.rowDatabaseURL
+													  columnMapURL: columnMapURL];
+	return self.pendingResult;
+}
+
+- (BOOL)publishPendingResultWithError:(NSError * __autoreleasing *)error {
+	MADDataResult *pending = self.pendingResult;
+	if (pending == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 1
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"There is no pending refresh result.", @"No result to publish.") }];
+		}
+		return NO;
+	}
+
+	NSError *writeError = nil;
+	if (![pending.dataTable cacheWithUrl: pending.columnMapURL error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 2 userInfo: nil];
+		return NO;
+	}
+
+	NSData *columnMap = [NSData dataWithContentsOfURL: pending.columnMapURL options: 0 error: &writeError];
+	if (columnMap == nil) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 3 userInfo: nil];
+		return NO;
+	}
+
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	if (rowDatabaseURL == nil || ![[NSFileManager defaultManager] fileExistsAtPath: rowDatabaseURL.path]) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 4
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The refreshed row table was not written.", @"The staged row file is missing.") }];
+		}
+		return NO;
+	}
+
+	// The commit point: the stable column map now points at the staged row file.
+	if (![self writePublishedColumnMapData: columnMap
+									toURL: self.urlDataTableCache
+									error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 5 userInfo: nil];
+		return NO;
+	}
+
+	self.dataTable = pending.dataTable;
+	self.currentResult = [[MADDataResult alloc] initWithIdentifier: pending.identifier
+														 dataTable: pending.dataTable
+													rowDatabaseURL: pending.rowDatabaseURL
+													  columnMapURL: self.urlDataTableCache];
+	self.pendingResult = nil;
+	[[NSFileManager defaultManager] removeItemAtURL: pending.columnMapURL error: NULL];
+	return YES;
+}
+
+- (void)discardPendingResult {
+	MADDataResult *pending = self.pendingResult;
+	self.pendingResult = nil;
+	if (pending == nil) return;
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	NSURL *columnMapURL = pending.columnMapURL;
+	MADDataTableFast *table = pending.dataTable;
+	// Close the staged table's handles before removing its files: Windows cannot
+	// delete a file whose handle is still open, and the reader otherwise stays open
+	// for the table's whole lifetime (holding the space on Apple).
+	[table closeConnections];
+	pending = nil;
+
+	// A removal failure is observable but must not clobber the refresh's own error;
+	// the discard is a cleanup, so its result is logged, not returned.
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *removeError = nil;
+	if (![fileManager removeItemAtURL: rowDatabaseURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged row file %@: %@",
+					 rowDatabaseURL.lastPathComponent, removeError.localizedDescription);
+	}
+	if (![fileManager removeItemAtURL: columnMapURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged column map %@: %@",
+					 columnMapURL.lastPathComponent, removeError.localizedDescription);
+	}
+}
+
+- (BOOL)writePublishedColumnMapData:(NSData *)data toURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+	NSDataWritingOptions options = (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen);
+#else
+	NSUInteger options = NSDataWritingAtomic;
+#endif
+	return [data writeToURL: url options: options error: error];
 }
 
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
@@ -270,7 +386,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 		_autosaveEnabled = YES;
 		_documentStore = [MADDocumentStore storeForDocumentURL: url];
 		
-		NSUInteger dataTableIdHash = self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash;
+		NSUInteger dataTableIdHash = self.documentStore.cacheNamespaceHash;
 		
 		MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:dataTableIdHash];
 		datatable.cacheDelegate = self;
@@ -280,11 +396,13 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 		self.urlDataTableCache = cacheUrl;
 		
 		NSError *error = nil;
-		[datatable loadFromCacheWithUrl:cacheUrl error:&error];
+		BOOL loaded = [datatable loadFromCacheWithUrl:cacheUrl error:&error];
 		if (error != nil) {
 			os_log_error(GetMadLog(), "Error: %@", error);
 		}
 		self.dataTable = datatable;
+		self.currentResult = loaded ? [MADDataResult resultWithDataTable: datatable
+															columnMapURL: cacheUrl] : nil;
 		
 		MADocumentState *documentState = [[MADocumentState alloc] init];
 		self.documentStatus = documentState;
@@ -460,9 +578,13 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
 		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
 																				   archiveURL: url];
-		success = [archiveManager unarchive];
+		NSError *archiveError = nil;
+		success = [archiveManager unarchiveWithError:&archiveError];
 		if (!success) {
 			os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
+			if (archiveError != nil && outError != NULL) {
+				*outError = archiveError;
+			}
 		}
 	}
 
@@ -597,10 +719,18 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 /// The document's one write: save the store context, write the metadata plist, and
-/// archive the guts directory over the document file.
+/// archive the guts directory over the document file.  A composed document (one
+/// with an explicit root) saves at store revision 3 and archives as container 1.1,
+/// the same as the headless writer.
 - (BOOL)writeStoreAndArchiveWithError:(NSError * __autoreleasing *)outError {
+	// A composed document has an explicit root query.  Check the document row
+	// directly rather than through -activeDocumentModel, which asserts when the
+	// document has not been inserted yet (the create flow saves before it does).
+	NSArray *documents = [self.storeContext objectsForEntity:@"RptqDocument"];
+	BOOL composed = (documents.count > 0 && [documents.lastObject valueForKey:@"rootQuery"] != nil);
 	NSError *error = nil;
-	if (![self.storeContext save:&error]) {
+	BOOL saved = composed ? [self.storeContext saveComposed:&error] : [self.storeContext save:&error];
+	if (!saved) {
 		if (outError != nil) {
 			*outError = error.copy;
 		}
@@ -612,6 +742,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
 																		   archiveURL:self.fileURL];
 	archiveManager.checkpointed = YES;
+	archiveManager.composed = composed;
 	return [archiveManager archive:YES];
 }
 
@@ -698,6 +829,9 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	if (_database != database) {
 		_database = database;
 		_database.delegate = self;
+		// The cached query compiles with the source's dialect; keep it in step
+		// when the document reconnects through -updateDatabaseWithConnection:.
+		_mainQuery.database = database;
 	}
 }
 
@@ -894,6 +1028,30 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	return _renderDataSource;
 }
 
+- (void)pinRenderResultToCurrentResult {
+	[self.renderDataSource pinResult:self.currentResult explicitly:NO];
+}
+
+- (void)pinRenderResult:(MADDataResult *)result {
+	[self.renderDataSource pinResult:result explicitly:YES];
+}
+
+- (void)unpinRenderResult {
+	[self.renderDataSource pinResult:nil explicitly:NO];
+}
+
+- (MADDataResult *)pinnedRenderResult {
+	return self.renderDataSource.result;
+}
+
+- (BOOL)isRenderResultExplicitlyPinned {
+	return self.renderDataSource.resultPinnedExplicitly;
+}
+
+- (void)beginReadTransaction { [self.renderDataSource beginReadTransaction]; }
+
+- (void)commitReadTransaction { [self.renderDataSource commitReadTransaction]; }
+
 #pragma mark MADReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData { return [self.renderDataSource enumeratorForReportData]; }
@@ -956,7 +1114,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 #pragma mark Helpers
 
 - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage {
-	self.dataTable.dataDelegate = delegage;
+	MADDataTableFast *table = self.pendingResult.dataTable ?: self.dataTable;
+	table.dataDelegate = delegage;
 }
 
 - (BOOL)dataTableMakeCache {
@@ -974,7 +1133,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 - (void)dataTableSort:(RptqQuery *)query {
 	NSArray *sortDescriptors = [query sortDescriptorsForDatabase:self.database];
-	[self.dataTable sortUsingDescriptors:sortDescriptors];
+	MADDataTableFast *table = self.pendingResult.dataTable ?: self.dataTable;
+	[table sortUsingDescriptors:sortDescriptors];
 }
 
 - (BOOL)hasCachedData {
@@ -1218,7 +1378,10 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 											 andQueryLimit: self.limitResultsDesignMode ?
 																	50 : NSUIntegerMax];
 			mainQuery.dataDelegate = self;
-			
+			// The query compiles with the dialect of the database it runs against,
+			// not whatever database the delegate happens to hand back.
+			mainQuery.database = self.database;
+
 			NSArray *sortDescriptors = [self readCurrentSortDescriptors];
 			[self.dataTable sortUsingDescriptors:sortDescriptors];
 			
@@ -1280,7 +1443,11 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	if (self.database == nil) {
 		[self initializeMainDatabase:document];        // FIXME: I doubt this ever runs.
 	}
-	return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase:self.database];
+	// A composed document's grouping lives on its explicit root, whose fields
+	// persist output keys; an ordinary document's lives on its single default
+	// query.  Both feed the same sort-descriptor builder.
+	RptqQuery *query = document.rootQuery ?: document.defaultDatabase.defaultQuery;
+	return [query sortDescriptorsForDatabase:self.database];
 }
 
 - (NSURL *)copyPersistentStoreURL {
