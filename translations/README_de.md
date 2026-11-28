@@ -24,10 +24,10 @@ Dies ist der aktuelle Aufbau; nichts wurde verschoben. Die Einträge auf oberste
 * **Frameworks** — die vierzehn `MAD*`-Verzeichnisse: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes` und `MADFeedback`.
 * **Headless-Engine** — `Linux/`, `CLI/` und `Windows/Engine/`.
 * **Build und eingebundene Bibliotheken** — `Compressor/` und `ThirdParty/`.
-* **Beispiele, Assets und Daten** — `Samples/`, `StaticResources/`, `TestDatabase/` und `translations/`.
+* **Beispiele, Assets und Daten** — `Samples/`, `StaticResources/` und `TestDatabase/`.
 * **Werkzeuge und Satelliten** — `scripts/`, `satellites/` und `Scrimpter/`.
 * **Workspaces** — `Reports.xcworkspace` und `Scrimpter.xcworkspace`.
-* **Dokumentation** — `docs/` (die Spezifikation, die Anleitungen und die internen Aufzeichnungen).
+* **Dokumentation** — `docs/` (die Spezifikation, die Anleitungen und die internen Aufzeichnungen) und `translations/` (die übersetzten Root-Dokumente).
 
 > **Neu in 0.8: Kompositionsberichte.** Kombinieren Sie vorhandene Berichte unter macOS und Windows in einem Dokument; jede Quelle behält ihr Layout und ihre Daten. Siehe [die Kompositionsanleitung](../docs/de/composition.md) und die [Beispielberichte](../Samples/README.md). Komposition ist im unten veröffentlichten 0.8.0-Download enthalten.
 

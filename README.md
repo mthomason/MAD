@@ -24,10 +24,10 @@ This is the current layout, and nothing has moved. The top-level entries group b
 * **Frameworks** — the fourteen `MAD*` directories: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes`, and `MADFeedback`.
 * **Headless engine** — `Linux/`, `CLI/`, and `Windows/Engine/`.
 * **Build and vendored libraries** — `Compressor/` and `ThirdParty/`.
-* **Samples, assets, and data** — `Samples/`, `StaticResources/`, `TestDatabase/`, and `translations/`.
+* **Samples, assets, and data** — `Samples/`, `StaticResources/`, and `TestDatabase/`.
 * **Tooling and satellites** — `scripts/`, `satellites/`, and `Scrimpter/`.
 * **Workspaces** — `Reports.xcworkspace` and `Scrimpter.xcworkspace`.
-* **Documentation** — `docs/` (the specification, guides, and internal records).
+* **Documentation** — `docs/` (the specification, guides, and internal records) and `translations/` (the translated root documents).
 
 > **New in 0.8: Composition Reports.** Combine existing reports into one document on macOS and Windows; every source keeps its layout and data. See [the composition guide](docs/composition.md) and the [sample reports](Samples/README.md). Composition is included in the published 0.8.0 download below.
 
