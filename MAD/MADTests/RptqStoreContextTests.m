@@ -1439,4 +1439,97 @@
 	[reread close];
 }
 
+#pragma mark - Relationship inverses
+
+- (RptqStoreContext *)relationshipTestContext {
+	RptqStoreContext *context = [self openContextAtPath:@"relationships.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+	return context;
+}
+
+- (RptqDocumentSectionRows *)rowWithIdentifier:(int64_t)identifier
+									 inContext:(RptqStoreContext *)context {
+	return (RptqDocumentSectionRows *)[context insertObjectForEntity:@"RptqDocumentSectionRows"
+														 identifier:identifier];
+}
+
+- (RptqDocumentElementLabelDataField *)elementWithIdentifier:(int64_t)identifier
+												   inContext:(RptqStoreContext *)context {
+	return (RptqDocumentElementLabelDataField *)[context insertObjectForEntity:@"RptqDocumentElementLabelDataField"
+																 identifier:identifier];
+}
+
+/// Moving an element to another row must take it out of the old row's collection.
+- (void)testReplacingAToOneRelationshipUnlinksTheOldTarget {
+	RptqStoreContext *context = [self relationshipTestContext];
+	RptqDocumentSectionRows *first = [self rowWithIdentifier:1 inContext:context];
+	RptqDocumentSectionRows *second = [self rowWithIdentifier:2 inContext:context];
+	RptqDocumentElementLabelDataField *element = [self elementWithIdentifier:10 inContext:context];
+
+	element.inSectionRow = first;
+	XCTAssertEqualObjects(first.hasObjects, [NSOrderedSet orderedSetWithObject:element]);
+
+	element.inSectionRow = second;
+
+	XCTAssertEqual(first.hasObjects.count, (NSUInteger)0, @"the old row still lists the moved element");
+	XCTAssertEqualObjects(second.hasObjects, [NSOrderedSet orderedSetWithObject:element]);
+	XCTAssertEqual(element.inSectionRow.identifier, second.identifier);
+
+	// The old target is dirty, so the unlink reaches disk, not just the memory graph.
+	NSError *error = nil;
+	XCTAssertTrue([context save:&error], @"save failed: %@", error);
+	RptqStoreContext *reread = [self openContextAtPath:@"relationships.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"reload failed: %@", error);
+	RptqDocumentSectionRows *readFirst =
+		(RptqDocumentSectionRows *)[reread objectForEntity:@"RptqDocumentSectionRows" identifier:1];
+	XCTAssertEqual(readFirst.hasObjects.count, (NSUInteger)0);
+}
+
+/// Clearing the reference must also clear the old row's inverse collection.
+- (void)testClearingAToOneRelationshipUnlinksTheOldTarget {
+	RptqStoreContext *context = [self relationshipTestContext];
+	RptqDocumentSectionRows *row = [self rowWithIdentifier:1 inContext:context];
+	RptqDocumentElementLabelDataField *element = [self elementWithIdentifier:10 inContext:context];
+
+	element.inSectionRow = row;
+	element.inSectionRow = nil;
+
+	XCTAssertEqual(row.hasObjects.count, (NSUInteger)0);
+	XCTAssertNil(element.inSectionRow);
+}
+
+/// Replacing a collection must clear the inverse on every member it dropped.
+- (void)testReplacingAToManyRelationshipUnlinksRemovedMembers {
+	RptqStoreContext *context = [self relationshipTestContext];
+	RptqDocumentSectionRows *row = [self rowWithIdentifier:1 inContext:context];
+	RptqDocumentElementLabelDataField *a = [self elementWithIdentifier:10 inContext:context];
+	RptqDocumentElementLabelDataField *b = [self elementWithIdentifier:11 inContext:context];
+	RptqDocumentElementLabelDataField *c = [self elementWithIdentifier:12 inContext:context];
+
+	row.hasObjects = [NSOrderedSet orderedSetWithObjects:a, b, nil];
+	XCTAssertEqualObjects(a.inSectionRow, row);
+	XCTAssertEqualObjects(b.inSectionRow, row);
+
+	row.hasObjects = [NSOrderedSet orderedSetWithObjects:a, c, nil];
+
+	XCTAssertEqualObjects(a.inSectionRow, row);
+	XCTAssertNil(b.inSectionRow, @"the removed member still names the old row");
+	XCTAssertEqualObjects(c.inSectionRow, row);
+	XCTAssertEqual(row.hasObjects.count, (NSUInteger)2);
+}
+
+/// The incremental form follows the same rule as the wholesale replacement.
+- (void)testRemovingAMemberFromAToManyRelationshipUnlinksIt {
+	RptqStoreContext *context = [self relationshipTestContext];
+	RptqDocumentSectionRows *row = [self rowWithIdentifier:1 inContext:context];
+	RptqDocumentElementLabelDataField *a = [self elementWithIdentifier:10 inContext:context];
+	RptqDocumentElementLabelDataField *b = [self elementWithIdentifier:11 inContext:context];
+
+	row.hasObjects = [NSOrderedSet orderedSetWithObjects:a, b, nil];
+	row.hasObjects = [NSOrderedSet orderedSetWithObject:a];
+
+	XCTAssertEqualObjects(a.inSectionRow, row);
+	XCTAssertNil(b.inSectionRow);
+}
+
 @end
