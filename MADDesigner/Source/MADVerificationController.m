@@ -382,6 +382,7 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
 	SecTrustRef trust = NULL;
 	SecPolicyRef policy = SecPolicyCreateBasicX509();
 	CFErrorRef cfError = NULL;
+	SecKeyRef receipt_signing_key = NULL;
 	NSData *certificate_data;
 	NSArray *anchors;
 	
@@ -479,14 +480,12 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
 	CC_SHA1_Update(&sha1_ctx, purchase_info_bytes, purchase_info_length);
 	CC_SHA1_Final(to_be_verified_data, &sha1_ctx);
 	
-	SecKeyRef receipt_signing_key = SecTrustCopyPublicKey(trust);
+	receipt_signing_key = SecTrustCopyKey(trust);
 	__Require(receipt_signing_key, outLabel);
 	__Require_noErr(SecKeyRawVerify(receipt_signing_key, kSecPaddingPKCS1SHA1,
 									to_be_verified_data, sizeof(to_be_verified_data),
 									signature_blob_ptr->signature, sizeof(signature_blob_ptr->signature)),
 					outLabel);
-	
-	if (receipt_signing_key) CFRelease(receipt_signing_key);
 	/*
 	 Optional:  Verify that the receipt certificate has the 1.2.840.113635.100.6.5.1 Null OID
 	 
@@ -501,7 +500,8 @@ outLabel:
 	if (trust) CFRelease(trust);
 	if (policy) CFRelease(policy);
 	if (cfError) CFRelease(cfError);
-	
+	if (receipt_signing_key) CFRelease(receipt_signing_key);
+
 	return valid;
 }
 
