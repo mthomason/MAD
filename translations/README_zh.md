@@ -16,16 +16,16 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 本仓库是一个自包含项目：iPad/iPhone 应用、原生 macOS（`AppKit`）桌面应用（`Mac/`）、原生 Windows（WPF）应用（`Windows/`）、十四个框架（其中十二个跨 iOS、iOS 模拟器和原生 macOS 多平台；十二个在 Linux 上无头运行）、无头 Linux 构建与测试套件（130 个套件，1,313 个测试）、`mad` 命令行工具，以及从固定源码编译第三方 C 库的构建系统（`Compressor`）。代码以 MIT 许可证发布；`.mad` 格式是开放规范（参见 [`docs/`](../docs/zh/)），但项目名称和应用美术资源不在许可证授权范围内（参见 [`NOTICE`](../NOTICE)）。
 
-> **0.8 新增：组合报表。** 在 macOS 和 Windows 上把现有报表合并到一个文档；每个源保留自己的布局和数据。参见[组合指南](../docs/zh/composition.md)和[示例报表](../Samples/README.md)。组合功能不在下文的 0.7 已发布下载中；它现在可从源码获取。
+> **0.8 新增：组合报表。** 在 macOS 和 Windows 上把现有报表合并到一个文档；每个源保留自己的布局和数据。参见[组合指南](../docs/zh/composition.md)和[示例报表](../Samples/README.md)。组合功能已包含在下文的 0.8.0 已发布下载中。
 
-> **在 macOS 上试用 MAD Designer（macOS 12.0+，Apple Silicon）——已发布 0.7：**
+> **在 macOS 上试用 MAD Designer（macOS 12.0+，Apple Silicon）——已发布 0.8.0：**
 > * **Homebrew 安装：** `brew install --cask mthomason/tap/mad-designer`
-> * **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *（浏览器直接下载拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"`）*
-> * **版本：** 应用 0.7 / 引擎 9.0 (r4433)。源码树为应用 0.8 / 引擎 9.1。
+> * **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.zip) *（浏览器直接下载拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"`）*
+> * **版本：** 应用 0.8.0 / 引擎 9.1 (r5164)。
 
-> **在 Windows 上试用 MAD Designer（Windows 10 1903+、Windows 11，64 位）——已发布 0.7：**
-> * **直接下载：** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *（未签名：Windows SmartScreen 会提示——选择“更多信息”→“仍要运行”；参见 [Windows 指南](../docs/zh/windows.md)）*
-> * **版本：** 应用 0.7 / 引擎 9.0 (r4433) · **无需安装 .NET**（自包含）。源码树为应用 0.8 / 引擎 9.1。
+> **在 Windows 上试用 MAD Designer（Windows 10 1903+、Windows 11，64 位）——已发布 0.8.0：**
+> * **直接下载：** [**MAD-Designer-Windows-0.8.0.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-Windows-0.8.0.zip) *（未签名：Windows SmartScreen 会提示——选择“更多信息”→“仍要运行”；参见 [Windows 指南](../docs/zh/windows.md)）*
+> * **版本：** 应用 0.8.0 / 引擎 9.1 (r5164) · **无需安装 .NET**（自包含）。
 
 ## 为什么选择 MAD
 

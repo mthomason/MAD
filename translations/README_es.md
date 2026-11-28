@@ -16,16 +16,16 @@ Un **Informe de composición** extiende ese modelo a través de las bases de dat
 
 El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), la aplicación nativa para Windows (WPF) (`Windows/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; doce sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (130 suites, 1 313 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](../docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
-> **Novedad en 0.8: Informes de composición.** Combine informes existentes en un solo documento en macOS y Windows; cada origen conserva su diseño y sus datos. Consulte [la guía de composición](../docs/es/composition.md) y los [informes de muestra](../Samples/README.md). La composición no está en la descarga publicada 0.7 de abajo; está disponible ahora desde el código fuente.
+> **Novedad en 0.8: Informes de composición.** Combine informes existentes en un solo documento en macOS y Windows; cada origen conserva su diseño y sus datos. Consulte [la guía de composición](../docs/es/composition.md) y los [informes de muestra](../Samples/README.md). La composición está incluida en la descarga publicada 0.8.0 de abajo.
 
-> **Pruebe MAD Designer en macOS (macOS 12.0+, Apple Silicon) — publicado 0.7:**
+> **Pruebe MAD Designer en macOS (macOS 12.0+, Apple Silicon) — publicado 0.8.0:**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
-> * **Descarga directa:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(en las descargas directas, ejecute `xattr -cr "/Applications/MAD Designer.app"` una vez después de copiar la aplicación a `/Applications`)*
-> * **Versión:** app 0.7 / motor 9.0 (r4433). El árbol de código fuente es app 0.8 / motor 9.1.
+> * **Descarga directa:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.zip) *(en las descargas directas, ejecute `xattr -cr "/Applications/MAD Designer.app"` una vez después de copiar la aplicación a `/Applications`)*
+> * **Versión:** app 0.8.0 / motor 9.1 (r5164).
 
-> **Pruebe MAD Designer en Windows (Windows 10 1903+, Windows 11, 64 bits) — publicado 0.7:**
-> * **Descarga directa:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(sin firmar: Windows SmartScreen preguntará — elija Más información → Ejecutar de todos modos; consulte [la guía de Windows](../docs/es/windows.md))*
-> * **Versión:** app 0.7 / motor 9.0 (r4433) · **No se necesita instalar .NET** (autocontenido). El árbol de código fuente es app 0.8 / motor 9.1.
+> **Pruebe MAD Designer en Windows (Windows 10 1903+, Windows 11, 64 bits) — publicado 0.8.0:**
+> * **Descarga directa:** [**MAD-Designer-Windows-0.8.0.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-Windows-0.8.0.zip) *(sin firmar: Windows SmartScreen preguntará — elija Más información → Ejecutar de todos modos; consulte [la guía de Windows](../docs/es/windows.md))*
+> * **Versión:** app 0.8.0 / motor 9.1 (r5164) · **No se necesita instalar .NET** (autocontenido).
 
 ## Por qué MAD
 

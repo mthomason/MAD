@@ -21,7 +21,7 @@ los nombres y el arte de las aplicaciones no están cubiertos por esa licencia (
 > * **Versión:** app {{ site.data.versions.macos_app_version}} / motor {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}})
 
 > **Pruebe MAD Designer en Windows (Windows 10 1903+, Windows 11, 64 bits):**
-> * **Descarga directa:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *(sin firmar: Windows SmartScreen avisará — elija Más información → Ejecutar de todos modos; consulte la [guía de Windows](windows.html))*
+> * **Descarga directa:** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.8.0.zip) *(sin firmar: Windows SmartScreen avisará — elija Más información → Ejecutar de todos modos; consulte la [guía de Windows](windows.html))*
 > * **Versión:** app {{ site.data.versions.windows_app_version}} / motor {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **No se necesita instalar .NET** (autocontenido)
 
 **Idiomas.** La interfaz de la aplicación está disponible en inglés, chino simplificado, japonés, portugués de Brasil, alemán y español latinoamericano. Las traducciones son asistidas por máquina y pueden contener errores; repórtelos en <https://github.com/mthomason/MAD/issues>.

@@ -87,9 +87,9 @@ number automatically and nothing is edited per commit or push. Only
   the About windows report `unknown` when the file is absent, which is the correct
   answer for an unidentified build.
 
-Release numbers: `0.7.1` is the stabilization candidate and `0.8.0` the composition
-candidate. The published `v0.7.0` tag, its assets, and the links that advertise it
-stay as they are until a release is cut.
+Release numbers: `0.8.0` is the composition release and `0.8.1` the stabilization
+candidate. The published `v0.8.0` tag, its assets, and the links that advertise it
+stay as they are until the next release is cut.
 
 ## Style
 

@@ -267,7 +267,7 @@ credentials are stored in Windows Credential Manager and passed to the engine as
 `user:password`; recent files is a client-side list. The About window (Overview / License &
 Notice / Acknowledgements) renders the Windows dependency register in
 `ThirdParty/Licenses/Windows/` and the relink offer — the Windows component set, never the
-Apple one — and reports the engine version (`v9.1 (r4433)`) and the Windows application
+Apple one — and reports the engine version (`v9.1 (r5164)`) and the Windows application
 version (`v0.8`) separately.
 
 The Viewer's report preview uses the **WebView2** control (`Microsoft.Web.WebView2`, pinned

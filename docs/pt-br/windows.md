@@ -11,11 +11,11 @@ lang: pt-BR
 
 **MAD Designer para Windows** é um aplicativo de desktop nativo para Windows Presentation Foundation (WPF) sobre .NET 10 para criar, consultar, diagramar, atualizar e exportar Mobile Analytics Documents (`.mad`). Ele executa o mesmo motor Objective-C próprio (`mad.exe`) do aplicativo para macOS e da CLI `mad` headless do Linux, de modo que todo documento que ele grava é compatível com os apps de iPad/iPhone, a CLI `mad` e a GitHub Action [`mad-action`](https://github.com/mthomason/mad-action).
 
-> **Esta compilação 0.7 não é assinada.** Ela é compilada e publicada a partir do código-fonte público, mas não possui um certificado comercial de assinatura de código, então o Windows SmartScreen avisará na primeira execução. Nada está oculto: revise a compilação (abaixo), verifique o checksum SHA-256 e execute-a.
+> **Esta compilação 0.8.0 não é assinada.** Ela é compilada e publicada a partir do código-fonte público, mas não possui um certificado comercial de assinatura de código, então o Windows SmartScreen avisará na primeira execução. Nada está oculto: revise a compilação (abaixo), verifique o checksum SHA-256 e execute-a.
 
 ## Download e Instalação
 
-* **Download direto:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **Download direto:** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.8.0.zip)
 * **Versão:** app {{ site.data.versions.windows_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
 **Idiomas.** A interface do aplicativo está disponível em inglês, chinês simplificado, japonês, português do Brasil, alemão e espanhol latino-americano. As traduções são assistidas por máquina e podem conter erros; reporte-os em <https://github.com/mthomason/MAD/issues>.
@@ -28,7 +28,7 @@ lang: pt-BR
 ### O que há no arquivo
 
 ```
-MAD-Designer-Windows-0.7/
+MAD-Designer-Windows-0.8.0/
   Mad.Designer.Windows.exe   the WPF application (self-contained)
   ...                        the application's own files
   CLI/Fixtures/              London.portable.mad (a sample report) and
@@ -47,7 +47,7 @@ MAD-Designer-Windows-0.7/
 A página da versão publica um checksum SHA-256 do arquivo. Compare-o após o download:
 
 ```powershell
-Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
+Get-FileHash .\MAD-Designer-Windows-0.8.0.zip -Algorithm SHA256
 ```
 
 Também é possível revisar a extração arquivo por arquivo: o arquivo compactado contém apenas o aplicativo publicado, o motor compilado por `Windows/Engine/build.ps1`, o documento de exemplo e os textos das licenças. `mad.exe` é o mesmo motor de linha de comando documentado no [guia do Linux](https://github.com/mthomason/MAD/blob/master/Linux/README.md) e no [registro de compilação do Windows](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md).

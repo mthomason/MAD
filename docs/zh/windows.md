@@ -11,11 +11,11 @@ lang: zh-CN
 
 **适用于 Windows 的 MAD Designer** 是一款基于 Windows Presentation Foundation（WPF）和 .NET 10 的原生桌面应用，用于创建、查询、排版、刷新和导出 Mobile Analytics Document（`.mad`）。它运行与 macOS 应用和 Linux 的 headless `mad` CLI 相同的自有 Objective-C 引擎（`mad.exe`），因此它写出的每个文档都与 iPad/iPhone 应用、`mad` CLI 和 GitHub Action [`mad-action`](https://github.com/mthomason/mad-action) 兼容。
 
-> **此 0.7 版本未签名。** 它从公开源代码构建并发布，但不包含商业代码签名证书，因此首次启动时 Windows SmartScreen 会发出警告。这里没有任何隐藏内容：请审查此版本（见下文）、校验其 SHA-256 校验和，然后再运行。
+> **此 0.8.0 版本未签名。** 它从公开源代码构建并发布，但不包含商业代码签名证书，因此首次启动时 Windows SmartScreen 会发出警告。这里没有任何隐藏内容：请审查此版本（见下文）、校验其 SHA-256 校验和，然后再运行。
 
 ## 下载与安装
 
-* **直接下载：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **直接下载：** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.8.0.zip)
 * **版本：** 应用 {{ site.data.versions.windows_app_version }} / 引擎 {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
 
 **语言：** 应用界面提供英语、简体中文、日语、巴西葡萄牙语、德语和拉丁美洲西班牙语。翻译由机器辅助完成，可能包含错误；请在 <https://github.com/mthomason/MAD/issues> 报告。
@@ -28,7 +28,7 @@ lang: zh-CN
 ### 压缩包内容
 
 ```
-MAD-Designer-Windows-0.7/
+MAD-Designer-Windows-0.8.0/
   Mad.Designer.Windows.exe   the WPF application (self-contained)
   ...                        the application's own files
   CLI/Fixtures/              London.portable.mad (a sample report) and
@@ -47,7 +47,7 @@ MAD-Designer-Windows-0.7/
 发布页面会公布压缩包的 SHA-256 校验和。下载后请进行比对：
 
 ```powershell
-Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
+Get-FileHash .\MAD-Designer-Windows-0.8.0.zip -Algorithm SHA256
 ```
 
 也可以逐个文件审查解压内容：压缩包只包含已发布的应用、由 `Windows/Engine/build.ps1` 构建的引擎、示例文档和许可证文本。`mad.exe` 就是 [Linux 指南](https://github.com/mthomason/MAD/blob/master/Linux/README.md)和 [Windows 构建记录](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md)中记录的命令行引擎。

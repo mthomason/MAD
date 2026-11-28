@@ -11,11 +11,11 @@ lang: ja-JP
 
 **MAD Designer for Windows** は、Windows Presentation Foundation（WPF）と .NET 10 上で動作するネイティブなデスクトップアプリケーションで、Mobile Analytics Document（`.mad`）の作成、クエリ、レイアウト、更新、エクスポートを行います。macOS アプリケーションと Linux の headless `mad` CLI と同じ自社開発の Objective-C エンジン（`mad.exe`）を実行するため、書き出すドキュメントは iPad/iPhone アプリ、`mad` CLI、および GitHub Action [`mad-action`](https://github.com/mthomason/mad-action) と互換性があります。
 
-> **この 0.7 ビルドは署名されていません。** 公開ソースからビルドして公開していますが、商用のコード署名証明書を持たないため、初回起動時に Windows SmartScreen が警告します。隠しているものはありません。ビルドを確認し（下記参照）、SHA-256 チェックサムを検証してから実行してください。
+> **この 0.8.0 ビルドは署名されていません。** 公開ソースからビルドして公開していますが、商用のコード署名証明書を持たないため、初回起動時に Windows SmartScreen が警告します。隠しているものはありません。ビルドを確認し（下記参照）、SHA-256 チェックサムを検証してから実行してください。
 
 ## ダウンロードとインストール
 
-* **直接ダウンロード:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **直接ダウンロード:** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.8.0.zip)
 * **バージョン:** アプリ {{ site.data.versions.windows_app_version }} / エンジン {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
 
 **言語：** アプリの UI は英語、簡体字中国語、日本語、ブラジルポルトガル語、ドイツ語、ラテンアメリカスペイン語で利用できます。翻訳は機械支援によるもので、誤りを含む場合があります。問題は <https://github.com/mthomason/MAD/issues> で報告してください。
@@ -28,7 +28,7 @@ lang: ja-JP
 ### アーカイブの内容
 
 ```
-MAD-Designer-Windows-0.7/
+MAD-Designer-Windows-0.8.0/
   Mad.Designer.Windows.exe   the WPF application (self-contained)
   ...                        the application's own files
   CLI/Fixtures/              London.portable.mad (a sample report) and
@@ -47,7 +47,7 @@ MAD-Designer-Windows-0.7/
 リリースページにはアーカイブの SHA-256 チェックサムが公開されています。ダウンロード後に比較してください。
 
 ```powershell
-Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
+Get-FileHash .\MAD-Designer-Windows-0.8.0.zip -Algorithm SHA256
 ```
 
 展開した内容はファイル単位でも確認できます。アーカイブには、公開されたアプリケーション、`Windows/Engine/build.ps1` でビルドされたエンジン、サンプルドキュメント、ライセンス文書だけが含まれています。`mad.exe` は、[Linux ガイド](https://github.com/mthomason/MAD/blob/master/Linux/README.md)と [Windows ビルド記録](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md)に記載されているコマンドラインエンジンと同じものです。
