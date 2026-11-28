@@ -1187,7 +1187,7 @@ bundle's header search path.
   zero type as intentional.
 
 ### The receipt check uses the deprecated SHA-1 verify API, and leaks its key on failure
-- **Status:** Open -- found by the warning sweep, documented rather than changed.
+- **Status:** Open -- found by the warning sweep; fix in review on `fix/receipt-check`.
 - **What:** `MADDesigner/Source/MADVerificationController.m` validates the App Store
   receipt with `SecTrustCopyPublicKey` (`:482`, deprecated in iOS 14) and
   `SecKeyRawVerify` with `kSecPaddingPKCS1SHA1` (`:484`, deprecated in iOS 15), over a
@@ -1195,14 +1195,19 @@ bundle's header search path.
   `osx.cocoa.RetainCount` check reports that `receipt_signing_key` (`:482`) leaks on the
   failure path: the `__Require` macros jump straight to `outLabel`, and the `CFRelease`
   at `:489` is only reached when verification succeeds.
-- **Why it is not changed here:** swapping `SecKeyRawVerify`/PKCS1SHA1 for
-  `SecKeyVerifySignature` with `kSecKeyAlgorithmRSASignatureMessagePKCS1v15SHA256`
-  changes which signatures the app accepts -- a security decision, not a warning fix.
-  The leak is mechanical in comparison: drop the `CFRelease` at `:489` (the success path
-  falls through to `outLabel`) and release there instead.
-- **Where:** `MADDesigner/Source/MADVerificationController.m:475-489`.
-- **Reproduction:** the analyzer reports both the deprecation and the leak on every
-  `xcodebuild analyze` of the app scheme.
+- **Fix (2026-11-28):** `receipt_signing_key` is declared NULL at the top, assigned from
+  `SecTrustCopyKey(trust)` (the modern replacement for `SecTrustCopyPublicKey`), and
+  released once at `outLabel`, so every `__Require` failure path releases it.  The
+  SHA-1 verification itself is unchanged: the receipt signature is over
+  SHA-1(version|purchaseInfo), and switching to SHA-256 would reject the receipts
+  Apple signs.
+- **Verification:** `xcodebuild build` and `xcodebuild analyze` on the app scheme
+  succeed; the `osx.cocoa.RetainCount` finding is gone.  No automated test: the
+  check needs a real App Store receipt.
+- **Where:** `MADDesigner/Source/MADVerificationController.m:378-510`.
+- **Reproduction:** `xcodebuild analyze` no longer reports the leak; the
+  `SecKeyRawVerify`/`kSecPaddingPKCS1SHA1` deprecation remains until the receipt
+  format changes.
 
 ### `MADToolboxStyleViewController -updateDisplay` miscounts distinct box-model and font-size values across a multi-selection
 - **Status:** Confirmed (found during the macOS Report Designer audit)
