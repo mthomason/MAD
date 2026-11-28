@@ -1407,49 +1407,10 @@ bundle's header search path.
 
 ## Mac (AppKit application)
 
-### The macOS smoke suite can overlap a composed refresh with the next one
-- **Status:** Open (intermittent; fix in review on `fix/ci-determinism`)
-- **Where:** `Mac/Tests/MADMacSmokeTest.m:77` (`MADSmokeRefreshComposed`); the
-  source- and root-filtered checks are `:3038` and `:3053`. The unguarded action is
-  `Mac/Source/MADMacViewerViewController.m:778` (`-refreshReportAction:`) through
-  `:749` (`-performRefreshWithSuccessHandler:`).
-- **Behavior:** the helper returns when the result table reaches the expected row count,
-  not when the asynchronous refresh finishes. The next mutation and refresh can then run
-  while the previous source connection is still closing, and the second refresh fails with
-  the generic "Could not refresh report data" error after the SQLite busy timeout. Seen in
-  roughly one in four macOS smoke runs, locally and on CI, at the source-filtered (exit
-  212) or root-filtered (exit 213) step; a rerun passes. The Viewer's Refresh button is not
-  disabled while a refresh is in flight, so a rapid double-refresh can reach the same path.
-- **Why it matters:** a flaky release gate, and a transient refresh error for a user who
-  presses Refresh again too quickly. It does not corrupt the document.
-- **Fix (2026-11-28):** `MADMacSmokeTest.m` declares the document's private
-  `refreshQueue` and drains it after the visible row/error signal, in
-  `MADSmokeRefreshComposed` and in the failed and empty-payments steps. The
-  observed failure on PR #59 was the empty-payments step (exit 107,
-  `payments.sqlite` reported missing while the prior failed refresh was still
-  tearing down), not only the source/root-filtered steps. Three consecutive
-  `./Mac/build.sh --smoke-test` runs pass. The Viewer's in-flight button state
-  remains a separate product change.
-- **Test:** `./Mac/build.sh --smoke-test`, the authored-composition block and
-  the empty-payments step.
+*Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
-### `MADDocumentTests` can time out opening a document on the macOS runner
-- **Status:** Open (intermittent, CI; fix in review on `fix/ci-determinism`)
-- **Where:** `MAD/MADTests/MADDocumentTests.m:545`
-  (`-testOpenAndCloseMoveThroughTheUIDocumentStateMachine`).
-- **Behavior:** the 20-second asynchronous wait for the "open" expectation expires on the
-  hosted macOS runner (observed on 2026-11-28, with the test reporting after 114 s), failing
-  the MAD suite with exit 65. The same test passes on the release commit and on reruns; the
-  failure is in UIDocument/file-coordination timing, not in the document code path the test
-  exercises.
-- **Why it matters:** it is an advisory macOS gate only (the required checks are Linux and
-  DCO), but it makes a green master look red.
-- **Fix (2026-11-28):** the fixture's `writer` and its `RptqStoreContext` are closed
-  and released before the reader opens the same URL, so the reader no longer opens
-  a second store context over the file while the writer's is live. Twenty
-  consecutive runs of the test pass, and the full `MAD` suite is 787/787.
-- **Test:** the `MAD` scheme's `MADDocumentTests`; the macOS verification workflow's
-  "Run the MAD suite" step.
+- The macOS smoke suite can overlap a composed refresh with the next one
+- `MADDocumentTests` can time out opening a document on the macOS runner
 
 ## Linux build
 
