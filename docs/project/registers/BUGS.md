@@ -562,6 +562,28 @@ Status key:
 - **Test:** `MADDataTableVirtualTests testObjectAtIndexAndSubscriptAgree`, through the
   test-only category bridge the suite already uses.
 
+### `BDHost +addressesForHostname:`'s synchronous CFHost lookup is an analyzer hang-risk
+- **Status:** Investigate -- analyzer finding, left as is (2026-11-28)
+- **Where:** `MADFoundation/Source/BDHost.m:66` (`CFHostStartInfoResolution`)
+- **Behavior:** The static analyzer's Hang Risk / QoS check reports the synchronous
+  CFHost resolution as a User-initiated thread waiting on a lower (Default) QoS resolver
+  thread, twice on the same line.  `CFHostStartInfoResolution` blocks the calling thread
+  while the name resolves.
+- **Call path:** `+addressForHostname:` calls `+addressesForHostname:`.  The only
+  production caller is `MADDatabaseSQLServer +IPAddressForServer:`
+  (`MADTdsClient/Source/MADDatabaseSQLServer.m:114`), used by
+  `-connectWithConnection:` (`:1743`) inside the `MADOperation` connection/refresh paths
+  on background operation queues, not the main thread.
+- **Why it is not changed:** It is not a crash or a main-thread hang today.  The clean
+  fix is an asynchronous resolver (`CFHostSetClient` with a run loop, or a
+  completion-based `BDHost` API), which touches the TDS connection path.  A cheaper
+  alternative is to use `getaddrinfo` on Apple, as Linux and Windows already do; that
+  removes the CFHost internal-QoS inversion but is still a blocking call on the
+  operation queue.
+- **Reproduction:** Xcode's analyzer reports it; `xcodebuild analyze` on the
+  `MADFoundation` and `MAD Designer` schemes did not reproduce it in this environment
+  (the IDE checker is stricter than the command-line configuration).
+
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
 - `MADURLFactory +newURLForLocalApplicationSupportDirectory` threw `NSInvalidArgumentException` without a bundle identifier, and `+groupRootURLForIdentifier:` targeted `~/Library/Group Containers` on macOS
