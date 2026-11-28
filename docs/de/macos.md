@@ -189,6 +189,35 @@ lokalen SQLite-Tabellen-Cache (`MADDataTableFast`) und rendert die Seiten:
 
 ---
 
+## Kompositionsberichte
+
+Ein **Kompositionsbericht** kombiniert mehrere Berichte zu einem einzigen `.mad`-Dokument. Er ist
+der Desktop-Weg, um Daten aus verschiedenen Datenbanken — MySQL, PostgreSQL, SQL Server und
+SQLite — ohne einen Föderationsserver zu verknüpfen. Siehe [die Kompositionsanleitung](../composition.html)
+für das Konzept und die datenbankübergreifenden Beispiele.
+
+* **Report-Auswahl in der Symbolleiste:** Ein Kompositionsbericht fügt neben dem Dokumenttyp ein
+  Popup **Report** hinzu. Es listet zuerst das **Ergebnis** auf (*Ergebnis — <Name>*) und dann jede
+  Quelle. Die Auswahl eines Berichts schaltet die Arbeitsbereiche Abfrage, Designer und Betrachter
+  gemeinsam um; sie ändert nie den aktiven Arbeitsbereich.
+* **Jede Quelle ist ein Bericht:** Die Auswahl einer Quelle zeigt ihre eigene Abfrage in MAD Query,
+  ihre eigenen Bänder und ihre Feldliste in MAD Designer und ihre eigenen Seiten in MAD Viewer.
+  Eine Quelle ohne Layout ist weiterhin ein Bericht aus Zeilen: Der Betrachter zeigt ein
+  Zeilenraster, und der Designer bietet an, ihr Layout zu erstellen.
+* **Zugangsdaten pro Quelle:** Eine Komposition fragt beim Aktualisieren nach einem Kennwort pro
+  Quelle, wobei Treiber, Host, Port, Datenbank und Benutzername vorausgefüllt sind. Kennwörter
+  bleiben im Schlüsselbund oder in der aktuellen Sitzung und werden nie in die `.mad` geschrieben.
+
+
+**Eine Komposition erstellen:** **File ▸ New Composition…** wählt vorhandene Berichte und ein
+Ziel; **File ▸ New Document…** bietet die Typen Standard Report und Composition Report an;
+**File ▸ Convert to Composition…** wandelt den geöffneten Standardbericht in eine Komposition mit
+einer Quelle um. Das Add-Menü des Arbeitsbereichs MAD Query fügt außerdem eine Quellabfrage aus
+einer Datenbankverbindung hinzu oder importiert einen vorhandenen Bericht in die geöffnete
+Komposition.
+
+---
+
 ## Dokumente öffnen und erstellen
 
 * **Launch & Open Panel (`MADMacDocumentController`):** Beim Start ohne Datei

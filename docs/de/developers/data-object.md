@@ -9,16 +9,15 @@ description: "Definition, Schema und Ergebnismenge eines Berichts als ein Vertra
 
 Diese Seite definiert das Datenobjekt: die Definition eines Berichts, sein Schema und seine Ergebnismenge als ein Vertrag. Es ist das Design, auf dem die Arbeit mit mehreren Quellen aufbaut; die Formatspezifikation beschreibt das Dokument, wie es heute ausgeliefert wird.
 
-**Umfang:** das am 2026-10-16 aufgeworfene Konzept — was ein Datenobjekt ist, wie es in dieser Codebasis repräsentiert wird und was seine Formalisierung erfordert. Die im selben Gespräch beschriebene Verdrahtung für mehrere Quellen / Unterberichte ist hier als Konsequenz des Vertrags niedergeschrieben, bewusst nicht gebaut.
-**Datum:** 2026-10-16, gelesen bei `445794e11`.
-**Status:** Designdokument. Es schlägt vor; es implementiert nichts, und nichts hier ist eingeplant. [die Projektvision](../vision.html) §1 — „ein Bericht ist eine Funktion von Datenquellen auf eine Tabelle“ — ist die Vision, die diese Datei konkretisiert und für die sie den Code benennt.
+**Umfang:** das am 2026-10-16 aufgeworfene Konzept — was ein Datenobjekt ist, wie es in dieser Codebasis repräsentiert wird und was seine Formalisierung erfordert. Die im selben Gespräch beschriebene Verdrahtung für mehrere Quellen / Unterberichte ist hier als Konsequenz des Vertrags niedergeschrieben; ihre Hälfte im selben Dokument ist jetzt gebaut.
+**Datum:** 2026-10-16, gelesen bei `445794e11`; Status aktualisiert am 2026-11-27.
+**Status:** Designdokument, teilweise verwirklicht. Die Komposition im selben Dokument wird in MAD Designer für macOS und Windows 0.8 ausgeliefert: Ein `.mad`-Dokument hält einen Graphen von Berichten, jeder mit eigener Abfrage, eigenem Layout und eigener materialisierter Tabelle. Die folgende Analyse bleibt als Aufzeichnung erhalten, die dazu führte; §5 und §7 markieren, was gebaut ist und was zurückgestellt bleibt. Die öffentliche Anleitung ist [Kompositionsberichte](../composition.html). [die Projektvision](../vision.html) §1 — „ein Bericht ist eine Funktion von Datenquellen auf eine Tabelle“ — ist die Vision, die diese Datei konkretisiert und für die sie den Code benennt.
 
 ---
 
-> **Endgültige Kompositionsentscheidung (2026-11-26):** §5s Kompositionsskizze (einschließlich
-> ihrer Layout-B-Empfehlung, §5.1/§9.2) wird durch die normative
-> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html) ersetzt, die
-> Layout A übernimmt (`ATTACH`, eine `.maddb` pro Knoten). §0 der Spezifikation ist
+> §5s Kompositionsskizze (einschließlich ihrer Layout-B-Empfehlung, §5.1/§9.2) wird durch die
+> normative [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md) ersetzt,
+> die Layout A übernimmt (`ATTACH`, eine `.maddb` pro Knoten). §0 der Spezifikation ist
 > **endgültig**: Jeder Knoten einer Komposition ist ein vollständiger Bericht mit eigenem
 > Layout und eigenen Daten; die Wurzel ist der Standardbericht des Dokuments, nicht der einzige
 > Bericht. Das Kombinieren von Berichten führt Layout und Ergebnis jedes Kindes mit.
@@ -170,9 +169,9 @@ Minimale Form, empfohlen:
 
 Die schwerere Alternative — eine neue Entität `RptqDataObject`, die die Definition besitzt, mit degradierter `RptqQuery` — ist sauberere Benennung und eine größere Migration. Festgehalten als Entscheidung 9.1.
 
-## 5. Komposition — die Unterbericht-Verdrahtung, dokumentiert, nicht gebaut
+## 5. Komposition — die Unterbericht-Verdrahtung, im selben Dokument gebaut
 
-**Dieser Abschnitt ist bewusst nicht eingeplant** (der Benutzer, 2026-10-16: *„Ich will es nicht verdrahten … aber ich will diese Idee dokumentieren“*). Er existiert, damit es, wenn es gewünscht wird, ein Plan statt einer Entdeckung ist.
+**Status: im selben Dokument gebaut (2026-11-27).** Der Mechanismus dieses Abschnitts ist das, was ausgeliefert wurde: Eine Komposition ist ein Graph vollständiger Berichte, in Reihenfolge materialisiert, wobei der komponierende Bericht die Tabellen seiner Kinder lokal verknüpft. Die frühere Haltung — dokumentiert, aber bewusst nicht eingeplant (der Benutzer, 2026-10-16: *„Ich will es nicht verdrahten … aber ich will diese Idee dokumentieren“*) — ist Geschichte. Die normative Entscheidung ([`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md) §0) macht jeden Knoten einer Komposition zu einem vollständigen Bericht mit eigenem Layout und eigenen Daten. Die dateiübergreifende Komposition und eine stabile, über Dateien hinweg geteilte Identität bleiben zurückgestellt.
 
 ### 5.1 Der Mechanismus, genau
 
@@ -183,13 +182,20 @@ Die schwerere Alternative — eine neue Entität `RptqDataObject`, die die Defin
 
 Die Einzeiler-Version, die der ganze Grund ist, warum dies eine Verdrahtung und kein Projekt ist: **das Ergebnis jeder Abfrage ist bereits eine SQLite-Tabelle, und SQLite ist bereits ein Treiber.** Die Föderations-Engine ist im Kasten; sie wird derzeit über einen Dateinamen-Hash adressiert.
 
-### 5.2 Was gebaut würde, wenn gewünscht
+### 5.2 Was gebaut wurde und was bleibt
 
-1. Der Vertrag von §4 (describe/execute, Identität, Adresse) — eine Voraussetzung, keine Phase.
-2. Die Quellenart: `RptqQueryTable` → Datenobjekt; die SQL-Erzeugung löst es auf die Materialisierungstabelle des Objekts auf statt auf `db.table`.
-3. Die Ausführungsreihenfolge: den DAG durchlaufen; veraltete Objekte aktualisieren; dann die komponierende Abfrage.
-4. Das Teleskopieren des Designers (das Wort des Benutzers): im Add-Table-Panel eine zweite Art von Quelle neben Schematabellen — die anderen Datenobjekte des Dokuments oder eine Unterberichtsbox, die die Ausgabefelder des anderen Objekts auflistet. Die Join-UI ist unverändert; beide Enden sind Felder.
-5. `ATTACH`-Unterstützung in `MADDatabaseSqlite3`, wenn und falls dateiübergreifende Komposition gewünscht wird.
+Ausgeliefert (im selben Dokument):
+
+1. Der Vertrag von §4 (describe/execute, Identität, Adresse).
+2. Die Quellenart: eine Abfragetabelle, deren Upstream eine andere Abfrage ist; die SQL-Erzeugung löst sie auf die materialisierte Tabelle des Kindes statt auf `db.table` auf.
+3. Die Ausführungsreihenfolge: Ein topologischer Durchlauf materialisiert jeden Knoten, den komponierenden Bericht zuletzt.
+4. Das Teleskopieren des Designers (das Wort des Benutzers): eine Oberfläche Import Report / Add Source neben Schematabellen, mit dem Kompositionsgraphen und den Berichten pro Knoten in allen drei Arbeitsbereichen.
+5. `ATTACH DATABASE` im SQLite-Pfad für eine materialisierte Tabelle pro Knoten.
+
+Zurückgestellt:
+
+* Dateiübergreifende Komposition — eine Quelle, die in einer *anderen* `.mad`-Datei lebt, mit Dokumentidentität, Pfadauflösung und Zugangsdatenrichtlinie.
+* Eine stabile Adresse, die zwischen Dokumenten geteilt wird (der Materialisierungs-Tag ist weiterhin nach dem Dateinamen-Hash des Dokuments verschlüsselt).
 
 ### 5.3 Was es zu keinem Einzeiler macht
 
@@ -218,13 +224,13 @@ So geordnet, dass die App weiter ausliefert und die Suite durchgehend grün blei
 | 2 | **Die Abfrage besitzt sich selbst.** `MADQueryFull` nimmt die Abfrage, die ihm gegeben wurde (kein erneutes Lesen des Dokuments); `-dataTableForQuery:` löst pro Abfrage auf; `MADQueryActiveQueryFields` beschränkt auf eine Abfrage; `MADModelDocument` spiegelt jede Abfrage. Ein Dokument, viele Objekte. | Alle drei Festverdrahtungspunkte von §3.6 |
 | 3 | **Identität und Adresse.** Das Objekt im Speicher benennen; Materialisierungen nach Objektidentität taggen, nicht nach Dateiname; eine Ergebnistabelle pro Objekt im Cache; Schema-Plist pro Objekt. | Dateinamen-gehashte Materialisierung; eine Tabelle pro Dokument |
 | 4 | **Die Bindung und die Oberflächen.** Das Layout bindet an das Schema eines Datenobjekts; die CLI erhält `describe`; die JSON-Form wird einmal festgelegt (Export + API + KI). | Bindung an „die Abfrage des Dokuments“ |
-| 5 | **Komposition** (§5), nur wenn gefragt. | — |
+| 5 | **Komposition** (§5): im selben Dokument, in 0.8 ausgeliefert. Dateiübergreifend bleibt zurückgestellt. | — |
 
-Phase 1 ist die eigentliche Nutzlast des Designs und die kleinste: sie braucht keine Speicheränderung, keine UI-Änderung und kein neues Format — sie sortiert vorhandenen Code neu und ist beweisbar durch die aktuellen Suiten plus eine Schemaprüfung an einer Abfrage mit null Zeilen. Die Phasen 2–4 sind dieselbe Idee, angewandt auf die Schichten, die die Ein-Abfrage-Annahme tragen. Phase 5 ist die Verdrahtung, dokumentiert, nicht eingeplant.
+Phase 1 ist die eigentliche Nutzlast des Designs und die kleinste: sie braucht keine Speicheränderung, keine UI-Änderung und kein neues Format — sie sortiert vorhandenen Code neu und ist beweisbar durch die aktuellen Suiten plus eine Schemaprüfung an einer Abfrage mit null Zeilen. Die Phasen 2–4 sind dieselbe Idee, angewandt auf die Schichten, die die Ein-Abfrage-Annahme tragen. Phase 5 wurde als Komposition im selben Dokument ausgeliefert; die dateiübergreifende Komposition bleibt zurückgestellt.
 
 ## 8. Was nicht zu tun ist
 
-- **Die Mehrquellen-Verdrahtung jetzt nicht bauen.** Die Entscheidung des Benutzers, 2026-10-16; dieses Dokument ist die Aufzeichnung, kein Warteschlangeneintrag. (Die Konventionen von `TASKS.md`/`BUGS.md` gelten: nichts hier wird auf Initiative des Agenten begonnen.)
+- **Die dateiübergreifende Komposition jetzt nicht bauen.** Die Komposition im selben Dokument ist ausgeliefert; ein Verweis auf einen Bericht in einer anderen `.mad`-Datei ist weiterhin ein separates, zurückgestelltes Arbeitsstück. (Die Konventionen von `TASKS.md`/`BUGS.md` gelten: nichts hier wird auf Initiative des Agenten begonnen.)
 - **Den Cache nicht komprimieren oder umgestalten.** Er ist tragend, das zweistufige Design braucht ihn, und `MAD_FORMAT.md` §5.1 ist die bestehende Analyse.
 - **Keine Föderations-Engine bauen.** Gemäß §1 und §5 sind die Materialisierungen die Föderation.
 - **Keinen zweiten SQL-Generator oder Executor implementieren.** Alles außer der Adressierung und der Reihenfolge existiert.

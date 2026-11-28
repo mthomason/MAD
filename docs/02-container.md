@@ -62,3 +62,24 @@ document uses for a thumbnail: `MADocument.m:571-583` reads
 
 Version is written as a double (`MADocument.m:611`) and reads back as an integer in
 the samples. Consumers should accept either.
+
+### The `1.1` composition header
+
+A composed document writes format version **1.1** instead of 1.0 and adds a
+`requirements.plist` member beside `meta.plist`. The record is a small plist:
+
+```xml
+{
+  "format" => 1,
+  "requiredCapabilities" => ["query-composition"]
+}
+```
+
+A reader checks every required capability against the build before opening the store;
+an unknown capability, a missing record, or a malformed record produces an actionable
+"upgrade MAD Designer" error rather than misreading the document. An ordinary report
+stays **1.0** with no requirements member — the record is an addition, so the rest of
+the container is unchanged. The version constants are
+`MADFileFormatMajorVersion`, `MADFileFormatMinorVersion`, and
+`MADFileFormatCompositionMinorVersion` in `MAD/Source/MADConstants.m`; the archive
+writes and checks the record in `MADArchiveManager.m`.

@@ -55,3 +55,24 @@ meta.plist
 ```
 
 版本在写入时是 double（`MADocument.m:611`），在示例中读回时是整数。使用方应当同时接受两者。
+
+### `1.1` 组合文件头
+
+组合文档写入格式版本 **1.1** 而不是 1.0，并在 `meta.plist` 旁增加一个
+`requirements.plist` 成员。该记录是一个小型 plist：
+
+```xml
+{
+  "format" => 1,
+  "requiredCapabilities" => ["query-composition"]
+}
+```
+
+读取器在打开存储之前，会把每项必需能力与当前构建进行比对；
+未知能力、缺失记录或格式错误的记录会产生可操作的
+“升级 MAD Designer”错误，而不是误读文档。普通报表
+仍为 **1.0**，没有 requirements 成员——该记录是一项新增内容，因此
+容器的其余部分不变。版本常量是 `MAD/Source/MADConstants.m` 中的
+`MADFileFormatMajorVersion`、`MADFileFormatMinorVersion` 和
+`MADFileFormatCompositionMinorVersion`；归档
+在 `MADArchiveManager.m` 中写入并检查该记录。

@@ -46,6 +46,7 @@ que un checkpoint integraría en el archivo principal.
 | Miembro | Obligatorio | Contenido |
 |---|---|---|
 | `meta.plist` | sí | `generator`, `version` |
+| `requirements.plist` | para documentos compuestos | `format`, `requiredCapabilities` (p. ej., `query-composition`) |
 | `StoreContent/<name>` | sí | la definición del documento |
 | `StoreContent/<name>-wal` / `-shm` | no | presentes solo cuando no hay checkpoint (bit 0 de los flags de la cabecera = 0) |
 | `AdditionalContent/` | no | `thumbnail@2x.png` |
@@ -54,7 +55,11 @@ que un checkpoint integraría en el archivo principal.
 
 - **v0** — lo que se distribuye hoy: sin bytes mágicos, posiblemente un WAL, `version` 1. Los lectores deben
   aceptarlo indefinidamente; ambos documentos de muestra son v0.
-- **v1** — cabecera mágica, almacén con checkpoint, `version` 1, nuevos miembros como arriba.
+- **v1.0** — cabecera mágica, almacén con checkpoint, `version` 1, nuevos miembros como arriba.
+  Un informe normal se escribe en 1.0.
+- **v1.1** — un documento compuesto: la misma cabecera y miembros que v1.0, versión menor
+  1, más `requirements.plist`. Un lector que solo conoce 1.0 rechaza un documento 1.1
+  con un error de actualización en lugar de abrir un almacén cuyo esquema no puede leer.
 
 Un escritor emite v1 y, por lo demás, `meta.plist` sin cambios. Un lector detecta v0 por
 la ausencia de los bytes mágicos.

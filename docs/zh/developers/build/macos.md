@@ -281,7 +281,7 @@ Silicon Mac 以及运行 Monterey 或更新版本的 Intel Mac）。**否决 Mac
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
 
-原生 macOS 应用的公开用户与开发者文档发布在 [`docs/macos.md`](../../macos.md)（截图位于 `docs/assets/macos-native-mad-query.png` 和 `docs/assets/macos-native-mad-designer.png`）以及 [`Mac/README.md`](../../../../Mac/README.md)。
+原生 macOS 应用的公开用户与开发者文档发布在 [`docs/macos.md`](../../macos.md)（截图位于 `docs/assets/macos-native-mad-query.png` 和 `docs/assets/macos-native-mad-designer.png`）以及 [`Mac/README.md`](https://github.com/mthomason/MAD/blob/master/Mac/README.md)。
 
 ### 持续集成（已完成）
 

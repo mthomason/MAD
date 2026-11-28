@@ -14,10 +14,10 @@ sem depender do Core Data ou de qualquer framework da Apple.
 O formato é relevante porque um relatório é *pequeno* — os exemplos distribuídos têm
 menos de 80 KB — e porque a engine que o executa cabe tanto em um celular quanto em um
 contêiner: a mesma definição roda no iOS, no macOS e no build headless para Linux.
-Para onde o formato está caminhando — a tabela de resultados de um relatório tornando-se uma fonte
-de dados para outros relatórios, permitindo que um único documento abranja múltiplos bancos de dados — está descrito em
-[`vision.md`](vision.md). A especificação também é publicada como site em
-<https://docs.everydayapps.com>.
+A tabela de resultados de um relatório agora pode ser uma fonte de dados para outros relatórios,
+de modo que um único documento abranja vários bancos de dados: [Relatórios de Composição](composition.md)
+descreve o modelo, e [`vision.md`](vision.md) registra a direção mais ampla.
+A especificação também é publicada como site em <https://docs.everydayapps.com>.
 
 Tudo na primeira metade foi medido na prática, não inferido. Os dois exemplos são
 `../../MADDesigner/Resources/Assets/Samples.xcassets/Reports/Music.dataset/Music.mad` e

@@ -7,10 +7,11 @@ lang: pt-BR
 
 # A Direção: De Relatórios a Dados Componíveis
 
-Atualizado em 2026-11-22. Esta página declara a direção para a qual o MAD foi
+Atualizado em 2026-11-27. Esta página declara a direção para a qual o MAD foi
 projetado para crescer. Ela separa o que já é entregue hoje do que é proposto, e
 aponta para os registros públicos de design em vez das notas internas de
-trabalho: o [design do objeto de dados](developers/data-object.html), os
+trabalho: o [guia de composição](composition.html), o
+[design do objeto de dados](developers/data-object.html), os
 [relatórios multifonte](developers/multi-source.html) e a
 [especificação do formato](README.html).
 
@@ -34,6 +35,11 @@ A engine já tem as peças de que uma direção mais ampla precisa:
   retornando um esquema e linhas como uma tabela.
 * Materialização local em SQLite (`MADDataTableFast`) que torna agrupamentos,
   agregações e renderização repetida viáveis em um celular.
+* **Composição** no mesmo documento: um documento `.mad` pode conter um grafo de
+  relatórios — um **Resultado** mais suas **fontes** — em que cada nó mantém sua
+  própria consulta, conexão, layout e tabela materializada. O documento
+  declara a capacidade `query-composition`, e o MAD Designer para macOS
+  e Windows cria e visualiza cada relatório do grafo.
 * Aplicativos nativos para iOS e macOS, um aplicativo nativo para Windows e a
   mesma engine rodando de forma headless no Linux e no Windows por meio do
   `mad serve` e da CLI `mad`.
@@ -45,35 +51,38 @@ tabular. A engine já trata os dois de forma idêntica.
 
 ## Para onde está indo
 
-As direções abaixo são propostas. Elas se baseiam na arquitetura acima, mas
-nenhuma delas é entregue hoje, a menos que esta página diga que sim.
+As direções abaixo se baseiam na arquitetura acima. Algumas já são entregues
+hoje — a composição no mesmo documento está no MAD Designer para macOS e Windows
+0.8 — e as seções indicam quais partes estão construídas e quais continuam propostas.
 
 ### Objetos de dados componíveis
 
 Em um banco de dados, você seleciona de tabelas base como `employee` ou
 `sales_data`. Um relatório conecta várias tabelas entre si, e sua saída é uma
-tabela SQLite ad hoc e materializada. Hoje nada consegue apontar uma consulta
-para a saída de outro relatório: o cache de resultados existe, mas é indexado
-por um hash de nome de arquivo em vez de uma identidade endereçável.
+tabela SQLite ad hoc e materializada. **Dentro de um único documento, a composição agora faz
+exatamente isso:** o Resultado consulta as tabelas materializadas de suas fontes, e toda
+fonte é endereçada como uma tabela que outro relatório une. Uma fonte é um relatório completo
+— consulta, layout e linhas —, não uma tabela despida. Consulte o
+[guia de composição](composition.html).
 
-Dar a essa saída uma identidade estável tornaria o resultado de um relatório
-uma tabela da qual outros relatórios podem selecionar e com a qual podem fazer
-join. Um relatório construído sobre um relatório torna-se um grafo acíclico
-direcionado de tabelas derivadas — uma camada semântica portável na qual
-projetar um relatório também é projetar uma fonte de dados reutilizável. O
-[design do objeto de dados](developers/data-object.html) descreve o modelo e o
-que é preciso para formalizá-lo.
+O que não está construído é uma **identidade estável compartilhada entre documentos**, para que um
+relatório em um `.mad` possa apontar para um relatório em outro. O cache de resultados é
+indexado por um hash de nome de arquivo em vez de uma identidade endereçável, e
+a composição entre documentos fica adiada. Dar à saída essa identidade
+estenderia o grafo dentro do documento a uma camada semântica portável entre arquivos. O
+[design do objeto de dados](developers/data-object.html) descreve o modelo e o que é
+preciso para formalizá-lo.
 
 ### Materialização local multifonte
 
 Cada driver materializa seu conjunto de resultados na mesma representação local
-de tabela SQLite. Quando um documento puder conter várias definições de
-consulta e endereçar cada saída como uma tabela, um único relatório poderá
-fazer join de uma tabela do PostgreSQL com uma tabela do SQL Server e com uma
-tabela do MySQL — combinadas localmente no SQLite sem um servidor de federação
-no meio do caminho. Cada fonte entende seus próprios dados; o MAD entende as
-tabelas resultantes. O [design multifonte](developers/multi-source.html) registra
-a arquitetura e as fases, nem todas construídas.
+de tabela SQLite. **Isto é entregue hoje dentro de um documento:** um Relatório de Composição
+pode unir uma tabela do PostgreSQL a uma tabela do SQL Server e a uma tabela do MySQL — combinadas
+localmente no SQLite sem um servidor de federação no meio do caminho. Cada fonte
+entende seus próprios dados; o MAD entende as tabelas resultantes. O
+[design multifonte](developers/multi-source.html) registra a arquitetura;
+a composição no mesmo documento está construída, enquanto a federação entre documentos permanece
+adiante.
 
 ### Uso embarcado e headless
 
@@ -204,10 +213,10 @@ dependências de plataforma desnecessárias.
 
 ## O que isto não é
 
-Uma promessa, um roadmap com datas ou uma afirmação de que as propostas acima
-são entregues. Esta página registra uma direção. Cada capacidade ainda precisa
-ser projetada, testada e documentada como todo o restante do repositório, e
-algumas dessas direções podem mudar à medida que forem construídas.
+Uma promessa, um roadmap com datas ou uma afirmação de que toda proposta acima é entregue.
+Esta página registra uma direção. A composição no mesmo documento está construída hoje; as
+outras direções ainda precisam ser projetadas, testadas e documentadas como
+todo o restante do repositório, e algumas podem mudar à medida que forem construídas.
 
 ## O princípio norteador
 

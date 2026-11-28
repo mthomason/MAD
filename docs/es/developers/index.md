@@ -18,6 +18,8 @@ integrarlo, controlarlo desde un script, añadir un origen de datos o compilarlo
   contenedor, el almacén y el objetivo normativo `v1`.
 * [MAD Designer para macOS](../macos.html) — la aplicación nativa de `AppKit`.
 * [MAD Designer para Windows](../windows.html) — la aplicación nativa de WPF.
+* [Informes de composición](../composition.html) — combina informes en un solo documento;
+  cada origen conserva su propia consulta, diseño y datos.
 * [Visión](../vision.html) — los informes como orígenes de datos componibles.
 
 ## Motor y CLI
@@ -25,9 +27,9 @@ integrarlo, controlarlo desde un script, añadir un origen de datos o compilarlo
 * [La herramienta de línea de comandos `mad`](cli.html) — abrir, inspeccionar, consultar, actualizar y
   exportar un documento sin interfaz de usuario.
 * [El objeto de datos](data-object.html) — la definición, el esquema y el
-  conjunto de resultados de un informe como un solo contrato.
+  conjunto de resultados de un informe como un solo contrato, y cómo la composición lo hace realidad.
 * [Informes multi-origen](multi-source.html) — los informes como tablas, y los controladores
-  para cualquier cosa que devuelva una tabla.
+  para cualquier cosa que devuelva una tabla; la composición dentro del mismo documento está construida.
 * [Pegar SQL en el diseñador de consultas](sql-entry.html) — el subconjunto admitido,
   el analizador y la ruta de aplicación.
 

@@ -14,13 +14,15 @@ MAD 是一个嵌入式关系型报表引擎：一份可移植的 `.mad` 文档�
 * [`.mad` 格式规范](../README.html)——文档是什么、容器、存储，以及规范性的 `v1` 目标。
 * [适用于 macOS 的 MAD Designer](../macos.html)——原生 `AppKit` 应用。
 * [适用于 Windows 的 MAD Designer](../windows.html)——原生 WPF 应用。
+* [组合报表](../composition.html)——把多份报表合并到一个文档；
+  每个源保留自己的查询、布局和数据。
 * [愿景](../vision.html)——将报表作为可组合的数据源。
 
 ## 引擎与 CLI
 
 * [`mad` 命令行工具](cli.html)——无需界面即可打开、检查、查询、刷新和导出一份文档。
-* [数据对象](data-object.html)——把报表的定义、架构和结果集作为同一个契约。
-* [多源报表](multi-source.html)——把报表当作表，以及为任何返回表的来源提供驱动。
+* [数据对象](data-object.html)——把报表的定义、架构和结果集作为同一个契约，以及组合如何实现它。
+* [多源报表](multi-source.html)——把报表当作表，以及为任何返回表的来源提供驱动；同一文档内的组合已经构建。
 * [将 SQL 粘贴到查询设计器](sql-entry.html)——支持的子集、解析器和应用路径。
 
 ## 架构

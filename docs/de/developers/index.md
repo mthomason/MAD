@@ -14,13 +14,15 @@ MAD ist eine eingebettete Engine für relationales Reporting: ein portables `.ma
 * [Die `.mad`-Formatspezifikation](../README.html) — was ein Dokument ist, der Container, der Speicher und das normative Ziel `v1`.
 * [MAD Designer für macOS](../macos.html) — die native `AppKit`-Anwendung.
 * [MAD Designer für Windows](../windows.html) — die native WPF-Anwendung.
+* [Kompositionsberichte](../composition.html) — kombinieren Sie Berichte in einem Dokument;
+  jede Quelle behält ihre eigene Abfrage, ihr Layout und ihre Daten.
 * [Vision](../vision.html) — Berichte als kombinierbare Datenquellen.
 
 ## Engine und CLI
 
 * [Das Kommandozeilenwerkzeug `mad`](cli.html) — ein Dokument ohne UI öffnen, inspizieren, abfragen, aktualisieren und exportieren.
-* [Das Datenobjekt](data-object.html) — Definition, Schema und Ergebnismenge eines Berichts als ein Vertrag.
-* [Berichte mit mehreren Quellen](multi-source.html) — Berichte als Tabellen und Treiber für alles, was eine Tabelle zurückgibt.
+* [Das Datenobjekt](data-object.html) — Definition, Schema und Ergebnismenge eines Berichts als ein Vertrag, und wie die Komposition ihn verwirklicht.
+* [Berichte mit mehreren Quellen](multi-source.html) — Berichte als Tabellen und Treiber für alles, was eine Tabelle zurückgibt; die Komposition im selben Dokument ist gebaut.
 * [SQL in den Abfragedesigner einfügen](sql-entry.html) — die unterstützte Teilmenge, der Parser und der Apply-Pfad.
 
 ## Architektur

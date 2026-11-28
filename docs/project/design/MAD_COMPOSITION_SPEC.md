@@ -51,10 +51,10 @@ embedded in the `.mad` (unchanged from a Standard Report).
 5. The UI presents the graph as a set of reports. Selecting a node selects its query, its
    layout, and its rows in **every** workspace — Query, Designer, and Viewer.
 
-The engine, store, import, and serve work is scoped in
-[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md). Until it lands, the Windows
-Designer and Viewer temporarily show the Result and display a notice saying so; that is an
-interim state, **not** the contract.
+The engine, store, import, and serve work is recorded in
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md) and has landed: MAD Designer
+for macOS and Windows select a node's query, layout, and rows in **every** workspace, and a
+layout-less source is shown as a row grid. The iOS app does not author compositions yet.
 
 ## 1. What a composite report is
 
@@ -150,9 +150,8 @@ A composing node's groupings apply to its own output, not to its children's.
 - Same-document composition only: every node's definition and layout lives in the one `.mad`
   file — a child is *contained* (embedded) in the composite, never referenced by an external
   path. Combining two reports means their definitions **and layouts** are brought into the
-  composite's `.mad`. A reference to a node in a *different* file is out of scope and deferred.
-  (The layout requirement is the §0 decision; it is not implemented yet, but it is part of the
-  target contract.)
+  composite's `.mad`, and that layout requirement is implemented (§0). A reference to a node
+  in a *different* file is out of scope and deferred.
 - `SQLITE_MAX_ATTACHED` is 10 on the engine build; a node with more than ten direct children
   is a design-time error in this milestone.
 
@@ -173,20 +172,18 @@ An implementation is correct only if all of these hold:
 
 ## 8. Current implementation vs. this contract
 
-The engine today implements the **N=3 special case** end to end: two leaves refresh, then a
-composer string-generates a single left-outer join over the two attached tables. The root is
-**not yet** compiled as a general query, and the walk is hardcoded to two leaves. The store
-model already records N tables and N links (store revision 3); the two-input limitation is in
-the executor (`MADComposer`, `MADOperationRefreshComposed`) and the authoring UI only.
+The engine implements the general walk of §3: every node refreshes in topological order
+(children before parents, root last), and a composing node is compiled as an ordinary query
+over its attached children, not the earlier two-input special case. The store records the
+graph (revision 3) and per-node layouts (revision 4).
 
-The remaining work is to replace the two-input special case with the general walk of §3 and
-make the composing root a compiled query over N attached children.
-[`MAD_COMPOSITION_ENGINE.md`](MAD_COMPOSITION_ENGINE.md) scopes that engine change;
-`MAD_QUERY_COMPOSITION.md` tracks the plan and its progress.
+The **node-as-report** decision in §0 is also implemented: every query can own its layout
+sections, `importQueryGraphFromContext:` carries a source's layout, `layout-model` and its
+mutations are query-scoped, and refresh, export, and the Viewer read the selected node (the
+Result by default). MAD Designer for macOS and Windows expose that selection in all three
+workspaces; the iOS app does not author compositions yet. The §3 execution walk is unchanged
+by the node UI: every node materializes its own table.
 
-The **node-as-report** decision in §0 is also not implemented. The store still has one
-document-level layout; `importQueryGraphFromContext:` drops a source's layout; `layout-model`
-and its mutations resolve the root; and `refresh`/`export` read only the root. That work —
-store revision, import, query-scoped layout and result reads, and the Windows/macOS surfaces —
-is scoped in [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md). The §3 execution
-walk is unchanged by it: every node already materializes its own table.
+[`MAD_COMPOSITION_ENGINE.md`](MAD_COMPOSITION_ENGINE.md) and
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md) record the implementation
+scope; `MAD_QUERY_COMPOSITION.md` tracks the plan and its checkpoints.

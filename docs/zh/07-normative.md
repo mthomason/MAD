@@ -34,6 +34,7 @@ offset 16 ...       bzip2 stream
 | 成员 | 必需 | 内容 |
 |---|---|---|
 | `meta.plist` | 是 | `generator`、`version` |
+| `requirements.plist` | 组合文档必需 | `format`、`requiredCapabilities`（例如 `query-composition`） |
 | `StoreContent/<name>` | 是 | 文档定义 |
 | `StoreContent/<name>-wal` / `-shm` | 否 | 仅当未执行检查点时存在（文件头标志位 0 = 0） |
 | `AdditionalContent/` | 否 | `thumbnail@2x.png` |
@@ -41,6 +42,7 @@ offset 16 ...       bzip2 stream
 ### 7.4 兼容性
 
 - **v0**——当前发布的格式：没有魔数，可能有 WAL，`version` 为 1。读取器必须无限期接受它；两份示例文档都是 v0。
-- **v1**——魔数文件头、经过检查点的存储、`version` 为 1，以及上述新成员。
+- **v1.0**——魔数文件头、经过检查点的存储、`version` 为 1，以及上述新成员。普通报表以 1.0 写入。
+- **v1.1**——组合文档：与 v1.0 相同的文件头和成员，次要版本号为 1，外加 `requirements.plist`。只认识 1.0 的读取器会以升级错误拒绝 1.1 文档，而不是打开一个其架构无法读取的存储。
 
 写入器输出 v1，除此之外 `meta.plist` 保持不变。读取器通过魔数缺失来检测 v0。

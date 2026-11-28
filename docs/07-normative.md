@@ -45,6 +45,7 @@ that a checkpoint would fold into the main file.
 | Member | Required | Contents |
 |---|---|---|
 | `meta.plist` | yes | `generator`, `version` |
+| `requirements.plist` | for composed documents | `format`, `requiredCapabilities` (e.g. `query-composition`) |
 | `StoreContent/<name>` | yes | the document definition |
 | `StoreContent/<name>-wal` / `-shm` | no | present only when not checkpointed (header flag bit 0 = 0) |
 | `AdditionalContent/` | no | `thumbnail@2x.png` |
@@ -53,7 +54,11 @@ that a checkpoint would fold into the main file.
 
 - **v0** -- what ships today: no magic, possibly a WAL, `version` 1. Readers must
   accept it indefinitely; both sample documents are v0.
-- **v1** -- magic header, checkpointed store, `version` 1, new members as above.
+- **v1.0** -- magic header, checkpointed store, `version` 1, new members as above.
+  An ordinary report is written at 1.0.
+- **v1.1** -- a composed document: the same header and members as v1.0, minor version
+  1, plus `requirements.plist`. A reader that knows only 1.0 refuses a 1.1 document
+  with an upgrade error instead of opening a store whose schema it cannot read.
 
 A writer emits v1 and `meta.plist` unchanged otherwise. A reader detects v0 by the
 absence of the magic.

@@ -7,7 +7,7 @@ lang: pt-BR
 
 # Relatórios Multifonte — relatórios como tabelas, e drivers para qualquer coisa
 
-Esta página descreve relatórios componíveis: o resultado de um relatório se torna uma tabela que outro relatório pode consultar, e um driver pode ficar à frente de qualquer coisa que retorne linhas. É um registro de design; a §8 nomeia as fases, e não todas estão construídas.
+Esta página descreve relatórios componíveis: o resultado de um relatório se torna uma tabela que outro relatório pode consultar, e um driver pode ficar à frente de qualquer coisa que retorne linhas. É um registro de design; a §8 nomeia as fases. **A composição no mesmo documento (Fase 3) está construída**; as fases restantes não estão.
 
 **Escopo:** a arquitetura que o usuário descreveu em 2026-11-22: um usuário projeta um relatório
 contra uma fonte de dados (MySQL, SQL Server, PostgreSQL, SQLite ou uma API Web como a API Seller
@@ -19,10 +19,11 @@ executa a consulta compositora sobre as materializações. A costura de driver n
 disto: um driver que fica à frente de uma API recebe uma consulta estruturada, não texto SQL, e retorna
 linhas em forma de tabela.
 **Data:** 2026-11-22, lido em `eba4225a1`; decisões incorporadas em 2026-11-22 (§9.2).
-**Status:** relatório de design. Ele declara a ideia e o design; não implementa
-nada e não adiciona trabalho a `TASKS.md`. A auditoria de código que fundamenta a
+**Status:** relatório de design, parcialmente realizado. A composição no mesmo documento é entregue no MAD
+Designer para macOS e Windows 0.8; a composição entre documentos e o driver genérico de API
+permanecem designs. A auditoria de código que fundamenta a
 metade do objeto de dados é [`MAD_DATA_OBJECT.md`](data-object.md); a direção é
-[`docs/vision.md`](../vision.md). Este documento adiciona o modelo de composição multifonte
+[`docs/vision.md`](../vision.md); o guia público é [Relatórios de Composição](../composition.html). Este documento adiciona o modelo de composição multifonte
 (sub-relatórios dentro do documento primeiro), a API de driver que torna as fontes não SQL de primeira classe
 e uma ordem de fases combinada.
 
@@ -30,11 +31,10 @@ e uma ordem de fases combinada.
 
 > **Modelo normativo:** o contrato de execução que esta página motiva está agora declarado de
 > forma normativa e em um só lugar em
-> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html). Onde esta página
+> [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md). Onde esta página
 > (ou `data-object.md`) divergir dele, a especificação prevalece. A §0 da especificação é
 > **final**: cada nó de uma composição é um relatório completo com seu próprio layout e dados,
-> e a raiz é o relatório padrão do documento, não o único visível. A frase da §3.2 passo 5 que
-> menciona apenas a raiz fica substituída.
+> e a raiz é o relatório padrão do documento, não o único visível.
 
 ## 1. A ideia, em uma página
 
@@ -145,7 +145,8 @@ Mais dois fatos importam para o design de composição:
    materialização.
 3. Anexe ou abra as materializações necessárias ao objeto compositor.
 4. Execute a consulta compositora contra o banco de dados SQLite local e materialize seu resultado.
-5. Repita subindo o grafo. A raiz é um relatório comum; seu cache é o que o visualizador lê.
+5. Repita subindo o grafo. A raiz é um relatório comum; o visualizador lê o cache do relatório
+   selecionado — a raiz por padrão, qualquer fonte quando o usuário a seleciona.
 
 A paginação não muda. A engine ainda puxa o resultado completo para o cache local; a interface
 pagina sobre o cache. Para um driver de API, "paginação" é um **laço interno** sobre as páginas
@@ -539,7 +540,7 @@ independente da composição e é a que desbloqueia as fontes não SQL.
 | 0 | **A costura do driver.** Adicione `MADQueryPlan` + tipos de valor e mova os três enums para `MADAPI`; adicione o `executeQueryPlan:` opcional; adicione capacidades; faça a atualização preferir o plano e recorrer ao SQL. Implemente o plano em um driver existente como referência e fixe a equivalência plano-SQL com testes. Sem mudança de comportamento. | — |
 | 1 | **O contrato do objeto de dados.** Separe a construção da lista SELECT da execução; adicione descrever/executar; retorne o esquema de resultado como `MADDataColumn`s; faça a atualização chamar o contrato. Esta é a Fase 1 de `MAD_DATA_OBJECT.md`. | 0 (sobrepõe-se) |
 | 2 | **A consulta é dona de si.** `MADQueryFull` usa a consulta que lhe foi dada; `dataTableForQuery:` resolve por consulta; `MADQueryActiveQueryFields` limita-se a uma consulta; `MADModelDocument` espelha qualquer consulta. | 1 |
-| 3 | **Composição no mesmo documento.** Uma tabela de consulta pode referenciar outro objeto de dados (sub-relatório); atualização topológica; suporte a `ATTACH` em `MADDatabaseSqlite3`; a consulta compositora executa contra o cache local. Este é o modelo de um arquivo portátil do usuário. | 1, 2 |
+| 3 | **Composição no mesmo documento — entregue na 0.8.** Uma tabela de consulta pode referenciar outro objeto de dados (sub-relatório); atualização topológica; suporte a `ATTACH` em `MADDatabaseSqlite3`; a consulta compositora executa contra o cache local. Este é o modelo de um arquivo portátil do usuário. | 1, 2 |
 | 4 | **Composição entre documentos (adiada).** Uma referência a um relatório em outro `.mad`; identidade de documento e resolução de caminho; ativo vs fixado; coordenação de arquivos; política de credenciais; tratamento de ausente/renomeado. Prioridade menor: a composição no mesmo documento satisfaz o modelo do usuário. | 3 |
 | 5 | **O driver genérico de API.** Um driver HTTP/JSON conduzido por manifesto; esquema a partir do manifesto; mapeamento plano-requisição; laço de paginação; mapeamento de tipos; o campo `options` extensível da credencial; eBay Seller como exemplo trabalhado. | 0, 1 (e 3 para junções) |
 | 6 | **Superfícies e documentação.** Listas de drivers e regras de junção conduzidas por registro; interface de atualização por nó; verbos da CLI; o tutorial de autoria de drivers atualizado com a costura de plano/capacidades. | 0–5 |
@@ -550,7 +551,7 @@ deve apenas evitar o acoplamento a uma lista fixa de drivers para que o carregam
 
 A Fase 0 é a parte "não muito distante": são novos tipos de valor, um método opcional, um ramo na
 atualização e testes. Ela não exige que o armazenamento, a interface ou o modelo de composição
-mudem. A Fase 3 é onde o modelo `ATTACH` do usuário chega, e é menor do que parece
+mudem. A Fase 3 é onde o modelo `ATTACH` do usuário chegou, e foi menor do que parece
 porque o SQLite já é um driver e o compilador já ordena um grafo.
 
 ## 9. Decisões

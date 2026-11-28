@@ -95,6 +95,34 @@ O workspace **MAD Viewer** (`MADMacViewerViewController`) atualiza a consulta co
 
 ---
 
+## Relatórios de Composição
+
+Um **Relatório de Composição** combina vários relatórios em um único documento `.mad`. É a
+maneira desktop de unir dados de bancos de dados diferentes — MySQL, PostgreSQL, SQL Server e
+SQLite — sem um servidor de federação. Consulte [o guia de composição](../composition.html) para
+o conceito e os exemplos entre bancos de dados.
+
+* **Seletor Report da barra de ferramentas:** um Relatório de Composição adiciona um popup **Report** ao lado do
+  tipo de documento. Ele lista o **Resultado** primeiro (*Resultado — <nome>*) e depois cada fonte.
+  Selecionar um relatório alterna os workspaces MAD Query, MAD Designer e MAD Viewer juntos; ele
+  nunca muda o workspace ativo.
+* **Toda fonte é um relatório:** selecionar uma fonte mostra sua própria consulta no MAD Query, suas
+  próprias bandas e lista de campos no MAD Designer, e suas próprias páginas no MAD Viewer. Uma fonte
+  que ainda não tem layout continua sendo um relatório de linhas: o Viewer mostra uma grade de linhas, e o
+  Designer oferece criar seu layout.
+* **Credenciais por fonte:** uma composição pede uma senha por fonte ao atualizar,
+  com driver, host, porta, banco de dados e nome de usuário já preenchidos. As senhas ficam no
+  Keychain ou na sessão atual e nunca são gravadas no `.mad`.
+
+
+**Criando uma composição:** **File ▸ New Composition…** escolhe relatórios existentes e um
+destino; **File ▸ New Document…** oferece os tipos Standard e Composition Report; **File
+▸ Convert to Composition…** converte o relatório padrão aberto em uma composição
+de uma única fonte. O menu Add do workspace MAD Query também adiciona uma consulta de origem a partir de uma
+conexão de banco de dados ou importa um relatório existente para a composição aberta.
+
+---
+
 ## Abrindo e Criando Documentos
 
 * **Inicialização e Painel de Abertura (`MADMacDocumentController`):** Iniciar o aplicativo sem abrir um arquivo exibe o painel **Open Report** do macOS filtrado para documentos `.mad` (`com.everydayapps.productivity.mad` e `com.thomason.report.mad`), com um botão principal **New Document** na barra inferior esquerda. Dar um duplo clique em qualquer arquivo `.mad` no Finder abre-o diretamente em sua janela de workspace.

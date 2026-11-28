@@ -7,7 +7,7 @@ lang: es-419
 
 # Informes multi-origen — informes como tablas, y controladores para cualquier cosa
 
-Esta página describe los informes componibles: el resultado de un informe se convierte en una tabla que otro informe puede consultar, y un controlador puede poner al frente cualquier cosa que devuelva filas. Es un registro de diseño; §8 nombra las fases, y no todas están construidas.
+Esta página describe los informes componibles: el resultado de un informe se convierte en una tabla que otro informe puede consultar, y un controlador puede poner al frente cualquier cosa que devuelva filas. Es un registro de diseño; §8 nombra las fases. **La composición dentro del mismo documento (fase 3) está construida**; las fases restantes no lo están.
 
 **Alcance:** la arquitectura que el usuario describió el 2026-11-22: un usuario diseña un informe
 contra un origen de datos (MySQL, SQL Server, PostgreSQL, SQLite, o una API web como la
@@ -19,22 +19,22 @@ ejecuta la consulta compuesta sobre las materializaciones. La costura del contro
 esto: un controlador que pone al frente una API recibe una consulta estructurada, no texto SQL, y devuelve
 filas en forma de tabla.
 **Fecha:** 2026-11-22, leído en `eba4225a1`; decisiones incorporadas el 2026-11-22 (§9.2).
-**Estado:** informe de diseño. Enuncia la idea y el diseño; no implementa
-nada y no añade trabajo a `TASKS.md`. La auditoría del código que fundamenta la
+**Estado:** informe de diseño, parcialmente realizado. La composición dentro del mismo documento se distribuyó en MAD
+Designer para macOS y Windows 0.8; la composición entre documentos y el controlador de API genérico
+siguen siendo diseños. La auditoría del código que fundamenta la
 mitad de objeto de datos es [`MAD_DATA_OBJECT.md`](data-object.md); la dirección es
-[`docs/vision.md`](../vision.md). Este documento añade el modelo de composición multi-origen
-(primero subinformes dentro del mismo documento), la API de controladores que hace de primera clase a los orígenes no-SQL,
-y un orden de fases combinado.
+[`docs/vision.md`](../vision.md); la guía pública es [Informes de composición](../composition.html). Este documento añade el
+modelo de composición multi-origen (primero subinformes dentro del mismo documento), la API de controladores que hace
+de primera clase a los orígenes no-SQL, y un orden de fases combinado.
 
 ---
 
 > **Modelo normativo:** el contrato de ejecución que motiva esta página se expresa ahora de
 > forma normativa y en un solo lugar en
-> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html). Donde esta página
+> [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md). Donde esta página
 > (o `data-object.md`) difiera de él, prevalece la especificación. La §0 de la especificación es
 > **definitiva**: cada nodo de una composición es un informe completo con su propio diseño y
-> datos, y la raíz es el informe predeterminado del documento, no el único visible. La frase de
-> §3.2 paso 5 que solo menciona la raíz queda sustituida.
+> datos, y la raíz es el informe predeterminado del documento, no el único visible.
 
 ## 1. La idea, en una página
 
@@ -145,7 +145,8 @@ Dos hechos más importan para el diseño de composición:
    materialización.
 3. Adjunta o abre las materializaciones que necesita el objeto compuesto.
 4. Ejecuta la consulta compuesta contra la base de datos SQLite local y materializa su resultado.
-5. Repite hacia arriba en el grafo. La raíz es un informe ordinario; su caché es lo que lee el visor.
+5. Repite hacia arriba en el grafo. La raíz es un informe ordinario; el visor lee la caché del informe
+   seleccionado —la raíz de forma predeterminada, cualquier origen cuando el usuario lo selecciona.
 
 La paginación no cambia. El motor sigue extrayendo el resultado completo en la caché local; la interfaz
 pagina sobre la caché. Para un controlador de API, la "paginación" es un **bucle interno** sobre las
@@ -539,7 +540,7 @@ independiente de la composición y es la que desbloquea los orígenes no-SQL.
 | 0 | **La costura de controladores.** Añade `MADQueryPlan` + tipos de valor y mueve los tres enums a `MADAPI`; añade `executeQueryPlan:` opcional; añade capacidades; haz que la actualización prefiera el plan y recurra a SQL. Implementa el plan en un controlador existente como referencia y fija la equivalencia plan-a-SQL con pruebas. Sin cambio de comportamiento. | — |
 | 1 | **El contrato de objeto de datos.** Separa la construcción de la lista SELECT de la ejecución; añade describe/execute; devuelve el esquema de resultado como `MADDataColumn`s; haz que la actualización llame al contrato. Esta es la fase 1 de `MAD_DATA_OBJECT.md`. | 0 (se solapa) |
 | 2 | **La consulta se posee a sí misma.** `MADQueryFull` usa la consulta que se le dio; `dataTableForQuery:` resuelve por consulta; `MADQueryActiveQueryFields` se limita a una consulta; `MADModelDocument` refleja cualquier consulta. | 1 |
-| 3 | **Composición dentro del mismo documento.** Una tabla de consulta puede referenciar otro objeto de datos (subinforme); actualización topológica; soporte de `ATTACH` en `MADDatabaseSqlite3`; la consulta compuesta se ejecuta contra la caché local. Este es el modelo de un solo archivo portable del usuario. | 1, 2 |
+| 3 | **Composición dentro del mismo documento: distribuida en 0.8.** Una tabla de consulta puede referenciar otro objeto de datos (subinforme); actualización topológica; soporte de `ATTACH` en `MADDatabaseSqlite3`; la consulta compuesta se ejecuta contra la caché local. Este es el modelo de un solo archivo portable del usuario. | 1, 2 |
 | 4 | **Composición entre documentos (diferida).** Una referencia a otro informe `.mad`; identidad de documento y resolución de rutas; vivo vs fijado; coordinación de archivos; política de credenciales; manejo de faltantes/renombrados. Menor prioridad: la composición dentro del mismo documento satisface el modelo del usuario. | 3 |
 | 5 | **El controlador de API genérico.** Un controlador HTTP/JSON impulsado por manifiesto; esquema desde el manifiesto; asignación plan-a-petición; bucle de paginación; mapeo de tipos; el campo `options` de credencial extensible; eBay Seller como ejemplo desarrollado. | 0, 1 (y 3 para uniones) |
 | 6 | **Superficies y documentación.** Listas de controladores y reglas de unión impulsadas por el registro; interfaz de actualización por nodo; verbos de CLI; el tutorial de autoría de controladores actualizado con la costura de plan/capacidades. | 0–5 |
@@ -550,7 +551,7 @@ debería simplemente evitar el acoplamiento a una lista fija de controladores pa
 
 La fase 0 es la parte "no muy lejana": son tipos de valor nuevos, un método opcional, una rama en
 la actualización, y pruebas. No requiere que cambien el almacén, la interfaz ni el modelo de composición.
-La fase 3 es donde aterriza el modelo `ATTACH` del usuario, y es más pequeña de lo que suena
+La fase 3 es donde aterrizó el modelo `ATTACH` del usuario, y fue más pequeña de lo que suena
 porque SQLite ya es un controlador y el compilador ya ordena un grafo.
 
 ## 9. Decisiones

@@ -10,15 +10,19 @@ This page defines the data object: a report's definition, its schema, and its re
 
 **Scope:** the concept raised 2026-10-16 — what a data object is, how it is represented in
 this codebase, and what formalizing it takes. The multi-source / subreport rig-up described
-in the same conversation is written down here as a consequence of the contract, deliberately
-not built.
-**Date:** 2026-10-16, read at `445794e11`.
-**Status:** design document. It proposes; it implements nothing, and nothing here is
-scheduled. [the project vision](../vision.html) §1 — "a report is a function from data sources to a table" — is
-the vision this file makes concrete and names the code for.
+in the same conversation is written down here as a consequence of the contract; its
+same-document half is now built.
+**Date:** 2026-10-16, read at `445794e11`; status updated 2026-11-27.
+**Status:** design record, partially realized. Same-document composition ships in MAD
+Designer for macOS and Windows 0.8: a `.mad` document holds a graph of reports, each with
+its own query, layout, and materialized table. The analysis below is preserved as the
+record that led to it; §5 and §7 mark what is built and what remains deferred. The public
+guide is [Composition Reports](../composition.html). [the project vision](../vision.html) §1 —
+"a report is a function from data sources to a table" — is the vision this file makes
+concrete and names the code for.
 
 > §5's composition sketch (including its Layout B recommendation, §5.1/§9.2) is superseded by
-> the normative [`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html),
+> the normative [`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md),
 > which adopts Layout A (`ATTACH`, one `.maddb` per node). The spec's §0 is **final**: every
 > node in a composition is a full report with its own layout and data; the root is the
 > document's default report, not the only report. Combining reports carries each child's
@@ -308,13 +312,16 @@ Minimal shape, recommended:
 The heavier alternative — a new `RptqDataObject` entity owning the definition, with
 `RptqQuery` demoted — is cleaner naming and a bigger migration. Recorded as decision 9.1.
 
-## 5. Composition — the subreport rig, documented, not built
+## 5. Composition — the subreport rig, built same-document
 
-**Status: scheduled (2026-11-26).** This section's mechanism is now the target. The earlier
-position — documented but deliberately unscheduled (the user, 2026-10-16: *"I don't want to rig
-it up… but I want to document this idea"*) — is history. The normative decision
-([`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html) §0) makes every node
-in a composition a full report with its own layout and data.
+**Status: built same-document (2026-11-27).** This section's mechanism is what shipped: a
+composition is a graph of complete reports, materialized in order, with the composing report
+joining its children's tables locally. The earlier position — documented but deliberately
+unscheduled (the user, 2026-10-16: *"I don't want to rig it up… but I want to document this
+idea"*) — is history. The normative decision
+([`MAD_COMPOSITION_SPEC.md`](https://github.com/mthomason/MAD/blob/master/docs/project/design/MAD_COMPOSITION_SPEC.md) §0) makes every node
+in a composition a full report with its own layout and data. Cross-document composition, and
+a stable identity shared between files, remain deferred.
 
 ### 5.1 The mechanism, precisely
 
@@ -338,16 +345,24 @@ The one-line version, which is the whole reason this is a rig and not a project:
 result of every query is already a SQLite table, and SQLite is already a driver.** The
 federation engine is in the box; it is currently addressed by a filename hash.
 
-### 5.2 What would be built, if wanted
+### 5.2 What was built, and what remains
 
-1. The contract of §4 (describe/execute, identity, address) — a prerequisite, not a phase.
-2. The source kind: `RptqQueryTable` → data object; SQL generation resolves it to the
-   object's materialization table instead of `db.table`.
-3. The execution order: walk the DAG; refresh stale objects; then the composing query.
-4. The designer's telescoping (the user's word): in the Add Table panel, a second kind of
-   source beside schema tables — the document's other data objects, or a subreport box that
-   lists the other object's output fields. The join UI is unchanged; both ends are fields.
-5. `ATTACH` support in `MADDatabaseSqlite3` if and when cross-file composition is wanted.
+Shipped (same-document):
+
+1. The contract of §4 (describe/execute, identity, address).
+2. The source kind: a query table whose upstream is another query; SQL compilation resolves it
+   to the child's materialized table instead of `db.table`.
+3. The execution order: a topological walk materializes every node, the composing report last.
+4. The designer's telescoping (the user's word): an Import Report / Add Source surface beside
+   schema tables, with the composition graph and the per-node reports in all three workspaces.
+5. `ATTACH DATABASE` in the SQLite path for one materialized table per node.
+
+Deferred:
+
+* Cross-document composition — a source that lives in a *different* `.mad` file, with document
+  identity, path resolution, and credential policy.
+* A stable address shared between documents (the materialization tag is still keyed by the
+  document's filename hash).
 
 ### 5.3 What makes it not a one-liner
 
@@ -409,19 +424,19 @@ change of §3 it retires.
 | 2 | **The query owns itself.** `MADQueryFull` takes the query it was given (no document re-read); `-dataTableForQuery:` resolves per query; `MADQueryActiveQueryFields` scopes to a query; `MADModelDocument` mirrors any query. One document, many objects. | All three hardwiring points of §3.6 |
 | 3 | **Identity and address.** Name the object in the store; tag materializations by object identifier, not filename; one result table per object in the cache; schema plist per object. | Filename-hashed materialization; one-table-per-document |
 | 4 | **The bind and the surfaces.** Layout binds to a data object's schema; the CLI grows `describe`; the JSON shape is fixed once (export + API + AI). | Binding to "the document's query" |
-| 5 | **Composition** (§5), only when asked. | — |
+| 5 | **Composition** (§5): same-document, shipped in 0.8. Cross-document remains deferred. | — |
 
 Phase 1 is the design's real payload and the smallest: it needs no store change, no UI
 change, and no new format — it re-sorts code that already exists, and it is provable by the
 current suites plus a schema assertion on a zero-row query. Phases 2–4 are the same idea
-applied to the layers that hold the single-query assumption. Phase 5 is the rig, documented,
-unscheduled.
+applied to the layers that hold the single-query assumption. Phase 5 shipped as
+same-document composition; cross-document composition remains deferred.
 
 ## 8. What not to do
 
-- **Do not build the multi-source rig now.** The user's decision, 2026-10-16; this document is
-  the record, not a queue item. (`TASKS.md`/`BUGS.md` conventions apply: nothing here is
-  started on the agent's initiative.)
+- **Do not build cross-document composition now.** Same-document composition is shipped; a
+  reference to a report in another `.mad` file is still a separate, deferred piece of work.
+  (`TASKS.md`/`BUGS.md` conventions apply: nothing here is started on the agent's initiative.)
 - **Do not compress or redesign the cache.** It is load-bearing, the two-pass design needs it,
   and `MAD_FORMAT.md` §5.1 is the standing analysis.
 - **Do not build a federation engine.** Per §1 and §5, the materializations are the

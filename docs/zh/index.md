@@ -9,7 +9,7 @@ lang: zh-CN
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer 图标" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>面向关系型报表的开放格式与可嵌入引擎——在这里，每一份报表都是一个可移植的查询图、一张物化的 SQLite 表和一套参数化布局。</strong></p>
 
-MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席查询、报表和设计：面向 iOS 与原生 macOS（`AppKit`）的 **MAD Designer** 和 **MAD Viewer** 应用，在 Linux 与 Windows 上以无头方式运行它们的引擎，以及开放的 `.mad` 文档格式。一个 `.mad` 文件在不到 100 KB 的体积内保存报表的完整定义——数据库架构快照、查询图（表、连接、谓词、分组）以及各元素的带区布局——并与刷新时生成的物化 SQLite 表（`.maddb` + `.mdcache`）清晰分离。
+MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席查询、报表和设计：面向 iOS 与原生 macOS（`AppKit`）的 **MAD Designer** 和 **MAD Viewer** 应用，在 Linux 与 Windows 上以无头方式运行它们的引擎，以及开放的 `.mad` 文档格式。一个 `.mad` 文件在不到 100 KB 的体积内保存报表的完整定义——数据库架构快照、查询图（表、连接、谓词、分组）以及各元素的带区布局——并与刷新时生成的物化 SQLite 表（`.maddb` + `.mdcache`）清晰分离。一份**组合报表**可以把多份报表——每份都保留自己的查询、布局和数据——合并到一个文档中，联接 MySQL、PostgreSQL、SQL Server 和 SQLite，而无需联邦服务器。
 
 代码位于 [github.com/mthomason/MAD](https://github.com/mthomason/MAD)，采用 MIT 许可证；项目名称与应用美术资源不在该许可证的授权范围内（参见 [NOTICE](https://github.com/mthomason/MAD/blob/master/NOTICE)）。
 
@@ -71,6 +71,8 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 * [适用于 macOS 的 MAD Designer](macos.html)——原生 `AppKit` 桌面应用：
   可视化查询画布、带缩略图和检查器的带区报表设计器、分页查看器，以及如何从源码构建或打包。
+* [组合报表](composition.html)——把来自多个数据库的报表合并为一个可移植的 `.mad` 文档；
+  每个源保留自己的布局和数据，结果将它们联接起来。
 * [构建与测试](https://github.com/mthomason/MAD#build-and-test)——
   iOS 测试套件、原生 macOS 测试套件和 Linux 构建的确切命令。
 * [`mad` CLI](https://github.com/mthomason/MAD#try-it)——用一行 Docker 命令

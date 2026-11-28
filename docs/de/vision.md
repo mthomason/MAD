@@ -7,10 +7,11 @@ lang: de-DE
 
 # Die Richtung: Von Berichten zu kombinierbaren Daten
 
-Aktualisiert am 2026-11-22. Diese Seite beschreibt die Richtung, in die MAD
+Aktualisiert am 2026-11-27. Diese Seite beschreibt die Richtung, in die MAD
 hineinwachsen soll. Sie trennt, was heute ausgeliefert wird, von dem, was
 vorgeschlagen ist, und sie verlinkt die öffentlichen Entwurfsunterlagen statt
-der internen Arbeitsnotizen: den
+der internen Arbeitsnotizen: die
+[Kompositionsanleitung](composition.html), den
 [Entwurf für das Datenobjekt](developers/data-object.html), die
 [Berichte mit mehreren Quellen](developers/multi-source.html) und die
 [Format-Spezifikation](README.html).
@@ -37,6 +38,12 @@ benötigt:
   jeweils ein Schema und Zeilen als Tabelle zurückgeben.
 * Lokale SQLite-Materialisierung (`MADDataTableFast`), die Gruppierungen,
   Aggregate und wiederholtes Rendern auf einem Telefon praktikabel macht.
+* **Komposition** im selben Dokument: Ein `.mad`-Dokument kann einen Graphen
+  von Berichten halten — ein **Ergebnis** plus seine **Quellen** —, wobei
+  jeder Knoten seine eigene Abfrage, Verbindung, sein Layout und seine
+  materialisierte Tabelle behält. Das Dokument deklariert die Fähigkeit
+  `query-composition`, und MAD Designer für macOS und Windows erstellt und
+  betrachtet jeden Bericht im Graphen.
 * Native iOS- und macOS-Anwendungen, eine native Windows-Anwendung und
   dieselbe Engine, die unter Linux und Windows über `mad serve` und die
   `mad`-CLI headless läuft.
@@ -48,39 +55,43 @@ in Tabellenform. Die Engine behandelt beides bereits identisch.
 
 ## Wohin es geht
 
-Die folgenden Richtungen sind Vorschläge. Sie bauen auf der obigen
-Architektur auf, aber keine davon wird heute ausgeliefert, sofern diese
-Seite nicht ausdrücklich sagt, dass sie es wird.
+Die folgenden Richtungen bauen auf der obigen Architektur auf. Einige davon
+werden heute ausgeliefert — die Komposition im selben Dokument ist in
+MAD Designer für macOS und Windows 0.8 enthalten —, und die Abschnitte sagen,
+welche Teile gebaut sind und welche Vorschläge bleiben.
 
 ### Kombinierbare Datenobjekte
 
 In einer Datenbank wählt man aus Basistabellen wie `employee` oder
 `sales_data` aus. Ein Bericht verknüpft mehrere Tabellen miteinander, und
-seine Ausgabe ist eine materialisierte Ad-hoc-SQLite-Tabelle. Heute kann
-nichts eine Abfrage auf die Ausgabe eines anderen Berichts richten: Der
-Ergebnis-Cache existiert, ist aber nach einem Dateinamen-Hash statt nach
-einer adressierbaren Identität indiziert.
+seine Ausgabe ist eine materialisierte Ad-hoc-SQLite-Tabelle. **Innerhalb
+eines Dokuments tut die Komposition genau das:** Das Ergebnis fragt die
+materialisierten Tabellen seiner Quellen ab, und jede Quelle wird als eine
+Tabelle adressiert, die ein anderer Bericht verknüpft. Eine Quelle ist ein
+vollständiger Bericht — Abfrage, Layout und Zeilen —, keine bloße Tabelle.
+Siehe [die Kompositionsanleitung](composition.html).
 
-Dieser Ausgabe eine stabile Identität zu geben, würde das Ergebnis eines
-Berichts zu einer Tabelle machen, aus der andere Berichte auswählen und
-gegen die sie joinen können. Ein Bericht, der auf einem Bericht aufbaut,
-wird zu einem gerichteten azyklischen Graphen (DAG) abgeleiteter Tabellen —
-einer portablen semantischen Schicht, in der das Entwerfen eines Berichts
-zugleich das Entwerfen einer wiederverwendbaren Datenquelle ist. Der
+Was nicht gebaut ist, ist eine **stabile Identität, die über Dokumente hinweg
+geteilt wird**, sodass ein Bericht in einem `.mad` auf einen Bericht in einem
+anderen zeigen kann. Der Ergebnis-Cache ist nach einem Dateinamen-Hash statt
+nach einer adressierbaren Identität indiziert, und die dateiübergreifende
+Komposition ist zurückgestellt. Dieser Ausgabe diese Identität zu geben,
+würde den Graph innerhalb des Dokuments zu einer portablen semantischen
+Schicht über Dateien hinweg erweitern. Der
 [Entwurf für das Datenobjekt](developers/data-object.html) beschreibt das
 Modell und was seine Formalisierung erfordert.
 
 ### Lokale Materialisierung aus mehreren Quellen
 
 Jeder Treiber materialisiert seine Ergebnismenge in derselben lokalen
-SQLite-Tabellendarstellung. Sobald ein Dokument mehrere Abfragedefinitionen
-halten und jede Ausgabe als Tabelle adressieren kann, kann ein Bericht eine
-PostgreSQL-Tabelle mit einer SQL-Server-Tabelle und einer MySQL-Tabelle
-joinen — lokal in SQLite kombiniert, ohne einen Föderationsserver
-dazwischen. Jede Quelle versteht ihre eigenen Daten; MAD versteht die
-daraus entstehenden Tabellen. Der [Entwurf für mehrere
-Quellen](developers/multi-source.html) hält die Architektur und die Phasen
-fest, von denen nicht alle gebaut sind.
+SQLite-Tabellendarstellung. **Dies wird heute innerhalb eines Dokuments
+ausgeliefert:** Ein Kompositionsbericht kann eine PostgreSQL-Tabelle mit
+einer SQL-Server-Tabelle und einer MySQL-Tabelle joinen — lokal in SQLite
+kombiniert, ohne einen Föderationsserver dazwischen. Jede Quelle versteht
+ihre eigenen Daten; MAD versteht die daraus entstehenden Tabellen. Der
+[Entwurf für mehrere Quellen](developers/multi-source.html) hält die
+Architektur fest; die Komposition im selben Dokument ist gebaut, während die
+dateiübergreifende Föderation noch aussteht.
 
 ### Einbettbare und headless Nutzung
 
@@ -220,11 +231,11 @@ ohne unnötige Plattformabhängigkeiten zu akzeptieren.
 
 ## Was dies nicht ist
 
-Ein Versprechen, eine Roadmap mit Terminen oder die Behauptung, dass die
-obigen Vorschläge ausgeliefert werden. Diese Seite hält eine Richtung fest.
-Jede Fähigkeit muss noch so entworfen, getestet und dokumentiert werden, wie
-alles andere im Repository, und einige dieser Richtungen können sich im Zuge
-ihrer Umsetzung ändern.
+Ein Versprechen, eine Roadmap mit Terminen oder die Behauptung, dass jeder
+obige Vorschlag ausgeliefert wird. Diese Seite hält eine Richtung fest. Die
+Komposition im selben Dokument ist heute gebaut; die anderen Richtungen
+müssen noch so entworfen, getestet und dokumentiert werden, wie alles andere
+im Repository, und einige können sich im Zuge ihrer Umsetzung ändern.
 
 ## Das Leitprinzip
 

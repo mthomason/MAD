@@ -43,8 +43,27 @@ Sein Schema wird durch die handgepflegten `MADStoreSchema`-Deskriptoren
 seine Schemaversion in `PRAGMA user_version`: Version 1 ist das ausgelieferte
 Schema (fehlend oder 0), Version 2 ergänzt `RptqQuery.sqlSourceText` – das vom
 Benutzer eingefügte SQL, unverändert aufbewahrt (`docs/developers/sql-entry.md`
-§8) –, und `MADStore` wendet beim Öffnen die fehlenden Schritte an. Die Felder der
-Tabelle `RptqQuery`:
+§8) –, Version 3 ergänzt die Kompositionsfelder, und Version 4 ergänzt Layouts pro
+Knoten. `MADStore` wendet beim Öffnen die fehlenden Schritte an; jeder Deskriptor
+markiert die Revision, die ihn eingeführt hat, mit `introducedInVersion` in
+`MAD/Source/rptq/store/MADStoreSchema.m`.
+
+Die Komposition ergänzte in Revision 3:
+
+| Ergänzung | Zweck |
+|---|---|
+| `RptqQuery.name` | Ein benutzerseitig lesbarer Name für einen Bericht im Graphen. |
+| `RptqDocument.rootQuery` | Der Standardbericht des Dokuments (das Ergebnis). |
+| `RptqQueryTable.upstreamQuery` | Eine Tabelle, deren Quelle eine andere Abfrage ist, keine entfernte Schematabelle. |
+| `RptqQueryField.outputIndex`, `RptqQueryField.outputKey` | Der stabile Name und die Reihenfolge der Ausgabespalten eines komponierenden Berichts. |
+
+Revision 4 ergänzt `RptqDocumentSection.ownerQuery`: Jede Abfrage kann eigene
+Layoutbereiche und -elemente besitzen, sodass jeder Bericht einer Komposition eigene
+Bänder und Feldbindungen hat. Ein Leser muss jeden Schritt bis zur `user_version`
+des Dokuments anwenden; ein älterer Leser verweigert ein neueres Dokument, statt ein
+Teil-Schema zu lesen.
+
+Die Felder der Tabelle `RptqQuery`:
 
 | Spalte | Typ | Hinweise |
 |---|---|---|

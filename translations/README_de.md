@@ -4,19 +4,28 @@
 
 # <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer-Symbol" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
-**Ein offenes Format und eine einbettbare Engine für relationales Reporting — hier ist jeder Bericht ein portabler Abfragegraph, eine materialisierte SQLite-Tabelle und ein parametrisches Layout.**
+[![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml) [![Windows verification](https://github.com/mthomason/MAD/actions/workflows/windows.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/windows.yml) [![macOS verification](https://github.com/mthomason/MAD/actions/workflows/macos.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/macos.yml)
 
-MAD ist eine von Grund auf in Objective-C entwickelte Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die App **MAD Designer** für iOS und natives macOS (`AppKit`), in der Abfragen und Layouts visuell oder per SQL erstellt werden; die App **MAD Viewer**, in der Berichte gelesen und aktualisiert werden; die headless **`mad`-CLI und -Engine**, die unter Linux und macOS laufen; und die offene **`.mad`-Spezifikation**.
+**Ein offenes Format und eine einbettbare Engine für relationales Reporting — hier ist jeder Bericht ein portabler Abfragegraph, eine materialisierte SQLite-Tabelle und ein parametrisches Layout, und ein Kompositionsbericht verknüpft mehrere Berichte aus verschiedenen Datenbanken in einem Dokument.**
+
+MAD ist eine von Grund auf in Objective-C entwickelte Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die Apps **MAD Designer** und **MAD Viewer** für iOS, natives macOS (`AppKit`) und natives Windows (WPF); die headless **`mad`-CLI und -Engine**, die unter Linux und macOS laufen; und die offene **`.mad`-Spezifikation**.
 
 Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den relationalen Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und den bandbasierten Layoutbaum — in einer einzigen Datei unter 100 KB, sauber getrennt von den Daten, die sie anzeigt. Ein Bericht ist eine ausführbare Datei, kein Server: Jede Laufzeitumgebung, die `.mad` versteht, kann das Schema inspizieren, deterministisches SQL für die Zieldatenbank kompilieren, die Ergebnismenge in eine lokale SQLite-Tabelle materialisieren und sie als native AppKit-/UIKit-Ansichten, seitenweise aufgeteiltes HTML, PDF, CSV oder JSON rendern.
 
-Das Repository ist ein einziges, in sich geschlossenes Projekt: die iPad-/iPhone-Apps, die native macOS-Desktopanwendung (`AppKit`, `Mac/`), vierzehn Frameworks (zwölf multiplattformfähig für iOS, iOS-Simulator und natives macOS; zwölf headless unter Linux), der headless Linux-Build und seine Testsuite (130 Suiten, 1.313 Tests), das Kommandozeilenwerkzeug `mad` und das Buildsystem (`Compressor`), das die C-Bibliotheken von Drittanbietern aus fixierten Quellen kompiliert. Der Code wird unter der MIT-Lizenz veröffentlicht; das `.mad`-Format ist eine offene Spezifikation (siehe [`docs/`](../docs/de/)), die Namen und das App-Artwork des Projekts sind jedoch nicht von der Lizenzgewährung abgedeckt (siehe [`NOTICE`](../NOTICE)).
+Ein **Kompositionsbericht** erweitert dieses Modell auf mehrere Datenbanken. Das Dokument hält einen Graphen vollständiger Berichte — ein **Ergebnis** plus seine **Quellen** — und verknüpft ihre materialisierten Tabellen in lokalem SQLite. Jede Quelle behält ihre eigene Datenbankverbindung, Abfrage, ihr Layout und ihre Daten. Eine portable `.mad`-Datei kann MySQL, PostgreSQL, SQL Server und SQLite ohne einen Föderationsserver dazwischen umspannen.
 
-[![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
+Das Repository ist ein einziges, in sich geschlossenes Projekt: die iPad-/iPhone-Apps, die native macOS-Desktopanwendung (`AppKit`, `Mac/`), die native Windows-Anwendung (WPF, `Windows/`), vierzehn Frameworks (zwölf multiplattformfähig für iOS, iOS-Simulator und natives macOS; zwölf headless unter Linux), der headless Linux-Build und seine Testsuite (130 Suiten, 1.313 Tests), das Kommandozeilenwerkzeug `mad` und das Buildsystem (`Compressor`), das die C-Bibliotheken von Drittanbietern aus fixierten Quellen kompiliert. Der Code wird unter der MIT-Lizenz veröffentlicht; das `.mad`-Format ist eine offene Spezifikation (siehe [`docs/`](../docs/de/)), die Namen und das App-Artwork des Projekts sind jedoch nicht von der Lizenzgewährung abgedeckt (siehe [`NOTICE`](../NOTICE)).
 
-> **MAD Designer unter macOS ausprobieren (macOS 12.0+, Apple Silicon):**
+> **Neu in 0.8: Kompositionsberichte.** Kombinieren Sie vorhandene Berichte unter macOS und Windows in einem Dokument; jede Quelle behält ihr Layout und ihre Daten. Siehe [die Kompositionsanleitung](../docs/de/composition.md) und die [Beispielberichte](../Samples/README.md). Komposition ist nicht im unten veröffentlichten 0.7-Download enthalten; sie ist jetzt aus dem Quellcode verfügbar.
+
+> **MAD Designer unter macOS ausprobieren (macOS 12.0+, Apple Silicon) — veröffentlicht 0.7:**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
 > * **Direkter Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(bei direkten Downloads nach dem Kopieren nach `/Applications` einmal `xattr -cr "/Applications/MAD Designer.app"` ausführen)*
+> * **Version:** App 0.7 / Engine 9.0 (r4433). Der Quellbaum ist App 0.8 / Engine 9.1.
+
+> **MAD Designer unter Windows testen (Windows 10 1903+, Windows 11, 64 Bit) — veröffentlicht 0.7:**
+> * **Direkter Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(unsigniert: Windows SmartScreen fragt — wählen Sie Weitere Informationen → Trotzdem ausführen; siehe [Windows-Anleitung](../docs/de/windows.md))*
+> * **Version:** App 0.7 / Engine 9.0 (r4433) · **Keine .NET-Installation nötig** (eigenständig). Der Quellbaum ist App 0.8 / Engine 9.1.
 
 ## Warum MAD
 
@@ -24,12 +33,25 @@ Heute kann jeder Entwickler ein LLM bitten, in zehn Minuten ein einmaliges SQL-S
 
 MAD löst das Reporting-Problem auf der Ebene des **Formats und der Engine**:
 
-* **Interoperabilität durch einen gemeinsamen Kontrakt.** Statt Ad-hoc-SQL und UI-Klebstoff über maßgeschneiderte Skripte zu verteilen, bündelt ein `.mad`-Dokument den Schema-Kontrakt, den Abfrage-AST und das Präsentationslayout in einem einzigen einsehbaren, diffbaren, versionierten Artefakt. Dieselbe 80-KB-Datei öffnet sich nativ unter macOS und auf dem iPad, läuft headless in einem Linux-Docker-Container, führt in GitHub Actions aus oder bettet sich in eine andere Anwendung ein — mit byte-identischem SQL und byte-identischen Exporten auf Apple- und Linux-Plattformen.
+* **Interoperabilität durch einen gemeinsamen Kontrakt.** Statt Ad-hoc-SQL und UI-Klebstoff über maßgeschneiderte Skripte zu verteilen, bündelt ein `.mad`-Dokument den Schema-Kontrakt, den Abfrage-AST und das Präsentationslayout in einem einzigen einsehbaren, diffbaren, versionierten Artefakt. Dieselbe Datei öffnet sich nativ unter macOS, Windows und auf dem iPad, läuft headless in einem Linux-Docker-Container, führt in GitHub Actions aus oder bettet sich in eine andere Anwendung ein — mit byte-identischem SQL und byte-identischen Exporten auf Apple-, Windows- und Linux-Plattformen.
 * **Deterministisches SQL und lokale Mathematik in zwei Durchläufen.** Weder Endbenutzer noch KI-Modell müssen dialektspezifisches SQL von Hand schreiben oder Summen im Anwendungscode berechnen. Die Engine validiert den Abfragegraphen gegen den Schema-Snapshot des Dokuments, kompiliert deterministisches SQL für den Wire-Treiber, zieht die Ergebnismenge einmal in einen lokalen SQLite-Zeilen-Cache (`MADDataTableFast`) und berechnet Gruppierungen, Sortierschlüssel sowie Kopf- und Fußzeilenaggregate lokal in zwei Durchläufen.
+* **Komposition ohne Föderationsserver.** Ein Kompositionsbericht materialisiert jede Quelle in ihrer eigenen Datenbank und verknüpft dann die materialisierten Tabellen lokal in SQLite. Es gibt keinen zentralen Server bereitzustellen, kein gemeinsames Warehouse zu befüllen und keinen zweiten SQL-Dialekt zu pflegen: Jede Quelle versteht ihre eigenen Daten, und MAD versteht die daraus entstehenden Tabellen. Eine Quelle ist ein vollständiger Bericht — Abfrage, Layout und Zeilen —, keine um ihr Design beraubte Tabelle.
 * **Geschrieben, nicht zusammengesetzt.** Der SQL-Generator, der SQL-Parser, die Datenbanktabellen-Engine, der portable Speicher, das Layoutmodell und der Seitenrenderer sind eigenentwickeltes Objective-C über vierzehn Frameworks. Drittanbieter-Code beschränkt sich strikt auf die Verbindungsebene — MariaDB Connector/C, FreeTDS, `libpq` und SQLite — plus `libarchive`/`bzip2` und `zint` für Barcodes. Kein proprietäres Reporting-SDK wird weiterverkauft.
 * **Mobile-first heißt speicherbudgetiert.** Weil die Ergebnismenge in eine indizierte SQLite-Tabelle auf der Festplatte materialisiert und Seiten in einem geometrieindizierten Cache formatiert werden, kann ein Telefon oder ein kleiner Container Berichte mit hunderttausend Zeilen seitenweise aufteilen und aggregieren, ohne den Datensatz im RAM zu halten.
 
 Die technische Dokumentation und die Format-Spezifikation werden auch unter <https://docs.everydayapps.com> bereitgestellt.
+
+## Kompositionsberichte
+
+Ein **Kompositionsbericht** kombiniert andere Berichte zu einem einzigen `.mad`-Dokument. Die Berichte, die Sie einbringen, sind **Quellen**; der Standardbericht des Dokuments ist das **Ergebnis**, das die Ergebnistabellen der Quellen zu einem eigenen neuen Bericht verknüpft.
+
+
+* **Jedes Mitglied ist ein Bericht.** Eine Quelle wird mit ihrer Abfragedefinition, ihrem eigenen Berichtslayout und ihren Daten importiert. Wenn Sie sie in der **Report**-Auswahl der Symbolleiste (macOS) oder im **Composition**-Bereich und der **Component**-Auswahl (Windows) auswählen, schalten Sie die Arbeitsbereiche Abfrage, Designer und Betrachter gemeinsam um. Eine Quelle ohne Layout ist weiterhin ein Bericht aus Zeilen: Der Betrachter zeigt ein Raster, und der Designer bietet an, ihr Layout zu erstellen.
+* **Datenbankübergreifend verknüpfen.** Jede Quelle führt gegen ihre eigene Datenbank mit ihren eigenen Zugangsdaten aus. Das Ergebnis verknüpft die materialisierten Tabellen lokal in SQLite — MySQL, PostgreSQL, SQL Server und SQLite in einem Dokument.
+* **Zugangsdaten bleiben außerhalb des Dokuments.** Eine Aktualisierung fragt nach einem Kennwort pro Quelle, wobei die Verbindungsdetails vorausgefüllt sind. Kennwörter leben im Schlüsselbund, in der Sitzung oder im Zugangsdatenspeicher der Plattform — nie in der `.mad`.
+* **Als Einheit portabel.** Die Definition, das Layout jeder Quelle und die Verbindungsverweise leben in der einen `.mad`-Datei. Zeilen und Seitencaches bleiben im Begleitspeicher daneben.
+
+Komposition wird in MAD Designer für **macOS** und **Windows** 0.8 ausgeliefert. Die iOS-App kann noch keine Kompositionen erstellen. Lesen Sie [die Kompositionsanleitung](../docs/de/composition.md) für das Modell, den Arbeitsablauf und die aktuellen Einschränkungen.
 
 ## In Aktion
 
@@ -49,9 +71,33 @@ Die technische Dokumentation und die Format-Spezifikation werden auch unter <htt
 
 Der [exportierte Bericht](https://docs.everydayapps.com/assets/london.html) der Aufzeichnung ist reines HTML und lässt sich in jedem Browser öffnen.
 
+## Beispielberichte
+
+[`Samples/Reports`](../Samples/Reports) hält ausführbare `.mad`-Dokumente für die Desktop-Apps:
+
+* **Chinook-Standard.mad** — eine Tabelle, Spaltenköpfe, ein Detailband, ein mehrseitiger Bericht.
+* **Chinook-Grouped.mad** — eine Abfragegruppierung mit Gruppenkopf- und -fußbändern.
+* **Chinook-Composition.mad** — zwei SQLite-Quellen (eine mit eigenem Layout, eine ohne) zu einem Ergebnis verknüpft.
+* **Composition-MySQL-PostgreSQL-SQLServer.mad** — eine Tabelle aus je MySQL, PostgreSQL und SQL Server, verknüpft über `demo_id`.
+* **PostgreSQL-Chinook.mad** — eine Serververbindung ohne gespeichertes Kennwort; die erste Aktualisierung fragt danach.
+
+Die SQLite-Beispiele brauchen nur die mitgelieferte `chinook.sqlite3`. Das datenbankübergreifende Beispiel braucht die drei Live-Testserver; ein idempotentes Skript richtet sie ein und befüllt die Demo-Tabelle:
+
+```sh
+./Samples/setup-databases.sh up
+```
+
+Unter Windows PowerShell:
+
+```powershell
+.\Samples\setup-databases.ps1 -Action up
+```
+
+Siehe [die Beispielanleitung](../Samples/README.md) für die Erstinbetriebnahme, die Kennwortabfragen pro Quelle und wie die Beispiele erzeugt und geprüft werden.
+
 ## Lokalisierung
 
-Die iOS- und macOS-Anwendungen sind vollständig in **Englisch, Deutsch, Spanisch, Japanisch, brasilianisches Portugiesisch und vereinfachtes Chinesisch** lokalisiert. Die Oberfläche folgt der Systemsprache, und die Dokumentation ist in dieselben Sprachen übersetzt. Marken- und Produktnamen, SQL-Bezeichner, Datenbank- und Schriftnamen sowie Lizenztexte bleiben bewusst auf Englisch. Die Übersetzungen wurden maschinell erstellt; Korrekturen sind im [Issue-Tracker](https://github.com/mthomason/MAD/issues) willkommen.
+Die iOS-, macOS- und Windows-Anwendungen sind vollständig in **Englisch, Deutsch, Spanisch, Japanisch, brasilianisches Portugiesisch und vereinfachtes Chinesisch** lokalisiert. Die Oberfläche folgt der Systemsprache, und die Dokumentation ist in dieselben Sprachen übersetzt. Marken- und Produktnamen, SQL-Bezeichner, Datenbank- und Schriftnamen sowie Lizenztexte bleiben bewusst auf Englisch. Die Übersetzungen wurden maschinell erstellt; Korrekturen sind im [Issue-Tracker](https://github.com/mthomason/MAD/issues) willkommen.
 
 ## Datenschutz
 
@@ -73,20 +119,22 @@ Die Architektur teilt einen Bericht in **die portable Definition** (innerhalb de
 | **4. Materialisierte Tabelle** *(Begleitdatei)* | `<hash>.maddb` + `<hash>.mdcache` | SQLite-Zeilendatenbank (`t<tag>`) + Spalten-Schema-Plist (`MADDataColumn`) | **Die Ausgabe des Berichts als Datenbanktabelle.** Enthält die abgerufenen Zeilen, Gruppenschlüsselindizes und Spaltentyp-Metadaten, damit zweistufige Aggregate (`SUM`, `COUNT`, `AVG`, `MIN`, `MAX`), Sortierung und erneutes Rendern nie die entfernte Datenbank erneut abfragen. |
 | **5. Seitencache** *(Begleitdatei)* | `<hash>{ih,lh}{w,h}.madac` | SQLite-Datenbanken für Index (`ih`) und Layout (`lh`), indiziert nach Seitengeometrie | Vorberechnete Seitenumbrüche und Elementrahmen für einen Ziel-Viewport (z. B. `{612, 792}` US Letter), damit Scrollen und Export sofort erfolgen. |
 
-Die vollständige Spezifikation — Container-Layout, Speichertabellen, Schemata der Begleitdateien, bekannte Eigenheiten (einschließlich der Frage, warum der interne Speicherdateiname aus Gründen der Rückwärtskompatibilität historisch `analyitics` geschrieben wird) und die plattformübergreifende Digest-Verifikation — ist Kapitel für Kapitel in [`docs/`](../docs/de/) dokumentiert.
+Ein Kompositionsbericht schreibt denselben Container und Speicher mit einer Ergänzung: Der Speicher zeichnet die Wurzel des Abfragegraphen (`rootQuery`), die Upstream-Tabellen jeder Abfrage und die eigenen Layoutbereiche jeder Abfrage auf. Ein zusammengesetztes Dokument deklariert die erforderliche Fähigkeit `query-composition` und einen Container-Header `1.1`; ein gewöhnlicher Bericht bleibt `1.0`. Die vollständige Spezifikation — Container-Layout, Speichertabellen, Schemata der Begleitdateien, bekannte Eigenheiten (einschließlich der Frage, warum der interne Speicherdateiname aus Gründen der Rückwärtskompatibilität historisch `analyitics` geschrieben wird) und die plattformübergreifende Digest-Verifikation — ist Kapitel für Kapitel in [`docs/`](../docs/de/) dokumentiert.
 
-## Wohin MAD führt: Roadmap & Vision
+## Wohin MAD führt
 
-Weil MAD den **Abfragegraphen**, die **materialisierte SQLite-Ergebnistabelle** und das **Präsentationslayout** bereits trennt, eröffnet die Architektur vier große Fähigkeiten, die aktiv entworfen und eingeplant werden (siehe [`docs/vision.md`](../docs/de/vision.md), [`docs/developers/data-object.md`](../docs/developers/data-object.md) und [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
+Die Komposition im selben Dokument ist gebaut. Die Richtung erweitert sie nun und den Rest der Architektur:
 
-1. **Ein `.mad`-Bericht als Ad-hoc-Datenbanktabelle (kombinierbare Datenobjekte).**
-   In einer traditionellen Datenbank wählt man mit `SELECT` aus Basistabellen wie `employee` oder `sales_data` aus. Ein `.mad`-Bericht verknüpft und filtert mehrere Tabellen, und seine Ausgabe (`.maddb` + `.mdcache`) ist bereits eine physische SQLite-Tabelle mit typisiertem Schema (`MADDataColumn`). Indem man die Ausgabe eines Berichts als Tabellenquelle im Abfrage-Designer adressierbar macht, **wird eine `.mad`-Datei zu einer virtuellen/materialisierten Datenbanktabelle**. Andere Berichte, Abfragen oder Werkzeuge können aus einem `.mad`-Bericht mit `SELECT` auswählen und dagegen `JOIN`en wie gegen jede Tabelle einer Datenbank.
-2. **Mehrere Datenquellen in einem einzigen Bericht (Föderation ohne Server).**
-   Jeder Datenbanktreiber (`MADMySQL`, `MADPostgres`, `MADTdsClient`, `MADSqlite3`) materialisiert sein Abfrageergebnis in derselben lokalen SQLite-Tabellendarstellung (`MADDataTableFast`). Sobald ein Bericht mehrere Abfrageobjekte halten und jede materialisierte Ausgabe als lokale Tabelle behandeln kann, kann ein einzelner `.mad`-Bericht eine `customers`-Tabelle aus PostgreSQL mit einer `orders`-Tabelle aus SQL Server und einer lokalen SQLite-Tabelle joinen — lokal über SQLite föderiert, ohne einen schwergewichtigen Föderationsserver dazwischen.
-3. **Jenseits des Papierparadigmas: native UIKit- und interaktive Datenansichten.**
-   Das bandbasierte Seitenlayout (Report Header, Page Header, Gruppenkopf- und -fußzeilen, Detail, Seiten-/Berichtsfußzeile) entstand aus dem Druck auf Papier. In MAD wird die Paginierung auf Papier zu **nur einem Ansichtsparadigma** über dem Datenobjekt des Dokuments. Wenn Sie nicht drucken oder ein seitengenaues Faksimile exportieren, werden dasselbe Layout und dieselbe lokale `.maddb`-Tabelle reichhaltige, interaktive native UIKit-Komponenten und Ansichten zur Rohdatenerkundung antreiben — einmal entwerfen, als seitenweise aufgeteiltes Papier oder als native interaktive UI rendern.
-4. **Legacy-Crystal-Reports-Dateien (`.rpt`) und Enterprise-Berichtsdateien in `.mad` konvertieren.**
-   Tausende Unternehmen sind noch immer in jahrzehntealten Crystal-Reports-Dateien (`.rpt`) gefangen, die niemand von Hand neu schreiben möchte und kein modernes SaaS-Dashboard sauber importieren kann. Weil MAD die klassische DNA aus bandbasierten Bereichen und relationalem Abfragegraphen mit Crystal Reports teilt — und dabei alles in einem offenen, einsehbaren SQLite-in-tar-Format speichert —, baut MAD Importer, um Legacy-`.rpt`-Definitionen direkt in offene `.mad`-Dateien zu konvertieren.
+1. **Dateiübergreifende Komposition und eine stabile Datenobjekt-Identität.**
+   Ein Kompositionsbericht adressiert bereits die materialisierte Tabelle jeder Quelle innerhalb ihres eigenen Dokuments. Der nächste Schritt ist eine stabile Identität für die Ausgabe eines Berichts *über* Dokumente hinweg, sodass ein `.mad` auf den Bericht eines anderen `.mad` mit Dokumentidentität, Pfadauflösung, Live- versus festgeschriebenen Daten und einer Zugangsdatenrichtlinie verweisen kann. Der [Entwurf für das Datenobjekt](../docs/de/developers/data-object.md) hält das Modell und was seine Formalisierung erfordert fest.
+2. **Jenseits des Papierparadigmas: native interaktive Datenansichten.**
+   Das bandbasierte Seitenlayout entstand aus dem Druck. In MAD ist die Papierpaginierung eine Ansicht über dem Datenobjekt des Dokuments; dasselbe Layout und dieselbe lokale `.maddb`-Tabelle können interaktive Tabellen, Daten-Explorer und native Ansichten antreiben. Einmal entwerfen, als seitenweise aufgeteiltes Papier oder als native interaktive UI rendern.
+3. **Legacy-Crystal-Reports-Dateien (`.rpt`) und Enterprise-Berichtsdateien in `.mad` konvertieren.**
+   Tausende Unternehmen sind noch immer in jahrzehntealten Crystal-Reports-Dateien gefangen, die niemand von Hand neu schreiben möchte. Weil MAD die klassische DNA aus bandbasierten Bereichen und relationalem Abfragegraphen mit Crystal Reports teilt — und dabei alles in einem offenen, einsehbaren SQLite-in-tar-Format speichert —, baut MAD Importer, um Legacy-Definitionen direkt in offene `.mad`-Dateien zu konvertieren.
+4. **KI-verfasste Dokumente.**
+   Ein Modell könnte ein echtes, editierbares MAD-Dokument vorschlagen — Quellen und Schema-Metadaten entdecken, Tabellen und Felder auswählen, Abfragegraphen und Layouts konstruieren und das Ergebnis der Engine zur Validierung und Ausführung übergeben —, statt eine einmalige Antwort zu erzeugen. Das Dokument bleibt einsehbar, editierbar und unabhängig vom Modell.
+
+Siehe [`docs/vision.md`](../docs/de/vision.md), [`docs/developers/data-object.md`](../docs/de/developers/data-object.md) und [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md).
 
 ## Ausprobieren
 
@@ -112,7 +160,7 @@ Die veröffentlichten Tags sind `latest` und der kurze SHA des Commits, gebaut f
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Die Beispieldokumente aktualisieren sich gegen die Sqlite3-Beispieldatenbank, die im Image enthalten ist; die Fixtures für MySQL, SQL Server und PostgreSQL erwarten die Testserver aus [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).
+Die Beispieldokumente aktualisieren sich gegen die Sqlite3-Beispieldatenbank, die im Image enthalten ist; die Fixtures für MySQL, SQL Server und PostgreSQL erwarten die Testserver aus [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md). Ein zusammengesetztes Dokument aktualisiert jede Quelle und exportiert den ausgewählten Bericht; `mad` löst die Zugangsdaten jeder Quelle aus dem Schlüsselbund auf, mit `--credentials` als Rückfall.
 
 ## In CI
 
@@ -125,7 +173,7 @@ Die [mad-action](https://github.com/mthomason/mad-action) GitHub Action führt e
     document: reports/sales.mad
 ```
 
-Sie führt das veröffentlichte Image aus, daher sind Action und CLI dieselbe Engine. Die Action wird aus [`satellites/mad-action/`](../satellites/mad-action/) hier generiert; [`docs/developers/satellites.md`](../docs/developers/satellites.md) hält fest, wie das Satelliten-Repository aktuell gehalten wird.
+Sie führt das veröffentlichte Image aus, daher sind Action und CLI dieselbe Engine. Die Action wird aus [`satellites/mad-action/`](../satellites/mad-action/) hier generiert; [`docs/developers/satellites.md`](../docs/de/developers/satellites.md) hält fest, wie das Satelliten-Repository aktuell gehalten wird.
 
 ## Datenbanktreiber
 
@@ -140,7 +188,9 @@ Ein Treiber ist ein Framework, das `MADDatabase` ableitet und sich bei `MADDatab
 
 ## Die Engine einbetten
 
-Elf der vierzehn Frameworks sind frei von UIKit und lassen sich headless bauen. Die `mad`-CLI oben ist diese Engine in Kommandozeilengewand: Die Verbs — `inspect`, `schema`, `query`, `refresh`, `export`, `write` — bilden die Einbettungsoberfläche, und eine Anwendung, die `MAD`, ein Treiber-Framework und `MADSqlite3` linkt, hat relationales Reporting ohne Server im Spiel. Treiber und Exportformate (`<MADReportExporting>` / `MADReportExporterRegistry`) registrieren sich selbst, sodass eine Datenquelle oder ein Ausgabeformat hinzuzufügen eine Unterklasse ist, kein Fork.
+Zwölf der vierzehn Frameworks sind frei von UIKit und lassen sich headless bauen. Die `mad`-CLI oben ist diese Engine in Kommandozeilengewand: Die Verbs — `inspect`, `schema`, `query`, `refresh`, `export`, `write` und das JSON-Protokoll `serve` — bilden die Einbettungsoberfläche, und eine Anwendung, die `MAD`, ein Treiber-Framework und `MADSqlite3` linkt, hat relationales Reporting ohne Server im Spiel. Treiber und Exportformate (`<MADReportExporting>` / `MADReportExporterRegistry`) registrieren sich selbst, sodass eine Datenquelle oder ein Ausgabeformat hinzuzufügen eine Unterklasse ist, kein Fork.
+
+Ein zusammengesetztes Dokument ist ein weiterer Fall derselben Oberfläche: `MADOperationRefreshComposed` durchläuft den Graphen, jeder Knoten materialisiert seine eigene Tabelle, und das Ergebnis des ausgewählten Berichts ist das, was die CLI, die Apps und die Exporter lesen.
 
 ## Native macOS-Anwendung
 
@@ -148,12 +198,23 @@ Die native macOS-Desktopanwendung ([`docs/macos.md`](../docs/de/macos.md), [`Mac
 
 * **Native `NSDocument`-Architektur (`MADMacDocument` / `MADMacDocumentController`):** Öffnet und speichert `.mad`-Archive nativ aus dem Finder oder dem Standard-Öffnen-Dialog (mit integrierter Schaltfläche **New Document**), migriert ältere Core-Data-`.mad`-Dateien automatisch über `MADStoreConverter` und integriert `MADDesignerLayout` direkt in `NSDocument.undoManager` (`Cmd+Z` / `Cmd+Shift+Z`).
 * **Datenbankverbindung und Schema-Import-Assistent (`MADMacConnectionWindowController`):** Verbindet zu **SQLite**, **MySQL / MariaDB**, **Microsoft SQL Server** oder **PostgreSQL**, prüft die Konnektivität, speichert Zugangsdaten im macOS-Schlüsselbund (`MADKeyChain`) und importiert Tabellen- und Spaltenschemata in ein neues `.mad`-Dokument.
+* **Kompositionsberichte:** Eine **Report**-Auswahl in der Symbolleiste schaltet jeden Arbeitsbereich zwischen dem Ergebnis und seinen Quellen um; der Designer bearbeitet die eigenen Bänder und die Feldliste des ausgewählten Berichts; der Betrachter rendert seine eigenen Seiten oder, bei einer Quelle ohne Layout, ihre zwischengespeicherten Zeilen als Raster. **File ▸ New Composition…**, **Import Report…** und **Convert to Composition…** erstellen den Graphen, und eine Aktualisierung fragt einmal pro Quelle mit Zugangsdaten nach. Siehe [die Kompositionsanleitung](../docs/de/composition.md).
 * **Drei integrierte Arbeitsbereiche** (`Cmd+1`, `Cmd+2`, `Cmd+3`):
   1. **MAD Query (`MADMacQueryViewController`):** Wechselt zwischen dem interaktiven **Query Designer** (verschiebbare Tabellenkarten, Bézier-Join-Verbindungen mit anklickbaren Join-Typ-Badges, Popover für `WHERE`-Filter und `GROUP BY`) und dem Editor **SQL Query** (`MADSQLParser` + `MADSQLQueryCompiler`).
-  2. **MAD Designer (`MADMacDesignerViewController`):** Dreigeteilte Ansicht mit interaktiver **Page & Section Minimap**, Gliederung **Report Bands**, durchsuchbarer Drag-Quelle **Query Fields**, zoombarer/mit Linealen versehener Design-Leinwand (`MADMacDesignerCanvasView`) mit Drag-and-Drop zwischen Bereichen und intelligenten Ausrichtungshilfen sowie einem zweikartigen **Page & Element Inspector**.
+  2. **MAD Designer (`MADMacDesignerViewController`):** Dreigeteilte Ansicht mit interaktiver **Page & Section Minimap**, Gliederung **Report Bands**, durchsuchbaren Abfragefeldern als Drag-Quelle, zoombarer/mit Linealen versehener Design-Leinwand (`MADMacDesignerCanvasView`) mit Drag-and-Drop zwischen Bereichen und intelligenten Ausrichtungshilfen sowie einem zweikartigen **Page & Element Inspector**.
   3. **MAD Viewer (`MADMacViewerViewController`):** Live-Datenaktualisierung (`Cmd+R`), sofortige Neupaginierung per **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), gerahmte `PDFView`-Vorschau, natives Drucken über `NSPrintOperation` (`Cmd+P`) und Export (`Cmd+E`) nach **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** und **Plain Text**.
 
 Siehe [`docs/macos.md`](../docs/de/macos.md) für die vollständige Anleitung und [`docs/developers/build/macos.md`](../docs/developers/build/macos.md) für den Multiplattform-Portabilitäts-Audit.
+
+## Native Windows-Anwendung
+
+Die native Windows-Anwendung ([`docs/windows.md`](../docs/de/windows.md), [`Windows/`](../Windows/)) ist eine WPF-Anwendung auf .NET 10 über derselben eigenentwickelten Objective-C-Engine (`mad.exe`), sodass ihre Dokumente mit macOS, iOS, der CLI und `mad-action` kompatibel sind:
+
+* **Drei Arbeitsbereiche:** die visuelle Abfrageleinwand und der SQL-Editor, der bandbasierte Designer mit Minimap, Gliederung, Feldliste und Inspector sowie der seitengenaue Betrachter mit Export nach PDF, HTML, HTML Flow, CSV, JSON, JSON Full Report und Plain Text.
+* **Kompositionsberichte:** Ein angedockter Bereich **Composition** zeigt das Ergebnis und seine Quellen als Graphen; seine Karten und die **Component**-Auswahl der Symbolleiste teilen sich eine Auswahl über alle drei Arbeitsbereiche. Jede Quelle behält ihre eigene Abfrage, ihr Layout und ihre Zeilen, und eine Quelle ohne Layout wird als Zeilenraster gerendert. **File ▸ New Composition…**, **Import…** und **Convert to Composition** erstellen den Graphen.
+* **Paketierung:** `Windows/package.ps1` baut das unsignierte, eigenständige Release-ZIP und das CI-Engine-Artefakt; die Engine selbst wird von `Windows/Engine/build.ps1` auf der fixierten Toolchain gebaut.
+
+Siehe [`docs/windows.md`](../docs/de/windows.md) für die Installationsanleitung und [`docs/developers/build/windows.md`](../docs/developers/build/windows.md) für die Build-Aufzeichnung.
 
 ## Bauen und testen
 
@@ -200,9 +261,32 @@ Die headless Engine wird unter Linux auf dieselbe Weise verifiziert. Vom Wurzelv
 
 Dies führt 130 Suiten und 1.313 Tests im Container aus, und `--verify` ergänzt die End-to-End-Prüfungen der CLI gegen die eingecheckten Fixtures und ihre fixierten Digests. Siehe [`Linux/README.md`](../Linux/README_de.md) für das Image, die fixierten Versionen und die GNUstep-Abweichungen, die der Port gefunden hat.
 
+### Windows (WPF-App & Engine)
+
+Die native Engine baut auf einer erhöhten Windows-Workstation — Clang 20.1.8, Visual Studios MSVC, NASM, Strawberry Perl, Meson, Python und ein aus dem Quellcode nach `C:\GNUstep` gebautes GNUstep —, und die WPF-App mit dem in `Windows/global.json` festgelegten .NET SDK:
+
+```powershell
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain   # rebuild after the toolchain exists
+dotnet test Windows\App\Mad.Designer.Windows.slnx      # both .NET suites, against the built engine
+pwsh -File .\Windows\package.ps1                      # the unsigned release zip and the CI engine asset
+```
+
+CI baut die Engine nicht neu (dafür braucht es die Workstation-Toolchain): [`windows.yml`](../.github/workflows/windows.yml) lädt ein vorgebautes Engine-Artefakt herunter und führt beide Suiten aus. Siehe [`docs/windows.md`](../docs/de/windows.md) für die Installationsanleitung und [`docs/developers/build/windows.md`](../docs/developers/build/windows.md) für die Build-Aufzeichnung.
+
+### Beispiel-Datenbanken
+
+Die datenbankübergreifende Komposition der Beispiele verwendet die drei fixierten Testserver. Starten Sie sie und befüllen Sie die Demo-Tabelle mit einem Skript:
+
+```sh
+./Samples/setup-databases.sh up       # macOS, Linux, Git Bash
+.\Samples\setup-databases.ps1 -Action up   # Windows PowerShell
+```
+
+Die Container und ihre öffentlichen Testzugangsdaten sind in [`TestDatabase/README.md`](../TestDatabase/README.md) und [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) dokumentiert.
+
 ## Unterstützung
 
-MAD ist freie Software und bleibt frei. Ein Maintainer hält das Projekt am Laufen: die Design-Dokumente, die Testmatrix für zwei Plattformen und die agentengesteuerte Entwicklung kosten echte Zeit und API-Tokens. Wenn MAD Ihrem Team Zeit spart, können Sie hier etwas davon zurückgeben — und so oder so: danke.
+MAD ist freie Software und bleibt frei. Ein Maintainer hält das Projekt am Laufen: die Design-Dokumente, die Testmatrix für mehrere Plattformen und die agentengesteuerte Entwicklung kosten echte Zeit und API-Tokens. Wenn MAD Ihrem Team Zeit spart, können Sie hier etwas davon zurückgeben — und so oder so: danke.
 
 * **[Sponsern Sie den Maintainer](https://github.com/sponsors/mthomason)** — einmalig oder monatlich, über GitHub Sponsors.
 * **Senden Sie API-Guthaben.** Das Projekt wird mit KI-Agenten entwickelt; OpenAI-, Anthropic- oder Agent-Token-Guthaben fließen direkt in die Arbeit zurück. Melden Sie sich über die Sponsorenseite oder ein Issue.

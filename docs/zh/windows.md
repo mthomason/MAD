@@ -81,6 +81,17 @@ Set-AuthenticodeSignature -FilePath .\Mad.Designer.Windows.exe -Certificate $cer
 
 查看器可导出 **PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON 完整报表**和**纯文本**，顺序与 macOS 查看器相同。PDF 由引擎自身写入（与 `mad export --format pdf` 使用相同的导出器），因此大型报表导出时不会阻塞窗口：状态栏会显示不确定进度条和“正在导出…”提示，完成后显示文件大小。
 
+## 组合报表
+
+**组合报表**把多份报表合并到一个 `.mad` 文档，在本地联接来自 MySQL、PostgreSQL、SQL Server 和 SQLite 的数据，而不是通过联邦服务器。[组合指南](composition.html)介绍了模型和示例。
+
+* **Composition 窗格：** 组合报表会显示一个停靠的左侧窗格，其中是文档的图——顶部的**结果**及其下方的源，连接线指向消费它们的报表。该窗格有一个 `GridSplitter` 和展开/折叠模式。
+* **单一选择：** 点击图中的卡片，或在工具栏的 **Component** 选取器中选择一份报表，会把 Query、Designer 和 Viewer 工作区切换到该报表。窗格折叠时选取器仍然可见。
+* **每个源都是一份报表：** 源保留自己的查询、布局和数据行。没有布局的源是一份由数据行组成的报表——查看器把它的缓存行显示为网格，设计器提议创作布局。
+* **每个源的凭据：** 刷新会为每个需要凭据的源提示一次，连接详情已预先填好。密码保存在会话或平台凭据存储中，而不是文档中。
+
+**创建组合：** **File ▸ New Composition…** 从现有报表构建组合；**File ▸ Import…** 把一份报表添加到当前组合；**File ▸ Convert to Composition** 转换当前打开的标准报表。窗格的 Import 操作可在工作区内部完成同样的事。
+
 ## 从源代码构建
 
 应用使用 [`Windows/global.json`](https://github.com/mthomason/MAD/blob/master/Windows/global.json) 固定的 .NET SDK（10.0.404）构建：

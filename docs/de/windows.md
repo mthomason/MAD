@@ -81,6 +81,32 @@ Die Anwendung hat dieselben drei Berichtsphasen wie die macOS-App:
 
 Der Betrachter exportiert **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON-Vollbericht** und **Reinen Text**, in der Reihenfolge des macOS-Betrachters. Das PDF schreibt die Engine selbst (derselbe Exporter, den `mad export --format pdf` verwendet); daher blockiert auch ein großer Bericht das Fenster nicht: Die Statusleiste zeigt einen unbestimmten Fortschrittsbalken und eine Zeile „Exportiere…“, bis die Datei geschrieben ist, und nennt danach ihre Größe.
 
+## Kompositionsberichte
+
+Ein **Kompositionsbericht** kombiniert mehrere Berichte zu einem einzigen `.mad`-Dokument und
+verknüpft Daten aus MySQL, PostgreSQL, SQL Server und SQLite lokal statt über einen
+Föderationsserver. [Die Kompositionsanleitung](../composition.html) behandelt das Modell und die
+Beispiele.
+
+* **Composition-Bereich:** Ein Kompositionsbericht zeigt einen angedockten linken Bereich mit dem
+  Graphen des Dokuments — das **Ergebnis** oben und seine Quellen darunter, wobei Verbindungen auf
+  den Bericht zeigen, der sie konsumiert. Der Bereich hat einen `GridSplitter` und einen Modus
+  zum Erweitern/Einklappen.
+* **Eine Auswahl:** Ein Klick auf eine Karte im Graphen oder die Auswahl eines Berichts in der
+  **Component**-Auswahl der Symbolleiste schaltet die Arbeitsbereiche Abfrage, Designer und
+  Betrachter auf diesen Bericht um. Die Auswahl bleibt sichtbar, wenn der Bereich eingeklappt ist.
+* **Jede Quelle ist ein Bericht:** Eine Quelle behält ihre eigene Abfrage, ihr Layout und ihre
+  Zeilen. Eine Quelle ohne Layout ist ein Bericht aus Zeilen — der Betrachter zeigt ihre
+  zwischengespeicherten Zeilen in einem Raster, und der Designer bietet an, ein Layout zu erstellen.
+* **Zugangsdaten pro Quelle:** Eine Aktualisierung fragt einmal pro Quelle mit Zugangsdaten nach,
+  wobei die Verbindungsdetails vorausgefüllt sind. Kennwörter bleiben in der Sitzung oder im
+  Zugangsdatenspeicher der Plattform, nicht im Dokument.
+
+**Eine erstellen:** **File ▸ New Composition…** baut eine Komposition aus vorhandenen Berichten;
+**File ▸ Import…** fügt der geöffneten Komposition einen Bericht hinzu; **File ▸ Convert to Composition**
+wandelt den geöffneten Standardbericht um. Die Import-Aktion des Bereichs tut dasselbe aus dem
+Arbeitsbereich heraus.
+
 ## Bauen aus dem Quellcode
 
 Die Anwendung wird mit dem in [`Windows/global.json`](https://github.com/mthomason/MAD/blob/master/Windows/global.json) festgelegten .NET SDK (10.0.404) gebaut:

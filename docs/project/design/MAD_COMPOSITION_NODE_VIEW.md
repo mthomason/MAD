@@ -6,11 +6,12 @@ description: "Every node in a composite report is a complete report with its own
 
 # Per-node reports — final decision and implementation plan
 
-**Status: decision final; implementation pending.** The normative contract is
+**Status: decision final; implemented on macOS and Windows.** The normative contract is
 [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) §0. This file records the decision, the
-evidence for the work it requires, and the implementation scope. The presentation direction is
+evidence for the work it required, and the implementation scope. The presentation direction is
 [`MAD_COMPOSITION_UX.md`](MAD_COMPOSITION_UX.md); the execution walk is
-[`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) §3.
+[`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) §3. The iOS app does not author
+compositions yet.
 
 ## 0. The decision (final, 2026-11-26)
 

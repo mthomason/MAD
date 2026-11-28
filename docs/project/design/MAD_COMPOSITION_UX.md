@@ -15,10 +15,8 @@ This file is about how the feature is *presented*, not how it runs.
 > Composition pane** (the direction in `Composable UI on Windows.md`) rather than the top node
 > strip recommended in §4: a `GridSplitter`, an Expand/Collapse mode, one toolbar Component
 > picker, a clickable graph whose Result is at depth 0, and the terminology/empty-state/
-> localization work below. The pane and the Query-workspace selection are live. The
-> Designer/Viewer per-node rendering and the notice that currently explains the gap are
-> **pending the engine/store work** in `MAD_COMPOSITION_NODE_VIEW.md`; the notice is temporary
-> and must be removed when that lands.
+> localization work below. The pane, the picker, and per-node rendering in all three
+> workspaces are live; macOS implements the same model with a toolbar **Report** picker.
 
 ## 1. The problem
 
@@ -162,12 +160,15 @@ one Component picker, document-type badge/tooltip, Outputs → Columns with expl
 composition empty states, the one-source hint, the Designer "Report columns" caption,
 consistent Result/Source wording in all six dictionaries, and Query-on-open.
 
-Remaining (the node-as-report decision): per-node layouts and data reads in the store, import,
-serve, and all three workspaces. Scoped in
-[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md). The interim "source layouts are
-not available yet" notice and the forced switch to Query are removed when that lands.
+Shipped on macOS (2026-11-27): the toolbar **Report** picker, per-node Query/Designer/Viewer,
+a layout-less source as a row grid, and per-source credential prompts.
+
+The node-as-report work — per-node layouts and data reads in the store, import, serve, and
+all three workspaces — has landed on macOS and Windows. The interim "source layouts are not
+available yet" notice and the forced switch to Query are gone. The iOS app does not author
+compositions yet.
 
 ## 11. Order
 
-The terminology, empty states, pane, and picker are complete. Next is the engine/store work in
-`MAD_COMPOSITION_NODE_VIEW.md` §3, then the Windows/macOS/iOS follow-up in §3.5–§3.6.
+The terminology, empty states, pane, picker, and per-node reports are complete on macOS and
+Windows. The iOS follow-up remains.

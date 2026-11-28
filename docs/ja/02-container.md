@@ -50,3 +50,16 @@ meta.plist
 ```
 
 バージョンは書き込み時にはdouble型として出力されますが（`MADocument.m:611`）、サンプル内では整数として読み取られます。コンシューマ（読み取り側）は両方を受け入れる必要があります。
+
+### `1.1`コンポジションヘッダー
+
+コンポジションドキュメントは、フォーマットバージョン**1.1**を1.0の代わりに書き込み、`meta.plist`の隣に`requirements.plist`メンバを追加します。このレコードは小さなplistです：
+
+```xml
+{
+  "format" => 1,
+  "requiredCapabilities" => ["query-composition"]
+}
+```
+
+リーダーはストアを開く前に、すべての必須機能をビルドに対して確認します。未知の機能、レコードの欠落、または不正なレコードは、ドキュメントを誤読する代わりに、対処可能な「MAD Designerをアップグレードしてください」エラーを生成します。通常のレポートは**1.0**のままで、requirementsメンバを持ちません——このレコードは追加であるため、コンテナの残りは変わりません。バージョン定数は`MAD/Source/MADConstants.m`の`MADFileFormatMajorVersion`、`MADFileFormatMinorVersion`、および`MADFileFormatCompositionMinorVersion`です。アーカイブは`MADArchiveManager.m`でレコードを書き込み、確認します。

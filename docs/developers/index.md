@@ -17,6 +17,8 @@ embed it, drive it from a script, add a data source, or build it from source.
   container, the store, and the normative `v1` target.
 * [MAD Designer for macOS](../macos.html) — the native `AppKit` application.
 * [MAD Designer for Windows](../windows.html) — the native WPF application.
+* [Composition reports](../composition.html) — combine reports into one document;
+  every source keeps its own query, layout, and data.
 * [Vision](../vision.html) — reports as composable data sources.
 
 ## Engine and CLI
@@ -24,9 +26,9 @@ embed it, drive it from a script, add a data source, or build it from source.
 * [The `mad` command-line tool](cli.html) — open, inspect, query, refresh, and
   export a document without a UI.
 * [The data object](data-object.html) — a report's definition, schema, and
-  result set as one contract.
+  result set as one contract, and how composition realizes it.
 * [Multi-source reports](multi-source.html) — reports as tables, and drivers
-  for anything that returns a table.
+  for anything that returns a table; same-document composition is built.
 * [Pasting SQL into the query designer](sql-entry.html) — the supported subset,
   the parser, and the apply path.
 

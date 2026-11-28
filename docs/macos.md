@@ -94,6 +94,34 @@ The **MAD Viewer** workspace (`MADMacViewerViewController`) refreshes the query 
 
 ---
 
+## Composition Reports
+
+A **Composition Report** combines several reports into one `.mad` document. It is the
+desktop way to join data from different databases — MySQL, PostgreSQL, SQL Server, and
+SQLite — without a federation server. See [the composition guide](composition.html) for
+the concept and the cross-database samples.
+
+* **Toolbar Report picker:** a Composition Report adds a **Report** popup beside the
+  document type. It lists the **Result** first (*Result — <name>*) and then each source.
+  Selecting a report switches the Query, Designer, and Viewer workspaces together; it
+  never changes the active workspace.
+* **Every source is a report:** selecting a source shows its own query in MAD Query, its
+  own bands and field list in MAD Designer, and its own pages in MAD Viewer. A source
+  with no layout yet is still a report of rows: the Viewer shows a row grid, and the
+  Designer offers to author its layout.
+* **Per-source credentials:** a composition asks for one password per source on refresh,
+  with driver, host, port, database, and username prefilled. Passwords stay in the
+  Keychain or the current session and are never written into the `.mad`.
+
+
+**Creating a composition:** **File ▸ New Composition…** chooses existing reports and a
+destination; **File ▸ New Document…** offers Standard and Composition Report types; **File
+▸ Convert to Composition…** converts the open standard report into a one-source
+composition. The MAD Query workspace's Add menu also adds a source query from a database
+connection or imports an existing report into the open composition.
+
+---
+
 ## Opening & Creating Documents
 
 * **Launch & Open Panel (`MADMacDocumentController`):** Launching the app without a file presents the macOS **Open Report** panel filtered to `.mad` documents (`com.everydayapps.productivity.mad` and `com.thomason.report.mad`) with a primary **New Document** button in the bottom-left bar. Double-clicking any `.mad` file in Finder opens it directly into its workspace window.

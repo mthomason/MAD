@@ -106,6 +106,34 @@ El espacio de trabajo **MAD Viewer** (`MADMacViewerViewController`) actualiza la
 
 ---
 
+## Informes de composición
+
+Un **Informe de composición** combina varios informes en un solo documento `.mad`. Es la
+manera de escritorio de unir datos de distintas bases de datos —MySQL, PostgreSQL, SQL Server y
+SQLite— sin un servidor de federación. Consulte [la guía de composición](composition.html) para
+el concepto y las muestras entre bases de datos.
+
+* **Selector Report de la barra de herramientas:** un Informe de composición añade un menú emergente **Report** junto al
+  tipo de documento. Lista el **Resultado** primero (*Resultado — <nombre>*) y luego cada origen.
+  Seleccionar un informe cambia los espacios de trabajo Query, Designer y Viewer juntos; nunca
+  cambia el espacio de trabajo activo.
+* **Cada origen es un informe:** seleccionar un origen muestra su propia consulta en MAD Query, sus
+  propias bandas y lista de campos en MAD Designer, y sus propias páginas en MAD Viewer. Un origen
+  que aún no tiene diseño sigue siendo un informe de filas: el visor muestra una cuadrícula de filas y el
+  diseñador ofrece crear su diseño.
+* **Credenciales por origen:** una composición pide una contraseña por origen al actualizar,
+  con el controlador, host, puerto, base de datos y usuario ya rellenados. Las contraseñas permanecen en el
+  Llavero o en la sesión actual y nunca se escriben en el `.mad`.
+
+
+**Para crear una composición:** **Archivo ▸ Nueva composición…** elige informes existentes y un
+destino; **Archivo ▸ Nuevo documento…** ofrece los tipos Standard y Composition Report; **Archivo
+▸ Convertir en composición…** convierte el informe estándar abierto en una composición
+de un solo origen. El menú Añadir del espacio de trabajo MAD Query también añade una consulta de origen desde una conexión
+de base de datos o importa un informe existente en la composición abierta.
+
+---
+
 ## Abrir y crear documentos
 
 * **Inicio y panel de apertura (`MADMacDocumentController`):** Al iniciar la aplicación sin un archivo se presenta el panel **Open Report** de macOS, filtrado a documentos `.mad` (`com.everydayapps.productivity.mad` y `com.thomason.report.mad`), con un botón principal **New Document** en la barra inferior izquierda. Al hacer doble clic en cualquier archivo `.mad` del Finder se abre directamente en su ventana de espacio de trabajo.

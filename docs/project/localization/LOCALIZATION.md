@@ -27,12 +27,12 @@ The translation suffix keeps its case: `translations/README_pt-BR.md`, not
 
 ## The canonical public set
 
-Six languages × 40 documents. A new public page must be added to every language at the
+Six languages × 41 documents. A new public page must be added to every language at the
 same time. A page that is missing from a language is not an error the switcher reports:
 the per-page counterpart lookup falls back to that language's landing page, so the reader
 silently lands somewhere else. Add the page rather than accept the fallback.
 
-### Website pages (29, under `docs/`)
+### Website pages (30, under `docs/`)
 
 | English source | Served URL |
 | --- | --- |
@@ -47,6 +47,7 @@ silently lands somewhere else. Add the page rather than accept the fallback.
 | `docs/07-normative.md` | `/07-normative.html` |
 | `docs/08-open-questions.md` | `/08-open-questions.html` |
 | `docs/09-verification.md` | `/09-verification.html` |
+| `docs/composition.md` | `/composition.html` |
 | `docs/macos.md` | `/macos.html` |
 | `docs/windows.md` | `/windows.html` |
 | `docs/vision.md` | `/vision.html` |
@@ -280,7 +281,7 @@ Run from the repository root unless a step says otherwise.
    done
    ```
 
-   Expected: no output for any language. Each language serves its 29 pages (the English
+   Expected: no output for any language. Each language serves its 30 pages (the English
    set includes `/assets/london.html`, the sample report, and `/404.html`, which are
    excluded here).
 
@@ -342,7 +343,7 @@ Spanish (`es-419`, directory `docs/es/`, suffix `_es`, label `Español`) was the
 added, on 2026-11-03, and followed these steps. The same steps apply to any language;
 substitute its tag, directory, suffix, and label.
 
-1. **Create `docs/<lang>/`** and translate the 29 website pages, mirroring the English
+1. **Create `docs/<lang>/`** and translate the 30 website pages, mirroring the English
    relative paths, including the `developers/` tree. Each page gets its BCP-47 tag as
    `lang:` in its front matter — for Spanish, `lang: es-419` on every page.
 2. **Add a `_config.yml` default** so pages without an explicit `lang` still resolve:
@@ -361,7 +362,8 @@ substitute its tag, directory, suffix, and label.
    `base_url` strip for `/es`, an `es` candidate and match with a `/es/` fallback, the
    `hreflang="es-419"` link (plus the neutral `hreflang="es"` alternate pointing at the
    same URL, when the variant is regional), the translation notice, the footer string,
-   and the four section-navigation labels (`Format`, `Apps`, `Developers`, `Vision`).
+   and the five section-navigation labels (`Format`, `Apps`, `Composition`, `Developers`,
+   `Vision`).
 4. **Add the switcher entry in every existing branch.** The layout has one `<nav>` block
    per language (English, Chinese, Japanese, Portuguese, German, Spanish); each must list
    the new label in the fixed order, and the new block must list the other languages.

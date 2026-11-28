@@ -13,10 +13,10 @@ without relying on Core Data or on any Apple framework.
 The format matters because a report is *small* -- the shipping samples are
 under 80 KB -- and because the engine that runs it fits on a phone and in a
 container: the same definition runs on iOS, macOS, and the headless Linux
-build. Where the format is going -- a report's result table becoming a data
-source for other reports, so one document can span several databases -- is
-[`vision.md`](vision.md). The spec is also served as a website at
-<https://docs.everydayapps.com>.
+build. A report's result table can now be a data source for other reports, so
+one document can span several databases: [Composition Reports](composition.md)
+describes the model, and [`vision.md`](vision.md) records the wider direction.
+The spec is also served as a website at <https://docs.everydayapps.com>.
 
 Everything in the first half is measured, not inferred. The two samples are
 `../MADDesigner/Resources/Assets/Samples.xcassets/Reports/Music.dataset/Music.mad` and

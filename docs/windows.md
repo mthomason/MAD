@@ -80,6 +80,30 @@ The application has the same three reporting stages as the macOS app:
 
 The Viewer exports **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report**, and **Plain Text**, in the macOS viewer's order. The PDF is written by the engine itself (the same exporter `mad export --format pdf` uses), so a large report exports without blocking the window: the status bar shows an indeterminate progress bar and an "Exporting…" line until the file is written, then reports its size.
 
+## Composition Reports
+
+A **Composition Report** combines several reports into one `.mad` document, joining data
+from MySQL, PostgreSQL, SQL Server, and SQLite locally instead of through a federation
+server. [The composition guide](composition.html) covers the model and the samples.
+
+* **Composition pane:** a Composition Report shows a docked left pane with the document's
+  graph — the **Result** at the top and its sources below, connectors pointing at the
+  report that consumes them. The pane has a `GridSplitter` and an Expand/Collapse mode.
+* **One selection:** clicking a card in the graph, or choosing a report in the toolbar's
+  **Component** picker, switches the Query, Designer, and Viewer workspaces to that
+  report. The picker stays visible when the pane is collapsed.
+* **Every source is a report:** a source keeps its own query, layout, and rows. A source
+  with no layout is a report of rows — the Viewer shows its cached rows in a grid and the
+  Designer offers to author a layout.
+* **Per-source credentials:** refresh prompts once per credential-taking source, with the
+  connection details prefilled. Passwords stay in the session or the platform credential
+  store, not in the document.
+
+**Creating one:** **File ▸ New Composition…** builds a composition from existing reports;
+**File ▸ Import…** adds a report to the open composition; **File ▸ Convert to Composition**
+converts the open standard report. The pane's Import action does the same from inside the
+workspace.
+
 ## Building from Source
 
 The application builds with the .NET SDK pinned in [`Windows/global.json`](https://github.com/mthomason/MAD/blob/master/Windows/global.json) (10.0.404):

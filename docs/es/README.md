@@ -15,10 +15,11 @@ Apple.
 El formato importa porque un informe es *pequeño* —las muestras distribuidas ocupan
 menos de 80 KB— y porque el motor que lo ejecuta cabe en un teléfono y en un
 contenedor: la misma definición se ejecuta en iOS, macOS y la compilación de Linux
-sin interfaz gráfica (headless). Hacia dónde va el formato —la tabla de resultados de un
-informe convertida en fuente de datos para otros informes, de modo que un documento pueda
-abarcar varias bases de datos— se describe en
-[`vision.md`](vision.md). La especificación también se publica como sitio web en
+sin interfaz gráfica (headless). La tabla de resultados de un informe ahora puede ser una
+fuente de datos para otros informes, de modo que un documento puede abarcar varias
+bases de datos: [Informes de composición](composition.md) describe el modelo, y
+[`vision.md`](vision.md) registra la dirección más amplia.
+La especificación también se publica como sitio web en
 <https://docs.everydayapps.com>.
 
 Todo lo de la primera mitad es medido, no inferido. Las dos muestras son
