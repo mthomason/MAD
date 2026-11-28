@@ -591,7 +591,7 @@ Status key:
   change, and that is churn for a cosmetic gain.
 
 ### `MADColorEverydayApps` header colors bypass the 8-bit-to-unit conversion
-- **Status:** Confirmed (pinned as-is -- no changed functionality)
+- **Status:** Confirmed (fix in review on `fix/p2-low-risk-batch`)
 - **Where:** `MADCocoaExtensions/Source/UIColor+EverydayApps.m:30`
   (`-newColorHeaderColor`) and `:40` (`-blueHeaderSecondaryColor`)
 - **Behavior:** Every other palette member builds its color through
@@ -606,10 +606,12 @@ Status key:
   veil instead of the blue.  `blueHeaderSecondaryColor` has the same arithmetic
   but an alpha of 0, so it is invisible either way.  The fix is dividing by 255,
   as every sibling does.
-- **Test:** `MADColorEverydayAppsTests testHeaderColorLightModeComponentsAreOutOfRange`
-  and `testBlueHeaderSecondaryLightModeComponentsAreOutOfRange`, which pin the
-  stored 2/108/182 and 13/158/215 components; every other palette member is pinned
-  at unit scale.
+- **Fix (2026-11-28):** both UIKit light-mode branches divide by `MADF255`, as the
+  macOS branches and the rest of the palette already did.
+- **Test:** `MADColorEverydayAppsTests testHeaderColorLightModeUsesTheIntendedComponents`
+  and `testBlueHeaderSecondaryLightModeUsesTheIntendedComponents`, which pin
+  2/108/182 and 13/158/215 at unit scale; every other palette member is pinned
+  the same way.
 
 ## MADFileManager
 
@@ -706,7 +708,7 @@ Status key:
   the tracked objects directly.
 
 ### `MADLocalFileCoordinator -removeFileAtURL:` reports the removal as an update
-- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Status:** Open (found by test 2026-10-06; fix in review on `fix/p2-low-risk-batch`)
 - **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:112-119`
 - **Behavior:** The success branch builds `removes = @[URL]` and then calls
   `fileCoordinatorDidUpdateContentsWithInsertedURLs: removedURLs:updates
@@ -720,11 +722,13 @@ Status key:
   difference. The same swapped call exists in
   `MADCloudFileCoordinator -createURLWithName:` (`.m:214-221`), where both arrays
   are empty and the inversion is inert.
-- **Pinned by:** `MADLocalFileCoordinatorTests
-  -testRemoveReportsTheURLAsUpdatedNotRemoved`.
+- **Fix (2026-11-28):** the success branch passes `removedURLs:removes` and
+  `updatedURLs:@[]`.  The cloud coordinator's identical call has both arrays empty,
+  so it is left as is.
+- **Test:** `MADLocalFileCoordinatorTests -testRemoveReportsTheURLAsRemoved`.
 
 ### `MADLocalFileCoordinator -documentsDirectory` has no setter
-- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Status:** Open (found by test 2026-10-06; fix in review on `fix/p2-low-risk-batch`)
 - **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:38` (`@dynamic`)
   against `MADFileCoordinatorProtocol.h:18-19` (`readwrite, copy`)
 - **Behavior:** The class declares the property `@dynamic` and implements only
@@ -735,8 +739,10 @@ Status key:
   holds an `id <MADFileCoordinatorProtocol>` is entitled to write the property and
   will crash instead. `MADFilesController` only reads it today, and the app's
   writes go through the reader-side accessors, which is why it has not surfaced.
-- **Pinned by:** `MADLocalFileCoordinatorTests -testDocumentsDirectoryHasNoSetter`
-  (`-respondsToSelector:` plus the throwing call).
+- **Fix (2026-11-28):** the class stores a `documentsDirectoryOverride`; the setter
+  assigns it, and the getter returns it when set and the App Group directory otherwise.
+- **Test:** `MADLocalFileCoordinatorTests -testDocumentsDirectorySetterIsHonored`
+  (`-respondsToSelector:` plus the round trip).
 
 ### `MADFilesController` accepts and ignores `sortComparator`
 - **Status:** Quirk (left as is)
@@ -753,7 +759,7 @@ Status key:
   (a comparator that would keep the reverse order makes no difference).
 
 ### `MADFilesController` gates the renaming failure on the removing callback
-- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Status:** Open (found by test 2026-10-06; fix in review on `fix/p2-low-risk-batch`)
 - **Where:** `MADFileManager/Source/MADFilesController.m:405-416`
 - **Behavior:** `-fileCoordinatorDidFailRenamingFileAtURL:withError:` puts
   `@selector(filesController:didFailRemovingFileInfo:withError:)` in the
@@ -763,8 +769,10 @@ Status key:
   failure; one that implements only the removing callback gets the renaming
   failure anyway.
 - **Why it matters:** A failed rename is silent for the expected delegate shape.
-- **Pinned by:** `MADFilesControllerTests
-  -testRenamingFailureIsGatedOnTheRemovingCallback`.
+- **Fix (2026-11-28):** the `respondsToSelector:` check now names
+  `@selector(filesController:didFailRenamingFileInfo:withError:)`, the selector it sends.
+- **Test:** `MADFilesControllerTests
+  -testRenamingFailureReachesTheRenamingCallback`.
 
 ### `+[MADFilesController getFileStorageLocationsForUbiquityIdentifier:…]` crosses its two URLs
 - **Status:** Open (latent; found by test 2026-10-06)

@@ -35,7 +35,7 @@
 		if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
 			return [UIColor secondarySystemBackgroundColor];
 		} else {
-			return [UIColor colorWithRed:2.0 green:108.0 blue:182.0 alpha:0.20000f];
+			return [UIColor colorWithRed:2.0/MADF255 green:108.0/MADF255 blue:182.0/MADF255 alpha:0.20000f];
 		}
 	}];
 #endif
@@ -49,7 +49,7 @@
 		if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
 			return [UIColor secondarySystemBackgroundColor];
 		} else {
-			return [UIColor colorWithRed:13.0 green:158.0 blue:215.0 alpha:0.0];
+			return [UIColor colorWithRed:13.0/MADF255 green:158.0/MADF255 blue:215.0/MADF255 alpha:0.0];
 		}
 	}];
 #endif

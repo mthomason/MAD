@@ -9,11 +9,9 @@
 //  cannot be redirected -- so every test claims a private path extension
 //  (a UUID-suffixed one) and creates/removes only files carrying it.
 //
-//  The suite pins two live defects, both called out in docs/project/registers/BUGS.md:
-//    - -removeFileAtURL: reports the removed URL in the *updatedURLs* box and
-//      leaves removedURLs empty (the local arrays are handed over swapped).
-//    - -documentsDirectory is @dynamic with only a getter, so the protocol's
-//      setter raises.
+//  Two former defects are now pinned as corrected:
+//    - -removeFileAtURL: reports the deleted URL in removedURLs, not updatedURLs.
+//    - -documentsDirectory accepts the protocol's setter and returns the override.
 //
 
 #import <XCTest/XCTest.h>
@@ -162,14 +160,16 @@
 	XCTAssertEqualObjects(coordinator.documentsDirectory.lastPathComponent, @"Documents");
 }
 
-- (void)testDocumentsDirectoryHasNoSetter {
-	// docs/project/registers/BUGS.md: the protocol declares documentsDirectory readwrite, but the
-	// class declares it @dynamic and only -documentsDirectory is implemented.
+- (void)testDocumentsDirectorySetterIsHonored {
+	// The protocol declares documentsDirectory readwrite; a value set through it
+	// is returned by the getter instead of the App Group's derived directory.
 	MADLocalFileCoordinator *coordinator = [self coordinator];
+	NSURL *override = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					   URLByAppendingPathComponent:@"override" isDirectory:YES];
 
-	XCTAssertFalse([coordinator respondsToSelector:@selector(setDocumentsDirectory:)]);
-	XCTAssertThrowsSpecificNamed([coordinator setDocumentsDirectory:coordinator.documentsDirectory],
-								 NSException, NSInvalidArgumentException);
+	XCTAssertTrue([coordinator respondsToSelector:@selector(setDocumentsDirectory:)]);
+	coordinator.documentsDirectory = override;
+	XCTAssertEqualObjects(coordinator.documentsDirectory, override);
 }
 
 - (void)testDebugQuickLookObjectListsTheGroupAndContents {
@@ -284,9 +284,8 @@
 
 #pragma mark - remove / duplicate / rename
 
-- (void)testRemoveReportsTheURLAsUpdatedNotRemoved {
-	// docs/project/registers/BUGS.md: the success branch hands the arrays over swapped.  The file is
-	// deleted, but the delegate is told the URL was updated.
+- (void)testRemoveReportsTheURLAsRemoved {
+	// The success branch reports the deleted URL in removedURLs, not updatedURLs.
 	MADLocalFileCoordinator *coordinator = [self coordinator];
 	coordinator.delegate = self.delegate;
 
@@ -296,8 +295,8 @@
 	[coordinator removeFileAtURL:URL];
 	[self waitForTheDelegate];
 
-	XCTAssertEqualObjects(self.delegate.lastUpdatedURLs, @[URL]);
-	XCTAssertEqualObjects(self.delegate.lastRemovedURLs, @[]);
+	XCTAssertEqualObjects(self.delegate.lastRemovedURLs, @[URL]);
+	XCTAssertEqualObjects(self.delegate.lastUpdatedURLs, @[]);
 	XCTAssertEqualObjects(self.delegate.lastInsertedURLs, @[]);
 	XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:(URL.path ?: @"")]);
 }
