@@ -34,6 +34,12 @@
 
 #import <mysql.h>
 
+// The connection owns the one close: -closeHandle is idempotent, so the driver's
+// early close and the connection's -dealloc can both call it without a double free.
+@interface MADMySQLConnection (MADMySQLClose)
+- (void)closeHandle;
+@end
+
 @interface MADDatabaseMySQL () <MADMySQLFetchProtocol>
 
 @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
@@ -396,10 +402,11 @@
 
 - (void)closeConnection:(id)process {
 	// Dropped before the close, so nothing can escape a literal through a session that is
-	// already shut.  The handle itself is freed by the connection's -dealloc: -mysql_init
-	// was handed memory this side allocated, so the client leaves freeing it to us.
+	// already shut.  The connection owns the close: -closeHandle runs mysql_close once,
+	// and its -dealloc frees the calloc'd struct afterwards.  Calling mysql_close here
+	// and again in -dealloc freed the session buffers twice.
 	if (process == self.liveConnection) self.liveConnection = nil;
-	mysql_close(((MADMySQLConnection *)process).connection);
+	[(MADMySQLConnection *)process closeHandle];
 }
 
 - (NSString *)identifier {

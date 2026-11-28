@@ -52,7 +52,9 @@ static void BDHostEnsureWinsock(void) {
 
 + (NSString *)addressForHostname:(NSString *)hostname {
 	NSArray *addresses = [BDHost addressesForHostname:hostname];
-	return addresses.class > 0 ? addresses[0] : nil;
+	// An IPv6-only name still answers an array; it is just empty after the AF_INET
+	// filter.  The count is the question, not the array's class.
+	return addresses.count > 0 ? addresses[0] : nil;
 }
 
 + (NSArray *)addressesForHostname:(NSString *)hostname {

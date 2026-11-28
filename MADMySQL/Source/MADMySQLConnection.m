@@ -29,6 +29,7 @@ static NSString *const MADMySQLSchemaKey = @"MySQLSchemaKey";
 @interface MADMySQLConnection ()
 
 	@property(nonatomic, assign, readwrite) BOOL transactionsEnabled;
+	@property(nonatomic, assign, readwrite) BOOL handleClosed;
 	@property(nonatomic, readonly) BOOL connected;
 	@property(nonatomic, readonly) MYSQL *mysqlHandle;
 
@@ -82,11 +83,23 @@ static NSString *const MADMySQLSchemaKey = @"MySQLSchemaKey";
 }
 
 - (void)dealloc {
+	[self closeHandle];
 	if (_mysqlHandle != NULL) {
-		mysql_close(_mysqlHandle);
 		free(_mysqlHandle);
 		_mysqlHandle = NULL;
 	}
+}
+
+// Closes the session exactly once.  The struct's storage stays until -dealloc,
+// which is the only owner allowed to free it: mysql_close tears down the
+// client's session buffers but not the calloc'd struct.  -closeConnection: may
+// have closed it already; the flag makes the second call a no-op.
+- (void)closeHandle {
+	if (_handleClosed || _mysqlHandle == NULL) {
+		return;
+	}
+	mysql_close(_mysqlHandle);
+	_handleClosed = YES;
 }
 
 - (NSString *)description {

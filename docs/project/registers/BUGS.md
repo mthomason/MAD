@@ -542,7 +542,7 @@ Status key:
   convention question is recorded at the bottom of this file.
 
 ### `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
-- **Status:** Confirmed (latent -- no IPv6-only resolution in the test environment)
+- **Status:** Confirmed (fix in review on `fix/reachable-crashes`)
 - **Where:** `MADFoundation/Source/BDHost.m:27`
 - **Behavior:** The guard is `addresses.class > 0 ? addresses[0] : nil`.  `[NSArray class]`
   is never 0, so the test only rejects nil; `+addressesForHostname:` answers an *empty*
@@ -550,9 +550,12 @@ Status key:
   `AF_INET`), and subscripting element 0 of an empty array throws `NSRangeException`.
 - **Why it matters:** An IPv6-only hostname -- the normal case on some networks -- takes
   the connection screen down instead of reporting a lookup failure.
-- **Test:** none, deliberately: no IPv6-only fixture resolves deterministically in an
-  offline simulator.  The non-empty path is pinned by `BDHostTests
-  testLocalhostResolvesToLoopback`.
+- **Fix (2026-11-28):** the guard reads `addresses.count > 0`, so both nil and the empty
+  array for an IPv6-only name answer nil instead of subscripting element 0.
+- **Test:** `BDHostTests testIPv6OnlyHostnameReturnsNilInsteadOfCrashing`.  `::1`
+  resolves through `CFHost` to one `AF_INET6` address and then filters to an empty
+  array, which makes the path deterministic offline.  The non-empty path is pinned by
+  `BDHostTests testLocalhostResolvesToLoopback`.
 
 ### `BDHost +ipAddresses` / `+ethernetAddresses` are unchecked walks of `getifaddrs()`
 - **Status:** Quirk (dead code -- left as is)
@@ -1037,7 +1040,7 @@ Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
 libmysqlclient; it skips rather than fails when no server is reachable.
 
 ### `MADDatabaseMySQL -closeConnection:` and `MADMySQLConnection -dealloc` both `mysql_close` the handle
-- **Status:** Confirmed (latent -- the closeConnection path is the create-document-from-schema import)
+- **Status:** Confirmed (fix in review on `fix/reachable-crashes`)
 - **Where:** `MADMySQL/Source/MADDatabaseMySQL.m:397-403` and `MADMySQL/Source/MADMySQLConnection.m:79-85`
 - **Behavior:** `-closeConnection:` calls `mysql_close` on the connection's handle, and the
   connection's own `-dealloc` calls `mysql_close` on the same handle again when the object
@@ -1050,11 +1053,16 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   closes and then releases. Recorded during the connector rewrite so the next reader does
   not mistake the arrangement for one that was checked.
 - **Fix sketch (2026-11-28):** make the close idempotent rather than remove either
-  call. Have `-closeConnection:` NULL the connection's handle after `mysql_close`, and
-  guard both `-closeConnection:` and `-dealloc` on a non-NULL handle. That keeps the
-  import path's explicit close and the common dealloc-only path, and needs no rebuild
-  of the MySQL client -- it is Objective-C ownership bookkeeping at two sites.
-- **Test:** none -- the path needs the app and a live server.
+  call. The implementation uses a `handleClosed` flag on the connection rather than
+  NULLing the handle pointer, because the calloc'd struct must stay for `-dealloc` to
+  free; the flag is what prevents the second `mysql_close`. That keeps the import
+  path's explicit close and the common dealloc-only path, and needs no rebuild of the
+  MySQL client -- it is Objective-C ownership bookkeeping at two sites.
+- **Fix (2026-11-28):** `MADMySQLConnection` now owns one idempotent `-closeHandle`;
+  `-closeConnection:` calls it instead of `mysql_close`, and `-dealloc` calls it before
+  freeing the struct.
+- **Test:** `MADMySQLLiveTests testCloseConnectionThenReleaseDoesNotDoubleClose`
+  (skips when no server is reachable).
 
 ### `MADMySQLInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
 - **Status:** Quirk (left as is)
