@@ -1999,12 +1999,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	NSTextField *field = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 220, 24)];
 	field.placeholderString = NSLocalizedString(@"e.g. invoices", @"Placeholder for the source query name.");
-	field.stringValue = @"source";
+	field.stringValue = NSLocalizedString(@"source", @"Default source query name.");
 	alert.accessoryView = field;
 
 	if ([alert runModal] != NSAlertFirstButtonReturn) return;
 	NSString *name = [field.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	if (name.length == 0) name = @"source";
+	if (name.length == 0) name = NSLocalizedString(@"source", @"Default source query name.");
 
 	NSError *error = nil;
 	RptqQuery *query = [_document addSourceQueryNamed:name

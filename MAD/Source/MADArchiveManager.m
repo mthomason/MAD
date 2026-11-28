@@ -296,7 +296,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain: MADFileFormatErrorDomain code: 2 userInfo: @{
 				NSLocalizedDescriptionKey:
-					@"This document requires capabilities this build cannot read (its requirements record is missing). Upgrade MAD Designer to open it." }];
+					NSLocalizedString(@"This document requires capabilities this build cannot read (its requirements record is missing). Upgrade MAD Designer to open it.", @"Requirements record missing error.") }];
 		}
 		return NO;
 	}
@@ -305,7 +305,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain: MADFileFormatErrorDomain code: 3 userInfo: @{
 				NSLocalizedDescriptionKey:
-					@"This document's requirements record is malformed. Upgrade MAD Designer to open it." }];
+					NSLocalizedString(@"This document's requirements record is malformed. Upgrade MAD Designer to open it.", @"Requirements record malformed error.") }];
 		}
 		return NO;
 	}

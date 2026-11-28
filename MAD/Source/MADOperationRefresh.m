@@ -635,7 +635,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 	if (connectError != nil) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
 		userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:
-			NSLocalizedString(@"The source '%@' could not connect: %@", @"Source connection failure."),
+			NSLocalizedString(@"The source '%1$@' could not connect: %2$@", @"Source connection failure."),
 			plan.name, connectError.localizedDescription];
 		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
 		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
@@ -667,7 +667,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 		[table closeConnections];
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
 		userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:
-			NSLocalizedString(@"The source '%@' failed: %@", @"Source query failure."),
+			NSLocalizedString(@"The source '%1$@' failed: %2$@", @"Source query failure."),
 			plan.name, (executeError.localizedDescription ?: NSLocalizedString(@"the query reported no error", @"No driver error."))];
 		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
 		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;

@@ -738,7 +738,7 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 			if (error != NULL) {
 				NSString *name = query.name ?: NSLocalizedString(@"<unnamed>", @"Unnamed query in a composition error.");
 				*error = MADCompositionError(2, [[NSString alloc] initWithFormat:
-					NSLocalizedString(@"The query '%@' references a missing upstream query (%@).", @"Missing-upstream validation error."), name, upstreamIdentifier]);
+					NSLocalizedString(@"The query '%1$@' references a missing upstream query (%2$@).", @"Missing-upstream validation error."), name, upstreamIdentifier]);
 			}
 			return NO;
 		}

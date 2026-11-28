@@ -3053,6 +3053,42 @@
         }
       }
     },
+    "A database connection is required.": {
+      "comment": "Error when a query connection is applied without one.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine Datenbankverbindung ist erforderlich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se requiere una conexión de base de datos."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データベース接続が必要です。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "É necessária uma conexão de banco de dados."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要数据库连接。"
+          }
+        }
+      }
+    },
     "A dynamic data field label.": {
       "comment": "Description of a dynamic data label element.",
       "extractionState": "manual",
@@ -13553,6 +13589,78 @@
         }
       }
     },
+    "Enter the connection details for the '%@' source.": {
+      "comment": "Connection window subtitle naming the composition source.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie die Verbindungsdetails für die Quelle '%@' ein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduzca los detalles de conexión para el origen '%@'."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース '%@' の接続詳細を入力してください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Insira os detalhes de conexão para a fonte '%@'."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入来源“%@”的连接详细信息。"
+          }
+        }
+      }
+    },
+    "Enter the password for the '%@' source.": {
+      "comment": "Composition prompt reason naming the source that needs a password.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie das Passwort für die Quelle '%@' ein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduzca la contraseña para el origen '%@'."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース '%@' のパスワードを入力してください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Insira a senha para a fonte '%@'."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入来源“%@”的密码。"
+          }
+        }
+      }
+    },
     "Entire Report": {
       "comment": "Aggregate scope: one value for the whole report.",
       "extractionState": "manual",
@@ -22998,6 +23106,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "没有要转换的报表存储。"
+          }
+        }
+      }
+    },
+    "No source database for query %lld.": {
+      "comment": "Error when a query-scoped connection names an unknown or connection-less query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Quelldatenbank für Abfrage %lld."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay base de datos de origen para la consulta %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ %lld のソースデータベースがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum banco de dados de origem para a consulta %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询 %lld 没有源数据库。"
           }
         }
       }
@@ -32754,6 +32898,42 @@
         }
       }
     },
+    "The query '%1$@' references a missing upstream query (%2$@).": {
+      "comment": "Missing-upstream validation error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage '%1$@' verweist auf eine fehlende übergeordnete Abfrage (%2$@)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta '%1$@' hace referencia a una consulta de origen ausente (%2$@)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ '%1$@' が存在しない上流クエリ (%2$@) を参照しています。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta '%1$@' referencia uma consulta de origem ausente (%2$@)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询 '%1$@' 引用了不存在的上游查询（%2$@）。"
+          }
+        }
+      }
+    },
     "The query '%@' has more than ten direct sources, which this build cannot attach.": {
       "comment": "Too many composition children.",
       "extractionState": "manual",
@@ -32822,42 +33002,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "查询 '%@' 将远程表与其他报表混合。  合成查询只引用其他报表，从不引用远程表。"
-          }
-        }
-      }
-    },
-    "The query '%@' references a missing upstream query (%@).": {
-      "comment": "Missing-upstream validation error.",
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Abfrage '%@' verweist auf eine fehlende übergeordnete Abfrage (%@)."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La consulta '%@' hace referencia a una consulta de origen ausente (%@)."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "クエリ '%@' が存在しない上流クエリ (%@) を参照しています。"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A consulta '%@' referencia uma consulta de origem ausente (%@)."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查询 '%@' 引用了不存在的上游查询（%@）。"
           }
         }
       }
@@ -33258,74 +33402,74 @@
         }
       }
     },
-    "The source '%@' could not connect: %@": {
+    "The source '%1$@' could not connect: %2$@": {
       "comment": "Source connection failure.",
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Quelle '%@' konnte keine Verbindung herstellen: %@"
+            "value": "Die Quelle '%1$@' konnte keine Verbindung herstellen: %2$@"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El origen '%@' no pudo conectarse: %@"
+            "value": "El origen '%1$@' no pudo conectarse: %2$@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ソース '%@' が接続できませんでした: %@"
+            "value": "ソース '%1$@' が接続できませんでした: %2$@"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A fonte '%@' não pôde conectar: %@"
+            "value": "A fonte '%1$@' não pôde conectar: %2$@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "源 '%@' 无法连接：%@"
+            "value": "源 '%1$@' 无法连接：%2$@"
           }
         }
       }
     },
-    "The source '%@' failed: %@": {
+    "The source '%1$@' failed: %2$@": {
       "comment": "Source query failure.",
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Quelle '%@' ist fehlgeschlagen: %@"
+            "value": "Die Quelle '%1$@' ist fehlgeschlagen: %2$@"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El origen '%@' falló: %@"
+            "value": "El origen '%1$@' falló: %2$@"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ソース '%@' が失敗しました: %@"
+            "value": "ソース '%1$@' が失敗しました: %2$@"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A fonte '%@' falhou: %@"
+            "value": "A fonte '%1$@' falhou: %2$@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "源 '%@' 失败：%@"
+            "value": "源 '%1$@' 失败：%2$@"
           }
         }
       }
@@ -33798,6 +33942,42 @@
         }
       }
     },
+    "This document requires capabilities this build cannot read (its requirements record is missing). Upgrade MAD Designer to open it.": {
+      "comment": "Requirements record missing error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Dokument benötigt Funktionen, die diese Version nicht lesen kann (der Anforderungsdatensatz fehlt). Aktualisieren Sie MAD Designer, um es zu öffnen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este documento requiere funciones que esta versión no puede leer (falta el registro de requisitos). Actualice MAD Designer para abrirlo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このドキュメントには、このビルドでは読み取れない機能が必要です（要件レコードがありません）。MAD Designer をアップグレードして開いてください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este documento exige recursos que esta versão não consegue ler (o registro de requisitos está ausente). Atualize o MAD Designer para abri-lo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此文档需要此版本无法读取的功能（缺少要求记录）。请升级 MAD Designer 以打开它。"
+          }
+        }
+      }
+    },
     "This document was written before the portable store and no legacy converter is available in this build.": {
       "comment": "Error opening a legacy document when this build has no converter.",
       "extractionState": "manual",
@@ -33830,6 +34010,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "此文档在便携存储出现之前创建，并且此版本中没有可用的旧版转换器。"
+          }
+        }
+      }
+    },
+    "This document's requirements record is malformed. Upgrade MAD Designer to open it.": {
+      "comment": "Requirements record malformed error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Anforderungsdatensatz dieses Dokuments ist fehlerhaft. Aktualisieren Sie MAD Designer, um es zu öffnen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El registro de requisitos de este documento está mal formado. Actualice MAD Designer para abrirlo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このドキュメントの要件レコードが壊れています。MAD Designer をアップグレードして開いてください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O registro de requisitos deste documento está malformado. Atualize o MAD Designer para abri-lo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此文档的要求记录格式不正确。请升级 MAD Designer 以打开它。"
           }
         }
       }
@@ -36698,6 +36914,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "root"
+          }
+        }
+      }
+    },
+    "source": {
+      "comment": "Default source query name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fonte"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源"
           }
         }
       }
