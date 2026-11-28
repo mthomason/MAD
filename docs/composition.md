@@ -45,7 +45,7 @@ when it is imported: its query definition, its own report layout, and its data a
 along, and they are saved in the same `.mad` document. Rows stay in companion storage
 (the `.maddb` and `.mdcache` files beside the document), not inside the `.mad`.
 
-Selecting a source in the **Report** picker (macOS) or the **Component** picker and
+Selecting a source in the **Navigation** picker (macOS) or the **Component** picker and
 Composition pane (Windows) switches **all three workspaces** — Query, Designer, and
 Viewer — to that source. A layout-less source is still a valid report: the Viewer shows
 its cached rows in a grid rather than a page.
@@ -65,7 +65,7 @@ its cached rows in a grid rather than a page.
 * In the **MAD Query** workspace, the Add menu adds a table, a **source query** from a
   new database connection, an **imported report**, or the composed **root query**.
 
-The toolbar's **Report** picker lists the **Result** first (marked *Result — <name>*)
+The toolbar's **Navigation** picker lists the **Result** first (marked *Result — <name>*)
 and then each source. Selecting an item never changes the active workspace; it changes
 which report that workspace is showing.
 

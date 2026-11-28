@@ -46,7 +46,7 @@ cuando se importa: su definición de consulta, su propio diseño de informe y su
 lo acompañan, y se guardan en el mismo documento `.mad`. Las filas permanecen en el almacenamiento complementario
 (los archivos `.maddb` y `.mdcache` junto al documento), no dentro del `.mad`.
 
-Seleccionar un origen en el selector **Report** (macOS) o en el selector **Componente** y el
+Seleccionar un origen en el selector **Navegación** (macOS) o en el selector **Componente** y el
 panel Composición (Windows) cambia **los tres espacios de trabajo** —Query, Designer y
 Viewer— a ese origen. Un origen sin diseño sigue siendo un informe válido: el Visor muestra
 sus filas en caché en una cuadrícula en lugar de una página.
@@ -66,7 +66,7 @@ sus filas en caché en una cuadrícula en lugar de una página.
 * En el espacio de trabajo **MAD Query**, el menú Añadir agrega una tabla, una **consulta de origen** desde una
   nueva conexión de base de datos, un **informe importado** o la **consulta raíz** compuesta.
 
-El selector **Report** de la barra de herramientas lista el **Resultado** primero (marcado *Resultado — <nombre>*)
+El selector **Navegación** de la barra de herramientas lista el **Resultado** primero (marcado *Resultado — <nombre>*)
 y luego cada origen. Seleccionar un elemento nunca cambia el espacio de trabajo activo; cambia
 qué informe muestra ese espacio de trabajo.
 

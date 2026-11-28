@@ -32,10 +32,6 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 /// toolbar forward their commands to it.
 @property (nonatomic, assign, readonly) MADMacWorkspaceTab activeWorkspaceTab;
 
-/// The compact, persistent document-type label ("Standard Report" / "Composition
-/// Report") shown in the window toolbar across all three workspaces.
-@property (nonatomic, strong, readonly) NSTextField *documentTypeLabel;
-
 /// The workspace switcher (labels Query / Designer / Viewer).
 @property (nonatomic, strong, readonly, nullable) NSSegmentedControl *workspaceSegmentedControl;
 
@@ -43,8 +39,9 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 /// for a Composition Report.  Nil for a Standard Report and before the toolbar is built.
 @property (nonatomic, strong, readonly, nullable) NSPopUpButton *nodePickerPopup;
 
-/// Refreshes the document-type label from the document model (`isComposed`).
-- (void)refreshDocumentTypeLabel;
+/// Refreshes the window subtitle ("Standard Report" / "Composition Report") from
+/// the document model (`isComposed`).
+- (void)refreshDocumentTypeSubtitle;
 
 /// The node picker's action: sets the document's selection; every workspace follows.
 - (void)nodePickerChanged:(NSPopUpButton *)sender;

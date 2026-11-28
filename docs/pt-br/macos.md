@@ -29,7 +29,7 @@ Cada arquivo `.mad` criado ou editado no macOS é compatível byte a byte com os
 
 ## Workspaces
 
-Cada documento `.mad` aberto roda em uma janela `NSDocument` nativa (`MADMacDocument` / `MADMacWindowController`) com um controle segmentado **Workspace** centralizado na barra de ferramentas da janela (`Cmd+1`, `Cmd+2`, `Cmd+3`), que alterna entre os três estágios de construção e leitura do relatório:
+Cada documento `.mad` aberto roda em uma janela `NSDocument` nativa (`MADMacDocument` / `MADMacWindowController`) com um controle segmentado **Workspace** centralizado na barra de ferramentas da janela (`Cmd+1`, `Cmd+2`, `Cmd+3`), que alterna entre os três estágios de construção e leitura do relatório. Um relatório abre no workspace Query na primeira vez e, depois, no workspace em que foi exibido por último; o subtítulo da janela indica o tipo (**Standard Report** ou **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -102,8 +102,8 @@ maneira desktop de unir dados de bancos de dados diferentes — MySQL, PostgreSQ
 SQLite — sem um servidor de federação. Consulte [o guia de composição](../composition.html) para
 o conceito e os exemplos entre bancos de dados.
 
-* **Seletor Report da barra de ferramentas:** um Relatório de Composição adiciona um popup **Report** ao lado do
-  tipo de documento. Ele lista o **Resultado** primeiro (*Resultado — <nome>*) e depois cada fonte.
+* **Seletor Navigation da barra de ferramentas:** um Relatório de Composição adiciona um popup **Navegação**.
+  Ele lista o **Resultado** primeiro (*Resultado — <nome>*) e depois cada fonte.
   Selecionar um relatório alterna os workspaces MAD Query, MAD Designer e MAD Viewer juntos; ele
   nunca muda o workspace ativo.
 * **Toda fonte é um relatório:** selecionar uma fonte mostra sua própria consulta no MAD Query, suas

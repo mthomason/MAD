@@ -8777,7 +8777,7 @@
       }
     },
     "Composition Report": {
-      "comment": "Document type label: a report that combines one or more child reports.",
+      "comment": "Window subtitle: a report that combines one or more child reports.",
       "extractionState": "manual",
       "localizations": {
         "de": {
@@ -12212,42 +12212,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "文档信息"
-          }
-        }
-      }
-    },
-    "Document Type": {
-      "comment": "Toolbar item label for the document type.",
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dokumenttyp"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tipo de documento"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ドキュメントの種類"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tipo de documento"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "文档类型"
           }
         }
       }
@@ -22210,6 +22174,42 @@
         }
       }
     },
+    "Navigation": {
+      "comment": "Toolbar item label for the composition's report navigation picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigation"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navegación"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ナビゲーション"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navegação"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导航"
+          }
+        }
+      }
+    },
     "New Composition…": {
       "comment": "File menu item that starts a new composition from existing reports.",
       "extractionState": "manual",
@@ -30410,7 +30410,7 @@
       "shouldTranslate": false
     },
     "Standard Report": {
-      "comment": "Document type label: an ordinary single-source report.",
+      "comment": "Window subtitle: an ordinary single-source report.",
       "extractionState": "manual",
       "localizations": {
         "de": {

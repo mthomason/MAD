@@ -13,8 +13,11 @@
 #import "MADMacConnectionWindowController.h"
 
 static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspace";
-static NSToolbarItemIdentifier const kToolbarItemDocumentType = @"MADToolbarDocumentType";
 static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePicker";
+
+/// One defaults key per report file path, holding the workspace tab it was last shown
+/// in.  A report without a path (an unsaved document) starts in the Query workspace.
+static NSString * const kWorkspaceTabDefaultsPrefix = @"MADMacWorkspaceTab.";
 
 @interface MADMacWindowController ()
 
@@ -27,7 +30,6 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 
 @property (nonatomic, strong, readwrite, nullable) NSSegmentedControl *workspaceSegmentedControl;
 @property (nonatomic, strong) NSTabView *workspaceTabView;
-@property (nonatomic, strong, readwrite) NSTextField *documentTypeLabel;
 @property (nonatomic, strong, readwrite, nullable) NSPopUpButton *nodePickerPopup;
 @property (nonatomic, strong, nullable) NSToolbarItem *nodePickerToolbarItem;
 
@@ -64,7 +66,7 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 												 selector:@selector(documentDidSelectQuery:)
 													 name:MADMacDocumentDidSelectQueryNotification
 												   object:document];
-		[self refreshDocumentTypeLabel];
+		[self refreshDocumentTypeSubtitle];
 		if (self.madDocument.isComposed) {
 			[self ensureNodePicker];
 		}
@@ -81,7 +83,7 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 }
 
 - (void)documentDidMutate:(NSNotification *) __unused notification {
-	[self refreshDocumentTypeLabel];
+	[self refreshDocumentTypeSubtitle];
 	// The composition may have gained or lost its root, and its query list may have changed.
 	[self updateNodePickerVisibility];
 	[self refreshNodePicker];
@@ -106,17 +108,6 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 #pragma clang diagnostic pop
 	}
 	self.window.toolbar = toolbar;
-	_documentTypeLabel = [self makeDocumentTypeLabel];
-}
-
-- (NSTextField *)makeDocumentTypeLabel {
-	NSTextField *label = [NSTextField labelWithString:[self documentTypeString]];
-	label.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightMedium];
-	label.textColor = [NSColor secondaryLabelColor];
-	label.lineBreakMode = NSLineBreakByTruncatingTail;
-	label.accessibilityLabel = [self documentTypeString];
-	label.toolTip = NSLocalizedString(@"The type of the open document: an ordinary report or one that combines child reports.", @"Tooltip for the document type label.");
-	return label;
 }
 
 - (void)setupWorkspaceTabs {
@@ -137,7 +128,7 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	[_workspaceTabView addTabViewItem:viewerTab];
 
 	[self.window.contentView addSubview:_workspaceTabView];
-	[self switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[self switchToWorkspaceTab:[self restoredWorkspaceTab]];
 }
 
 - (void)switchToWorkspaceTab:(MADMacWorkspaceTab)tab {
@@ -151,6 +142,36 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	} else if (tab == MADMacWorkspaceTabViewer) {
 		[_viewerViewController reloadPreview];
 	}
+	[self persistWorkspaceTab:tab];
+}
+
+#pragma mark - Workspace Persistence
+
+/// The defaults key for this report, or nil when the document has never been saved.
+- (nullable NSString *)workspaceTabDefaultsKey {
+	NSString *path = self.madDocument.fileURL.path;
+	if (path.length == 0) return nil;
+	return [kWorkspaceTabDefaultsPrefix stringByAppendingString:path];
+}
+
+/// The workspace this report was last shown in, or Query for a report with no
+/// recorded workspace (including every unsaved document).
+- (MADMacWorkspaceTab)restoredWorkspaceTab {
+	NSString *key = [self workspaceTabDefaultsKey];
+	if (key == nil) return MADMacWorkspaceTabQuery;
+	id stored = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+	if (![stored isKindOfClass:[NSNumber class]]) return MADMacWorkspaceTabQuery;
+	NSInteger tab = [stored integerValue];
+	if (tab < MADMacWorkspaceTabQuery || tab > MADMacWorkspaceTabViewer) {
+		return MADMacWorkspaceTabQuery;
+	}
+	return (MADMacWorkspaceTab)tab;
+}
+
+- (void)persistWorkspaceTab:(MADMacWorkspaceTab)tab {
+	NSString *key = [self workspaceTabDefaultsKey];
+	if (key == nil) return;
+	[[NSUserDefaults standardUserDefaults] setInteger:tab forKey:key];
 }
 
 - (void)workspaceSegmentAction:(NSSegmentedControl *)sender {
@@ -159,17 +180,12 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 
 - (NSString *)documentTypeString {
 	return self.madDocument.isComposed
-		? NSLocalizedString(@"Composition Report", @"Document type label: a report that combines one or more child reports.")
-		: NSLocalizedString(@"Standard Report", @"Document type label: an ordinary single-source report.");
+		? NSLocalizedString(@"Composition Report", @"Window subtitle: a report that combines one or more child reports.")
+		: NSLocalizedString(@"Standard Report", @"Window subtitle: an ordinary single-source report.");
 }
 
-- (void)refreshDocumentTypeLabel {
-	if (_documentTypeLabel == nil) {
-		return;
-	}
-	NSString *type = [self documentTypeString];
-	_documentTypeLabel.stringValue = type;
-	_documentTypeLabel.accessibilityLabel = type;
+- (void)refreshDocumentTypeSubtitle {
+	self.window.subtitle = [self documentTypeString];
 }
 
 #pragma mark - Composition Node Picker
@@ -190,13 +206,13 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 - (void)ensureNodePicker {
 	if (_nodePickerToolbarItem != nil) return;
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:kToolbarItemNodePicker];
-	item.label = NSLocalizedString(@"Report", @"Toolbar item label for the composition's report picker.");
+	item.label = NSLocalizedString(@"Navigation", @"Toolbar item label for the composition's report navigation picker.");
 	item.paletteLabel = item.label;
 	NSPopUpButton *popup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0, 0, 190, 24) pullsDown:NO];
 	popup.target = self;
 	popup.action = @selector(nodePickerChanged:);
 	popup.toolTip = NSLocalizedString(@"Choose the Result or one of the composition's sources. Every workspace follows the selection.", @"Tooltip for the composition report picker.");
-	popup.accessibilityLabel = NSLocalizedString(@"Report", @"Toolbar item label for the composition's report picker.");
+	popup.accessibilityLabel = NSLocalizedString(@"Navigation", @"Toolbar item label for the composition's report navigation picker.");
 	item.view = popup;
 	_nodePickerPopup = popup;
 	_nodePickerToolbarItem = item;
@@ -238,9 +254,7 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	NSInteger index = [self indexOfToolbarItemWithIdentifier:kToolbarItemNodePicker inToolbar:toolbar];
 	if (composed && index == NSNotFound) {
 		[self ensureNodePicker];
-		NSInteger after = [self indexOfToolbarItemWithIdentifier:kToolbarItemDocumentType inToolbar:toolbar];
-		NSInteger insertAt = (after == NSNotFound) ? 0 : after + 1;
-		[toolbar insertItemWithItemIdentifier:kToolbarItemNodePicker atIndex:insertAt];
+		[toolbar insertItemWithItemIdentifier:kToolbarItemNodePicker atIndex:0];
 	} else if (!composed && index != NSNotFound) {
 		[toolbar removeItemAtIndex:index];
 	}
@@ -667,7 +681,6 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *) __unused toolbar {
 	return @[
-		kToolbarItemDocumentType,
 		kToolbarItemNodePicker,
 		NSToolbarFlexibleSpaceItemIdentifier,
 		kToolbarItemWorkspace,
@@ -676,7 +689,6 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *) __unused toolbar {
 	NSMutableArray<NSToolbarItemIdentifier> *items = [[NSMutableArray alloc] init];
-	[items addObject:kToolbarItemDocumentType];
 	if (self.madDocument.isComposed) {
 		[items addObject:kToolbarItemNodePicker];
 	}
@@ -689,14 +701,6 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 - (nullable NSToolbarItem *)toolbar:(NSToolbar *) __unused toolbar
 			  itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier
 		  willBeInsertedIntoToolbar:(BOOL) __unused flag {
-	if ([itemIdentifier isEqualToString:kToolbarItemDocumentType]) {
-		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-		item.label = NSLocalizedString(@"Document Type", @"Toolbar item label for the document type.");
-		item.paletteLabel = item.label;
-		item.view = _documentTypeLabel;
-		return item;
-	}
-
 	if ([itemIdentifier isEqualToString:kToolbarItemNodePicker]) {
 		[self ensureNodePicker];
 		return _nodePickerToolbarItem;

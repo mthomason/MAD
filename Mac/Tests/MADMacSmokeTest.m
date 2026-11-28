@@ -946,7 +946,7 @@ static BOOL MADSmokeWriteLiveReport(NSString *name,
 		   (unsigned long)rows,
 		   rendered,
 		   expectedValue.UTF8String ?: "",
-		   wc.documentTypeLabel.stringValue.UTF8String ?: "");
+		   wc.window.subtitle.UTF8String ?: "");
 	if (!pdfOK || !htmlOK) {
 		if (outError != NULL) {
 			*outError = [NSString stringWithFormat:@"export failed: %@", exportError.localizedDescription ?: @"?"];
@@ -2877,9 +2877,8 @@ int main(int argc, const char * argv[]) {
 		MADMacWindowController *authorWC = authorDoc.windowControllers.firstObject;
 		[authorWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
 		[authorWC.window layoutIfNeeded];
-		if (authorWC.documentTypeLabel == nil ||
-			![authorWC.documentTypeLabel.stringValue isEqualToString:@"Standard Report"]) {
-			fprintf(stderr, "FAIL: Standard document type label is not 'Standard Report'\n");
+		if (![authorWC.window.subtitle isEqualToString:@"Standard Report"]) {
+			fprintf(stderr, "FAIL: Standard document type subtitle is not 'Standard Report'\n");
 			return 207;
 		}
 		MADMacQueryViewController *authorQVC = authorWC.queryViewController;
@@ -2918,9 +2917,8 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "FAIL: Could not add root query: %s\n", err.localizedDescription.UTF8String);
 			return 205;
 		}
-		if (authorWC.documentTypeLabel == nil ||
-			![authorWC.documentTypeLabel.stringValue isEqualToString:@"Composition Report"]) {
-			fprintf(stderr, "FAIL: Document type label did not update to 'Composition Report' after adding the root\n");
+		if (![authorWC.window.subtitle isEqualToString:@"Composition Report"]) {
+			fprintf(stderr, "FAIL: Document type subtitle did not update to 'Composition Report' after adding the root\n");
 			return 208;
 		}
 		authorDoc.selectedQuery = rootQuery;
@@ -3212,6 +3210,10 @@ int main(int argc, const char * argv[]) {
 			}
 			[nodeDoc makeWindowControllers];
 			MADMacWindowController *nodeWC = nodeDoc.windowControllers.firstObject;
+			if (nodeWC.activeWorkspaceTab != MADMacWorkspaceTabQuery) {
+				fprintf(stderr, "FAIL: A newly opened composition did not start in the Query workspace\n");
+				return 330;
+			}
 			[nodeWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
 			[nodeWC.window layoutIfNeeded];
 			MADMacDesignerViewController *nodeDVC = nodeWC.designerViewController;
@@ -3224,6 +3226,21 @@ int main(int argc, const char * argv[]) {
 			if (nodeTabs == nil || nodeWC.nodePickerPopup == nil) {
 				fprintf(stderr, "FAIL: The composition window has no workspace tab view or node picker\n");
 				return 242;
+			}
+			// The document type lives in the window subtitle, and the composition
+			// picker is labeled Navigation.
+			BOOL hasDocumentTypeItem = NO;
+			BOOL hasNavigationLabel = NO;
+			for (NSToolbarItem *item in nodeWC.window.toolbar.items) {
+				if ([item.itemIdentifier isEqualToString:@"MADToolbarDocumentType"]) hasDocumentTypeItem = YES;
+				if ([item.itemIdentifier isEqualToString:@"MADToolbarNodePicker"] &&
+					[item.label isEqualToString:@"Navigation"]) hasNavigationLabel = YES;
+			}
+			if (hasDocumentTypeItem || !hasNavigationLabel ||
+				![nodeWC.window.subtitle isEqualToString:@"Composition Report"] ||
+				![nodeWC.nodePickerPopup.accessibilityLabel isEqualToString:@"Navigation"]) {
+				fprintf(stderr, "FAIL: The composition toolbar still has a document type item or the picker is not labeled Navigation\n");
+				return 331;
 			}
 			NSInteger startTab = [nodeTabs indexOfTabViewItem:nodeTabs.selectedTabViewItem];
 
@@ -3710,11 +3727,25 @@ int main(int argc, const char * argv[]) {
 				fprintf(stderr, "FAIL: Workspace switcher is not labeled Query / Designer / Viewer\n");
 				return 301;
 			}
+			// A newly opened report starts in Query, not Designer.
+			if (uiWC.activeWorkspaceTab != MADMacWorkspaceTabQuery ||
+				switcher.selectedSegment != MADMacWorkspaceTabQuery) {
+				fprintf(stderr, "FAIL: A newly opened report did not start in the Query workspace\n");
+				return 332;
+			}
 			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
 			if (uiWC.activeWorkspaceTab != MADMacWorkspaceTabQuery) {
 				fprintf(stderr, "FAIL: The active workspace did not follow the switcher\n");
 				return 301;
 			}
+			// Reopening the same report returns to the workspace it was last shown in.
+			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+			MADMacWindowController *reopenedWC = [[MADMacWindowController alloc] initWithDocument:uiDoc];
+			if (reopenedWC.activeWorkspaceTab != MADMacWorkspaceTabViewer) {
+				fprintf(stderr, "FAIL: Reopening the report did not restore the Viewer workspace\n");
+				return 333;
+			}
+			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
 
 			// 20b. The Designer has one Insert menu that covers every element kind.
 			MADMacDesignerViewController *uiDesigner = uiWC.designerViewController;
@@ -3774,7 +3805,7 @@ int main(int argc, const char * argv[]) {
 			}
 
 			// 20d. Tooltips and first-run tips.
-			if (uiWC.documentTypeLabel.toolTip.length == 0 ||
+			if (uiWC.window.subtitle.length == 0 ||
 				insertButton.accessibilityLabel.length == 0) {
 				fprintf(stderr, "FAIL: A key Designer control is missing its tooltip or accessibility label\n");
 				return 305;

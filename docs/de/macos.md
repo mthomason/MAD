@@ -39,7 +39,10 @@ den iPad-/iPhone-Apps, der `mad`-CLI unter Linux und der GitHub Action
 Jedes geöffnete `.mad`-Dokument läuft in einem nativen `NSDocument`-Fenster
 (`MADMacDocument` / `MADMacWindowController`) mit einem zentrierten segmentierten
 Steuerelement **Workspace** in der Fenstersymbolleiste (`Cmd+1`, `Cmd+2`,
-`Cmd+3`), das zwischen den drei Berichtsphasen wechselt:
+`Cmd+3`), das zwischen den drei Berichtsphasen wechselt. Ein Bericht öffnet sich beim
+ersten Mal im Arbeitsbereich Abfrage und danach in dem Arbeitsbereich, in dem er zuletzt
+angezeigt wurde; der Fensteruntertitel nennt seinen Typ (**Standard Report** oder
+**Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -196,8 +199,8 @@ der Desktop-Weg, um Daten aus verschiedenen Datenbanken — MySQL, PostgreSQL, S
 SQLite — ohne einen Föderationsserver zu verknüpfen. Siehe [die Kompositionsanleitung](../composition.html)
 für das Konzept und die datenbankübergreifenden Beispiele.
 
-* **Report-Auswahl in der Symbolleiste:** Ein Kompositionsbericht fügt neben dem Dokumenttyp ein
-  Popup **Report** hinzu. Es listet zuerst das **Ergebnis** auf (*Ergebnis — <Name>*) und dann jede
+* **Navigation-Auswahl in der Symbolleiste:** Ein Kompositionsbericht fügt ein
+  Popup **Navigation** hinzu. Es listet zuerst das **Ergebnis** auf (*Ergebnis — <Name>*) und dann jede
   Quelle. Die Auswahl eines Berichts schaltet die Arbeitsbereiche Abfrage, Designer und Betrachter
   gemeinsam um; sie ändert nie den aktiven Arbeitsbereich.
 * **Jede Quelle ist ein Bericht:** Die Auswahl einer Quelle zeigt ihre eigene Abfrage in MAD Query,

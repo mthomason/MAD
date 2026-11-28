@@ -47,7 +47,7 @@ Tabelle reduziert: ihre Abfragedefinition, ihr eigenes Berichtslayout und ihre D
 mit, und sie werden im selben `.mad`-Dokument gespeichert. Die Zeilen bleiben im Begleitspeicher
 (den Dateien `.maddb` und `.mdcache` neben dem Dokument), nicht im `.mad`.
 
-Wenn Sie eine Quelle in der **Report**-Auswahl (macOS) oder in der **Component**-Auswahl und dem
+Wenn Sie eine Quelle in der **Navigation**-Auswahl (macOS) oder in der **Component**-Auswahl und dem
 Bereich **Composition** (Windows) auswählen, wechseln **alle drei Arbeitsbereiche** — Abfrage,
 Designer und Betrachter — zu dieser Quelle. Eine Quelle ohne Layout ist weiterhin ein gültiger
 Bericht: Der Betrachter zeigt ihre zwischengespeicherten Zeilen in einem Raster statt auf einer Seite.
@@ -68,7 +68,7 @@ Bericht: Der Betrachter zeigt ihre zwischengespeicherten Zeilen in einem Raster 
   einer neuen Datenbankverbindung, einen **importierten Bericht** oder die zusammengesetzte
   **Wurzelabfrage** hinzu.
 
-Die **Report**-Auswahl in der Symbolleiste listet zuerst das **Ergebnis** auf (markiert als
+Die **Navigation**-Auswahl in der Symbolleiste listet zuerst das **Ergebnis** auf (markiert als
 *Ergebnis — <Name>*) und dann jede Quelle. Die Auswahl eines Eintrags ändert nie den aktiven
 Arbeitsbereich; sie ändert, welchen Bericht dieser Arbeitsbereich anzeigt.
 

@@ -28,7 +28,7 @@ Every `.mad` file created or edited on macOS is byte-compatible with the iPad/iP
 
 ## Workspaces
 
-Each open `.mad` document runs in a native `NSDocument` window (`MADMacDocument` / `MADMacWindowController`) with a centered **Workspace** segmented control in the window toolbar (`Cmd+1`, `Cmd+2`, `Cmd+3`) that switches between the three reporting stages:
+Each open `.mad` document runs in a native `NSDocument` window (`MADMacDocument` / `MADMacWindowController`) with a centered **Workspace** segmented control in the window toolbar (`Cmd+1`, `Cmd+2`, `Cmd+3`) that switches between the three reporting stages. A report opens in the Query workspace the first time and afterwards in the workspace it was last shown in; the window subtitle names its type (**Standard Report** or **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -101,8 +101,8 @@ desktop way to join data from different databases — MySQL, PostgreSQL, SQL Ser
 SQLite — without a federation server. See [the composition guide](composition.html) for
 the concept and the cross-database samples.
 
-* **Toolbar Report picker:** a Composition Report adds a **Report** popup beside the
-  document type. It lists the **Result** first (*Result — <name>*) and then each source.
+* **Toolbar Navigation picker:** a Composition Report adds a **Navigation** popup. It
+  lists the **Result** first (*Result — <name>*) and then each source.
   Selecting a report switches the Query, Designer, and Viewer workspaces together; it
   never changes the active workspace.
 * **Every source is a report:** selecting a source shows its own query in MAD Query, its

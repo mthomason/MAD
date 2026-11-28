@@ -46,7 +46,7 @@ quando é importada: sua definição de consulta, seu próprio layout de relató
 junto, e são salvos no mesmo documento `.mad`. As linhas permanecem no armazenamento complementar
 (os arquivos `.maddb` e `.mdcache` ao lado do documento), não dentro do `.mad`.
 
-Selecionar uma fonte no seletor **Report** (macOS) ou no seletor **Component** e no
+Selecionar uma fonte no seletor **Navegação** (macOS) ou no seletor **Component** e no
 painel Composition (Windows) alterna **todos os três workspaces** — MAD Query, MAD Designer e
 MAD Viewer — para essa fonte. Uma fonte sem layout ainda é um relatório válido: o Viewer mostra
 suas linhas em cache em uma grade em vez de uma página.
@@ -66,7 +66,7 @@ suas linhas em cache em uma grade em vez de uma página.
 * No workspace **MAD Query**, o menu Add adiciona uma tabela, uma **consulta de origem** a partir de
   uma nova conexão de banco de dados, um **relatório importado** ou a **consulta raiz** composta.
 
-O seletor **Report** da barra de ferramentas lista o **Resultado** primeiro (marcado como *Resultado — <nome>*)
+O seletor **Navegação** da barra de ferramentas lista o **Resultado** primeiro (marcado como *Resultado — <nome>*)
 e depois cada fonte. Selecionar um item nunca muda o workspace ativo; ele muda
 qual relatório aquele workspace está exibindo.
 

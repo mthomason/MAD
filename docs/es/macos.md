@@ -37,7 +37,10 @@ iPad/iPhone, la CLI `mad` en Linux y la GitHub Action
 
 Cada documento `.mad` abierto se ejecuta en una ventana nativa de `NSDocument` (`MADMacDocument` / `MADMacWindowController`)
 con un control segmentado **Workspace** centrado en la barra de herramientas de la
-ventana (`Cmd+1`, `Cmd+2`, `Cmd+3`) que alterna entre las tres etapas de generación de informes:
+ventana (`Cmd+1`, `Cmd+2`, `Cmd+3`) que alterna entre las tres etapas de generación de informes.
+Un informe se abre en el espacio de trabajo Query la primera vez y después en el espacio de
+trabajo en el que se mostró por última vez; el subtítulo de la ventana indica su tipo
+(**Standard Report** o **Composition Report**).
 
 ### 1. MAD Query (`Cmd+1`)
 
@@ -113,8 +116,8 @@ manera de escritorio de unir datos de distintas bases de datos —MySQL, Postgre
 SQLite— sin un servidor de federación. Consulte [la guía de composición](composition.html) para
 el concepto y las muestras entre bases de datos.
 
-* **Selector Report de la barra de herramientas:** un Informe de composición añade un menú emergente **Report** junto al
-  tipo de documento. Lista el **Resultado** primero (*Resultado — <nombre>*) y luego cada origen.
+* **Selector Navigation de la barra de herramientas:** un Informe de composición añade un menú emergente **Navegación**.
+  Lista el **Resultado** primero (*Resultado — <nombre>*) y luego cada origen.
   Seleccionar un informe cambia los espacios de trabajo Query, Designer y Viewer juntos; nunca
   cambia el espacio de trabajo activo.
 * **Cada origen es un informe:** seleccionar un origen muestra su propia consulta en MAD Query, sus

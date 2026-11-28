@@ -29,7 +29,7 @@ lang: zh-CN
 
 ## 工作区
 
-每个打开的 `.mad` 文档都运行在一个原生 `NSDocument` 窗口（`MADMacDocument` / `MADMacWindowController`）中，窗口工具栏中央有一个 **Workspace** 分段控件（`Cmd+1`、`Cmd+2`、`Cmd+3`），用于在三个报表阶段之间切换：
+每个打开的 `.mad` 文档都运行在一个原生 `NSDocument` 窗口（`MADMacDocument` / `MADMacWindowController`）中，窗口工具栏中央有一个 **Workspace** 分段控件（`Cmd+1`、`Cmd+2`、`Cmd+3`），用于在三个报表阶段之间切换。报表首次打开时位于 Query 工作区，之后在其上次显示的工作区中打开；窗口副标题显示其类型（**Standard Report** 或 **Composition Report**）。
 
 ### 1. MAD Query（`Cmd+1`）
 
@@ -99,7 +99,7 @@ lang: zh-CN
 
 **组合报表**把多份报表合并到一个 `.mad` 文档。它是连接来自不同数据库（MySQL、PostgreSQL、SQL Server 和 SQLite）的数据而无需联邦服务器的桌面方式。概念和跨数据库示例见[组合指南](composition.html)。
 
-* **工具栏 Report 选取器：** 组合报表会在文档类型旁增加一个 **Report** 弹出菜单。它先列出**结果**（*结果 — <name>*），然后列出每个源。选择一份报表会把 Query、Designer 和 Viewer 工作区一起切换；它从不改变活动工作区。
+* **工具栏导航选取器：** 组合报表会增加一个 **导航** 弹出菜单。它先列出**结果**（*结果 — <name>*），然后列出每个源。选择一份报表会把 Query、Designer 和 Viewer 工作区一起切换；它从不改变活动工作区。
 * **每个源都是一份报表：** 选择一个源，会在 MAD Query 中显示它自己的查询，在 MAD Designer 中显示它自己的带区和字段列表，在 MAD Viewer 中显示它自己的页面。尚无布局的源仍然是一份由数据行组成的报表：查看器显示行网格，设计器提议为它创作布局。
 * **每个源的凭据：** 组合在刷新时为每个源请求一个密码，驱动、主机、端口、数据库和用户名都已预先填好。密码保存在钥匙串或当前会话中，绝不写入 `.mad`。
 
