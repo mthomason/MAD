@@ -351,7 +351,18 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	};
 
 	if (!relationship.isToMany) {
+		int64_t previousIdentifier = [object.backingObject referenceForName:name].longLongValue;
 		int64_t targetIdentifier = MADStoreIdentifierOfValue(value);
+
+		// Replacing or clearing the reference leaves the old target's inverse edge
+		// pointing at this object unless it is unlinked here.
+		if (previousIdentifier != 0 && previousIdentifier != targetIdentifier) {
+			[self unlinkInverseForObject:object
+						 relationship:relationship
+							  inverse:inverse
+					  targetIdentifier:previousIdentifier];
+		}
+
 		if (targetIdentifier == 0) {
 			[object.backingObject setReference:nil forName:name];
 			return;
@@ -370,7 +381,24 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 		return;
 	}
 
+	NSArray<NSNumber *> *previousIdentifiers =
+		[[object.backingObject existingCollectionForName:name] copy] ?: @[];
 	NSArray<NSNumber *> *identifiers = MADStoreIdentifiersOfValue(value);
+
+	// A replaced collection removes the inverse edge from every member it no longer
+	// contains.  Without this, a dropped member still names the old owner from its
+	// side and the member appears in two collections.
+	if (inverse) {
+		NSSet<NSNumber *> *kept = [NSSet setWithArray:identifiers];
+		for (NSNumber *previous in previousIdentifiers) {
+			if ([kept containsObject:previous]) continue;
+			[self unlinkInverseForObject:object
+						 relationship:relationship
+							  inverse:inverse
+					  targetIdentifier:previous.longLongValue];
+		}
+	}
+
 	for (NSNumber *memberIdentifier in identifiers) {
 		markMember(memberIdentifier.longLongValue);
 	}
@@ -389,6 +417,25 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 			[member setReference:@(object.identifier) forName:inverse.name];
 		}
 	}
+}
+
+// Removes `object` from the old target's inverse edge and marks the target dirty.
+// The target may be gone (deleted, or never faulted); the caller still owns the
+// forward reference, so a missing target is not an error.
+- (void)unlinkInverseForObject:(RptqObject *)object
+				  relationship:(MADStoreRelationship *)relationship
+					   inverse:(MADStoreRelationship *)inverse
+			  targetIdentifier:(int64_t)targetIdentifier {
+	if (!inverse || targetIdentifier == 0) return;
+	RptqObject *target = [self objectForEntity:relationship.destination identifier:targetIdentifier];
+	if (!target) return;
+	if (inverse.isToMany) {
+		NSMutableArray<NSNumber *> *members = [target.backingObject collectionForName:inverse.name];
+		[members removeObject:@(object.identifier)];
+	} else {
+		[target.backingObject setReference:nil forName:inverse.name];
+	}
+	[self.dirtyObjects addObject:target];
 }
 
 - (void)addObject:(id)member toRelationshipNamed:(NSString *)name onObject:(RptqObject *)object {

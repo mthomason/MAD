@@ -371,8 +371,8 @@ Status key:
   throw.
 
 ### `RptqStoreContext -setRelationship:value:onObject:` does not unlink old inverse targets when replacing or clearing a relationship
-- **Status:** Confirmed (found during the macOS Report Designer implementation)
-- **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:324-363`
+- **Status:** Confirmed (fix in review on `fix/rptq-inverse-relationships`)
+- **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:335-440`
 - **Behavior:** Two related omissions in `-setRelationship:value:onObject:`:
   1. In the to-one branch (`!relationship.isToMany`, `:324-342`), when `value` is `nil`
      (`targetIdentifier == 0`), the method clears the forward reference on `object` and
@@ -399,6 +399,15 @@ Status key:
   enforcing "somewhere" -- snap back to the old section or the nearest valid target until
   a new one is chosen. That preserves the behaviour the workaround was written for and
   removes the duplicate membership.
+- **Fix (2026-11-28):** `-setRelationship:` now records the previous target (to-one) or
+  collection (to-many) before mutating, unlinks the old target's inverse on to-one
+  replace and clear and on to-many replace, and marks the old target dirty so the unlink
+  is saved. The drag-and-drop "must live somewhere" policy is unchanged; the caller's
+  manual `-removeHasObjectsObject:` remains harmless.
+- **Test:** `RptqStoreContextTests testReplacingAToOneRelationshipUnlinksTheOldTarget`,
+  `testClearingAToOneRelationshipUnlinksTheOldTarget`,
+  `testReplacingAToManyRelationshipUnlinksRemovedMembers`, and
+  `testRemovingAMemberFromAToManyRelationshipUnlinksIt`.
 
 ### `RptqDocumentSection -addDocumentObject:withDropPoint:managedObjectContext:` writes `rect.origin` and leaves `dropPoint` at `(0, 0)`
 - **Status:** Quirk / defect (found during the macOS Report Designer implementation)
