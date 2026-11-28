@@ -12,9 +12,9 @@
 brew install --cask mthomason/tap/mad-designer
 ```
 
-或者从 [`v0.7.0` 发布页](https://github.com/mthomason/MAD/releases/tag/v0.7.0) 直接下载 [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)。
+或者从 [`v0.8.0` 发布页](https://github.com/mthomason/MAD/releases/tag/v0.8.0) 直接下载 [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.zip)。
 
-本版本：**应用 0.7 / 引擎 9.0 (r4433)**。
+本版本：**应用 0.8.0 / 引擎 9.1 (r5164)**。
 
 ## 从源码构建与运行
 

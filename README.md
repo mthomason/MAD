@@ -16,16 +16,23 @@ A **Composition Report** extends that model across databases. The document holds
 
 The repository is one self-contained project: the iPad/iPhone apps, the native macOS (`AppKit`) desktop app (`Mac/`), the native Windows (WPF) app (`Windows/`), fourteen frameworks (twelve multiplatform across iOS, iOS Simulator, and native macOS; twelve headless on Linux), the headless Linux build and test suite (130 suites, 1,313 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
 
-> **New in 0.8: Composition Reports.** Combine existing reports into one document on macOS and Windows; every source keeps its layout and data. See [the composition guide](docs/composition.md) and the [sample reports](Samples/README.md). Composition is not in the published 0.7 download below; it is available now from source.
+> **New in 0.8: Composition Reports.** Combine existing reports into one document on macOS and Windows; every source keeps its layout and data. See [the composition guide](docs/composition.md) and the [sample reports](Samples/README.md). Composition is included in the published 0.8.0 download below.
 
-> **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon) — published 0.7:**
+> **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon) — published 0.8.0:**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
-> * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
-> * **Version:** app 0.7 / engine 9.0 (r4433). The source tree is app 0.8 / engine 9.1.
+> * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
+> * **Version:** app 0.8.0 / engine 9.1 (r5164).
 
-> **Try MAD Designer on Windows (Windows 10 1903+, Windows 11, 64-bit) — published 0.7:**
-> * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](docs/windows.md))*
-> * **Version:** app 0.7 / engine 9.0 (r4433) · **No .NET install needed** (self-contained). The source tree is app 0.8 / engine 9.1.
+> **Try MAD Designer on Windows (Windows 10 1903+, Windows 11, 64-bit) — published 0.8.0:**
+> * **Direct Download:** [**MAD-Designer-Windows-0.8.0.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-Windows-0.8.0.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](docs/windows.md))*
+> * **Version:** app 0.8.0 / engine 9.1 (r5164) · **No .NET install needed** (self-contained).
+>
+> **Try the headless `mad` CLI (Linux, amd64) — published 0.8.0:**
+> * **Direct Download:** [**mad-linux-amd64.tar.gz**](https://github.com/mthomason/MAD/releases/download/v0.8.0/mad-linux-amd64.tar.gz) *(the runtime Docker image: `docker load -i mad-linux-amd64.tar.gz`, then `docker run --rm -v "$PWD:/docs:ro" mad-cli:0.8.0 mad inspect /docs/Reports/Chinook-Standard.mad`)*
+> * **Version:** engine 9.1 (r5164).
+>
+> **Sample reports — published 0.8.0:**
+> * **Direct Download:** [**MAD-Samples-0.8.0.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Samples-0.8.0.zip) *(the runnable reports, the Chinook SQLite database, the database-setup scripts, and a README; also in [`Samples/`](Samples/README.md))*
 
 ## Why MAD
 

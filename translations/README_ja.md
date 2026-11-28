@@ -16,16 +16,16 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 本リポジトリは自己完結した単一プロジェクトです。iPad/iPhoneアプリ、ネイティブmacOS（`AppKit`）デスクトップアプリ（`Mac/`）、ネイティブWindows（WPF）アプリ（`Windows/`）、14個のフレームワーク（うち12個はiOS、iOSシミュレータ、ネイティブmacOS対応のマルチプラットフォーム、12個はLinux上でヘッドレス動作）、ヘッドレスLinuxビルドおよびテストスイート（130スイート、1,313テスト）、`mad`コマンドラインツール、およびピン留めされたソースからサードパーティ製Cライブラリをコンパイルするビルドシステム（`Compressor`）を含んでいます。コードはMITライセンスの下で公開されており、`.mad`フォーマットはオープン仕様です（[`docs/`](../docs/ja/)を参照）。ただし、プロジェクト名およびアプリのアートワークはライセンス供与の対象外です（[`NOTICE`](../NOTICE)を参照）。
 
-> **0.8の新機能：コンポジションレポート。** macOSとWindowsで既存のレポートを1つのドキュメントに統合できます。各ソースは自身のレイアウトとデータを保持します。[コンポジションガイド](../docs/ja/composition.md)と[サンプルレポート](../Samples/README.md)を参照してください。コンポジションは下記の公開済み0.7ダウンロードには含まれていません。現在はソースから利用できます。
+> **0.8の新機能：コンポジションレポート。** macOSとWindowsで既存のレポートを1つのドキュメントに統合できます。各ソースは自身のレイアウトとデータを保持します。[コンポジションガイド](../docs/ja/composition.md)と[サンプルレポート](../Samples/README.md)を参照してください。コンポジションは下記の公開済み0.8.0ダウンロードに含まれています。
 
-> **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）——公開済み0.7：**
+> **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）——公開済み0.8.0：**
 > * **Homebrew：** `brew install --cask mthomason/tap/mad-designer`
-> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
-> * **バージョン：** アプリ 0.7 / エンジン 9.0 (r4433)。ソースツリーはアプリ 0.8 / エンジン 9.1 です。
+> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
+> * **バージョン：** アプリ 0.8.0 / エンジン 9.1 (r5164)。
 
-> **WindowsでMAD Designerを試す（Windows 10 1903以降、Windows 11、64ビット）——公開済み0.7：**
-> * **直接ダウンロード：** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *（未署名：Windows SmartScreenが警告します。「詳細情報」→「実行」を選択してください。詳しくは[Windowsガイド](../docs/ja/windows.md)を参照）*
-> * **バージョン：** アプリ 0.7 / エンジン 9.0 (r4433) · **.NETのインストール不要**（自己完結型）。ソースツリーはアプリ 0.8 / エンジン 9.1 です。
+> **WindowsでMAD Designerを試す（Windows 10 1903以降、Windows 11、64ビット）——公開済み0.8.0：**
+> * **直接ダウンロード：** [**MAD-Designer-Windows-0.8.0.zip**](https://github.com/mthomason/MAD/releases/download/v0.8.0/MAD-Designer-Windows-0.8.0.zip) *（未署名：Windows SmartScreenが警告します。「詳細情報」→「実行」を選択してください。詳しくは[Windowsガイド](../docs/ja/windows.md)を参照）*
+> * **バージョン：** アプリ 0.8.0 / エンジン 9.1 (r5164) · **.NETのインストール不要**（自己完結型）。
 
 ## なぜMADなのか
 

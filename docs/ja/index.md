@@ -18,7 +18,7 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 > * **バージョン：** アプリ {{ site.data.versions.macos_app_version}} / エンジン {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}})
 
 > **Windows で MAD Designer を試す（Windows 10 1903 以降、Windows 11、64 ビット）：**
-> * **直接ダウンロード：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *（未署名：Windows SmartScreen が警告します。「詳細情報」→「実行」を選択してください。詳しくは [Windows ガイド](windows.html) を参照）*
+> * **直接ダウンロード：** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.8.0.zip) *（未署名：Windows SmartScreen が警告します。「詳細情報」→「実行」を選択してください。詳しくは [Windows ガイド](windows.html) を参照）*
 > * **バージョン：** アプリ {{ site.data.versions.windows_app_version}} / エンジン {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **.NET のインストール不要**（自己完結型）
 
 **言語：** アプリの UI は英語、簡体字中国語、日本語、ブラジルポルトガル語、ドイツ語、ラテンアメリカスペイン語で利用できます。翻訳は機械支援によるもので、誤りを含む場合があります。問題は <https://github.com/mthomason/MAD/issues> で報告してください。

@@ -19,7 +19,7 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 > * **版本：** 应用 {{ site.data.versions.macos_app_version}} / 引擎 {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}})
 
 > **在 Windows 上试用 MAD Designer（Windows 10 1903+、Windows 11，64 位）：**
-> * **直接下载：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *（未签名：Windows SmartScreen 会提示——选择“更多信息”→“仍要运行”；参见 [Windows 指南](windows.html)）*
+> * **直接下载：** [**MAD-Designer-Windows-0.8.0.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.8.0.zip) *（未签名：Windows SmartScreen 会提示——选择“更多信息”→“仍要运行”；参见 [Windows 指南](windows.html)）*
 > * **版本：** 应用 {{ site.data.versions.windows_app_version}} / 引擎 {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **无需安装 .NET**（自包含）
 
 **语言：** 应用界面提供英语、简体中文、日语、巴西葡萄牙语、德语和拉丁美洲西班牙语。翻译由机器辅助完成，可能包含错误；请在 <https://github.com/mthomason/MAD/issues> 报告。

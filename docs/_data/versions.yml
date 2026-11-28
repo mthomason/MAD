@@ -3,13 +3,13 @@
 # Mac/Resources/Info.plist and the Windows release. Change them here, not in
 # page text. The marketing repository keeps a matching copy in
 # _data/versions.yml; change both together.
-engine_version: "9.0"
-engine_revision: "r4433"
-macos_app_version: "0.7"
-windows_app_version: "0.7"
+engine_version: "9.1"
+engine_revision: "r5164"
+macos_app_version: "0.8"
+windows_app_version: "0.8"
 ios_app_status: "between releases; returns early 2027"
-release_tag: "v0.7.0"
-release_base_url: "https://github.com/mthomason/MAD/releases/download/v0.7.0"
+release_tag: "v0.8.0"
+release_base_url: "https://github.com/mthomason/MAD/releases/download/v0.8.0"
 headless_frameworks: 12
 linux_suites: 130
 linux_tests: 1313
