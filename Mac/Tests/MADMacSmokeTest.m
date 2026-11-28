@@ -2124,10 +2124,23 @@ int main(int argc, const char * argv[]) {
 		}
 		[aboutWC.window layoutIfNeeded];
 
+		NSString *identityPath = [packagedAppBundle pathForResource:@"MADBuildInfo" ofType:@"plist"];
+		NSDictionary *identity = identityPath.length > 0 ? [NSDictionary dictionaryWithContentsOfFile:identityPath] : nil;
+		NSString *revision = identity[@"MADEngineRevision"];
+		NSString *build = identity[@"MADAppBuild"];
+		if (![revision isKindOfClass:[NSString class]] || ![build isKindOfClass:[NSString class]] ||
+			![revision isEqualToString:[@"r" stringByAppendingString:build]]) {
+			fprintf(stderr, "FAIL: packaged build identity is inconsistent: revision='%s' build='%s'\n",
+					revision.UTF8String, build.UTF8String);
+			return 75;
+		}
+
 		if (![aboutWC.titleLabel.stringValue isEqualToString:@"MAD Designer"] ||
 			![aboutWC.versionLabel.stringValue containsString:@"v9.1"] ||
-			![aboutWC.versionLabel.stringValue containsString:@"r4433"] ||
+			![aboutWC.versionLabel.stringValue containsString:revision] ||
+			[aboutWC.versionLabel.stringValue containsString:@"unknown"] ||
 			![aboutWC.applicationVersionLabel.stringValue containsString:@"v0.8"] ||
+			![aboutWC.applicationVersionLabel.stringValue containsString:build] ||
 			[aboutWC.versionLabel.stringValue isEqualToString:aboutWC.applicationVersionLabel.stringValue] ||
 			![aboutWC.copyrightLabel.stringValue containsString:@"Copyright © 2012–2026 Michael Thomason"] ||
 			![aboutWC.licenseSummaryLabel.stringValue containsString:@"Licensed under the MIT License"] ||
