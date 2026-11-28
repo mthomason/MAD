@@ -1408,7 +1408,7 @@ bundle's header search path.
 ## Mac (AppKit application)
 
 ### The macOS smoke suite can overlap a composed refresh with the next one
-- **Status:** Open (intermittent; test and UI)
+- **Status:** Open (intermittent; fix in review on `fix/ci-determinism`)
 - **Where:** `Mac/Tests/MADMacSmokeTest.m:77` (`MADSmokeRefreshComposed`); the
   source- and root-filtered checks are `:3038` and `:3053`. The unguarded action is
   `Mac/Source/MADMacViewerViewController.m:778` (`-refreshReportAction:`) through
@@ -1422,10 +1422,19 @@ bundle's header search path.
   disabled while a refresh is in flight, so a rapid double-refresh can reach the same path.
 - **Why it matters:** a flaky release gate, and a transient refresh error for a user who
   presses Refresh again too quickly. It does not corrupt the document.
-- **Test:** `./Mac/build.sh --smoke-test`, the authored-composition block.
+- **Fix (2026-11-28):** `MADMacSmokeTest.m` declares the document's private
+  `refreshQueue` and drains it after the visible row/error signal, in
+  `MADSmokeRefreshComposed` and in the failed and empty-payments steps. The
+  observed failure on PR #59 was the empty-payments step (exit 107,
+  `payments.sqlite` reported missing while the prior failed refresh was still
+  tearing down), not only the source/root-filtered steps. Three consecutive
+  `./Mac/build.sh --smoke-test` runs pass. The Viewer's in-flight button state
+  remains a separate product change.
+- **Test:** `./Mac/build.sh --smoke-test`, the authored-composition block and
+  the empty-payments step.
 
 ### `MADDocumentTests` can time out opening a document on the macOS runner
-- **Status:** Open (intermittent, CI)
+- **Status:** Open (intermittent, CI; fix in review on `fix/ci-determinism`)
 - **Where:** `MAD/MADTests/MADDocumentTests.m:545`
   (`-testOpenAndCloseMoveThroughTheUIDocumentStateMachine`).
 - **Behavior:** the 20-second asynchronous wait for the "open" expectation expires on the
@@ -1435,6 +1444,10 @@ bundle's header search path.
   exercises.
 - **Why it matters:** it is an advisory macOS gate only (the required checks are Linux and
   DCO), but it makes a green master look red.
+- **Fix (2026-11-28):** the fixture's `writer` and its `RptqStoreContext` are closed
+  and released before the reader opens the same URL, so the reader no longer opens
+  a second store context over the file while the writer's is live. Twenty
+  consecutive runs of the test pass, and the full `MAD` suite is 787/787.
 - **Test:** the `MAD` scheme's `MADDocumentTests`; the macOS verification workflow's
   "Run the MAD suite" step.
 
