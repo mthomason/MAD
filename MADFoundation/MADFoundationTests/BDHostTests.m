@@ -51,4 +51,15 @@
 	XCTAssertNil([BDHost addressForHostname:@"mad-designer-tests.invalid"]);
 }
 
+- (void)testIPv6OnlyHostnameReturnsNilInsteadOfCrashing {
+	// "::1" resolves deterministically to one AF_INET6 address.  The address
+	// filter drops it, leaving a non-nil empty array; the old class check treated
+	// that as an address and subscripted element 0.
+	NSArray *addresses = [BDHost addressesForHostname:@"::1"];
+
+	XCTAssertNotNil(addresses);
+	XCTAssertEqual(addresses.count, (NSUInteger)0);
+	XCTAssertNil([BDHost addressForHostname:@"::1"]);
+}
+
 @end

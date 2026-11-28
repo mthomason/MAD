@@ -122,6 +122,21 @@
 	XCTAssertEqualObjects(connection.server.host, server.host);
 }
 
+// The schema-import path closes the session before the connection is released.
+// The connection must not close the same handle again in -dealloc; the test
+// passing is the assertion, because the second close corrupted the session.
+- (void)testCloseConnectionThenReleaseDoesNotDoubleClose {
+	[self requireServer];
+	@autoreleasepool {
+		MADMySQLConnection *socket = nil;
+		MADDatabaseMySQL *database = [self openDatabase:&socket];
+		if (database == nil) return;
+
+		XCTAssertNotNil(socket);
+		[database closeConnection:socket];
+	}
+}
+
 - (void)testConnectionDescriptionMentionsHostAndConnectedState {
 	[self requireServer];
 	MADMySQLConnection *connection = [self openConnection];
