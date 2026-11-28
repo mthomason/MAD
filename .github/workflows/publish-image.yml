@@ -33,6 +33,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The image reports the commit count as its revision.  A shallow
+          # checkout counts 1, so fetch the history.
+          fetch-depth: 0
 
       # The Docker context excludes .git, so the image cannot derive its own
       # identity.  Pass the commit and count in; BuildInfo writes them beside

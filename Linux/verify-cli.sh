@@ -95,21 +95,24 @@ check "sample database installed"	[ -f "${SAMPLE_DB}" ]
 # for the engine version, revision, and source commit, which is a broken release
 # artifact even though every other verb still works.
 expected_engine="$(awk -F': *' '$1 == "engine_version" { gsub(/"/, "", $2); print $2; exit }' /repo/Versions.yml)"
+expected_revision="${MAD_EXPECTED_REVISION:-}"
 version_json="$(mad version --json 2>/dev/null)"
 if [[ -n "${expected_engine}" ]] && printf '%s' "${version_json}" | python3 -c '
 import json, re, sys
 info = json.load(sys.stdin)
 commit = info.get("sourceCommit") or ""
 revision = info.get("engineRevision") or ""
+expected_revision = sys.argv[2]
 ok = (info.get("engineVersion") == sys.argv[1]
       and re.match(r"^r[0-9]+$", revision)
       and re.match(r"^[0-9a-f]{40}$", commit)
-      and info.get("sourceDirty") is False)
+      and info.get("sourceDirty") is False
+      and (not expected_revision or revision == expected_revision))
 sys.exit(0 if ok else 1)
-' "${expected_engine}"; then
-	pass "version identity (${expected_engine})"
+' "${expected_engine}" "${expected_revision}"; then
+	pass "version identity (${expected_engine}, ${expected_revision:-any revision})"
 else
-	fail "version identity (${version_json})"
+	fail "version identity (${version_json}; expected ${expected_engine} ${expected_revision:-any revision})"
 fi
 
 # --- help, inspect, schema, query -----------------------------------------
