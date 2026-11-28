@@ -30,6 +30,7 @@
 #import <Foundation/NSFileWrapper.h>
 #import <Foundation/NSUUID.h>
 #import <Foundation/NSError.h>
+#import <Foundation/NSBundle.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 #import "MADConstants.h"
