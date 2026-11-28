@@ -906,7 +906,12 @@ Apple app links the GNUstep runtime. The public `docs/windows.md` and the
 the page is present in all six languages under the documentation contract
 (`docs/project/localization/LOCALIZATION.md`). The Windows verification workflow
 (`.github/workflows/windows.yml`) tests the .NET suites against the
-`mad-windows-x64.zip` engine asset attached to `v0.7.0`;
+`mad-windows-x64.zip` engine asset attached to the `v0.8.0-engine-rc1`
+pre-release, the composition candidate engine. The workflow's capability gate
+runs `mad.exe version --json` and fails the job when the asset does not
+advertise `query-composition`; that keeps an engine predating the protocol from
+being mistaken for a passing run. The pre-release is temporary: repoint the pin
+when `v0.8.0` (or the next release) carries its own engine asset.
 `Windows/package.ps1` assembles both that asset and the app's release zip.
 
 ## Test databases
