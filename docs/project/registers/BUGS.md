@@ -370,45 +370,6 @@ Status key:
 - **Test:** `MADElementStylizedTextTests testNilFontNameThrows` pins the current
   throw.
 
-### `RptqStoreContext -setRelationship:value:onObject:` does not unlink old inverse targets when replacing or clearing a relationship
-- **Status:** Confirmed (fix in review on `fix/rptq-inverse-relationships`)
-- **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:335-440`
-- **Behavior:** Two related omissions in `-setRelationship:value:onObject:`:
-  1. In the to-one branch (`!relationship.isToMany`, `:324-342`), when `value` is `nil`
-     (`targetIdentifier == 0`), the method clears the forward reference on `object` and
-     returns early at `:328` without removing `object.identifier` from the previous
-     target's inverse collection (or clearing its inverse to-one reference) and without
-     marking the previous target dirty.  Similarly, when `value` is replaced with a new
-     target (`object.inSectionRow = newRow`), `object.identifier` is appended to the new
-     target's inverse collection (`newRow.hasObjects`) without being removed from the
-     old target's inverse collection (`oldRow.hasObjects`).
-  2. In the to-many branch (`relationship.isToMany`, `:344-362`), replacing a collection
-     updates the inverse reference on the new members but never clears the inverse
-     reference on members removed from the collection.
-- **Why it matters:** Moving an `RptqDocumentElement` between sections via
-  `element.inSectionRow = targetRow` alone (or deleting it via
-  `element.inSectionRow = nil`) leaves the element in the old `RptqDocumentSectionRows`'s
-  `hasObjects` collection, causing the element to appear in both sections (or remain in
-  its old section after deletion) until the caller explicitly removes it from
-  `oldRow.hasObjects` via `-removeHasObjectsObject:`.
-- **Design context (2026-11-28):** the "an element must live in a section" rule is a
-  drag-and-drop / UI invariant, not a reason for the store to keep two. The workaround
-  exists because a dropped-outside element must go somewhere rather than disappear; the
-  store should still maintain one inverse correctly. Fix the store method to unlink the
-  old target on replace and clear (to-one and to-many), while the drop handler keeps
-  enforcing "somewhere" -- snap back to the old section or the nearest valid target until
-  a new one is chosen. That preserves the behaviour the workaround was written for and
-  removes the duplicate membership.
-- **Fix (2026-11-28):** `-setRelationship:` now records the previous target (to-one) or
-  collection (to-many) before mutating, unlinks the old target's inverse on to-one
-  replace and clear and on to-many replace, and marks the old target dirty so the unlink
-  is saved. The drag-and-drop "must live somewhere" policy is unchanged; the caller's
-  manual `-removeHasObjectsObject:` remains harmless.
-- **Test:** `RptqStoreContextTests testReplacingAToOneRelationshipUnlinksTheOldTarget`,
-  `testClearingAToOneRelationshipUnlinksTheOldTarget`,
-  `testReplacingAToManyRelationshipUnlinksRemovedMembers`, and
-  `testRemovingAMemberFromAToManyRelationshipUnlinksIt`.
-
 ### `RptqDocumentSection -addDocumentObject:withDropPoint:managedObjectContext:` writes `rect.origin` and leaves `dropPoint` at `(0, 0)`
 - **Status:** Quirk / defect (found during the macOS Report Designer implementation)
 - **Where:** `MAD/Source/rptq/RptqDocumentSection+Extras.m:472-489`,
@@ -488,6 +449,7 @@ Status key:
 - `MADPrintPageRenderer` ignores `withTransparentBackground:`
 - `MADSectionLayoutAttributes +movePlacedItem:` teleports an isolated item to the origin
 - MAD's document fixtures shared one store across test runs
+- `RptqStoreContext -setRelationship:value:onObject:` does not unlink old inverse targets when replacing or clearing a relationship
 
 ## MADFoundation
 
@@ -550,22 +512,6 @@ Status key:
   rather than filling `error` (commit `e72b1e8df`).  Behaviour is unchanged; the
   convention question is recorded at the bottom of this file.
 
-### `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
-- **Status:** Confirmed (fix in review on `fix/reachable-crashes`)
-- **Where:** `MADFoundation/Source/BDHost.m:27`
-- **Behavior:** The guard is `addresses.class > 0 ? addresses[0] : nil`.  `[NSArray class]`
-  is never 0, so the test only rejects nil; `+addressesForHostname:` answers an *empty*
-  array for a name that resolves to IPv6 only (it filters everything that is not
-  `AF_INET`), and subscripting element 0 of an empty array throws `NSRangeException`.
-- **Why it matters:** An IPv6-only hostname -- the normal case on some networks -- takes
-  the connection screen down instead of reporting a lookup failure.
-- **Fix (2026-11-28):** the guard reads `addresses.count > 0`, so both nil and the empty
-  array for an IPv6-only name answer nil instead of subscripting element 0.
-- **Test:** `BDHostTests testIPv6OnlyHostnameReturnsNilInsteadOfCrashing`.  `::1`
-  resolves through `CFHost` to one `AF_INET6` address and then filters to an empty
-  array, which makes the path deterministic offline.  The non-empty path is pinned by
-  `BDHostTests testLocalhostResolvesToLoopback`.
-
 ### `BDHost +ipAddresses` / `+ethernetAddresses` are unchecked walks of `getifaddrs()`
 - **Status:** Quirk (dead code -- left as is)
 - **Where:** `MADFoundation/Source/BDHost.m:117`, `:140`
@@ -616,6 +562,7 @@ Status key:
 - MADDataTable's cache loader dereferenced a null error pointer
 - `MADOperationConditionResultTests`: the async-path assertion raced the dispatch_group
 - Framework targets dropped `$(inherited)`, so `DEBUG` never reached framework code
+- `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
 
 ## MADCocoaExtensions
 
@@ -1048,31 +995,6 @@ Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
 `MADMySQLFetch` and `MADMySQLFetch+DataTable`, which are thin wrappers over
 libmysqlclient; it skips rather than fails when no server is reachable.
 
-### `MADDatabaseMySQL -closeConnection:` and `MADMySQLConnection -dealloc` both `mysql_close` the handle
-- **Status:** Confirmed (fix in review on `fix/reachable-crashes`)
-- **Where:** `MADMySQL/Source/MADDatabaseMySQL.m:397-403` and `MADMySQL/Source/MADMySQLConnection.m:79-85`
-- **Behavior:** `-closeConnection:` calls `mysql_close` on the connection's handle, and the
-  connection's own `-dealloc` calls `mysql_close` on the same handle again when the object
-  dies. The handle's storage is calloc'd by the connection and `free_me` is false, so
-  neither call frees the struct -- but each call frees the session's internal buffers, so
-  the second is a double free.
-- **Why it matters:** Only latent. Every other path drops the connection without
-  `-closeConnection:`, so the single close in `-dealloc` is the common case; the import
-  path (`MADOperationCreateDocumentImportSchema.m:246,293`) is the only caller that
-  closes and then releases. Recorded during the connector rewrite so the next reader does
-  not mistake the arrangement for one that was checked.
-- **Fix sketch (2026-11-28):** make the close idempotent rather than remove either
-  call. The implementation uses a `handleClosed` flag on the connection rather than
-  NULLing the handle pointer, because the calloc'd struct must stay for `-dealloc` to
-  free; the flag is what prevents the second `mysql_close`. That keeps the import
-  path's explicit close and the common dealloc-only path, and needs no rebuild of the
-  MySQL client -- it is Objective-C ownership bookkeeping at two sites.
-- **Fix (2026-11-28):** `MADMySQLConnection` now owns one idempotent `-closeHandle`;
-  `-closeConnection:` calls it instead of `mysql_close`, and `-dealloc` calls it before
-  freeing the struct.
-- **Test:** `MADMySQLLiveTests testCloseConnectionThenReleaseDoesNotDoubleClose`
-  (skips when no server is reachable).
-
 ### `MADMySQLInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
 - **Status:** Quirk (left as is)
 - **Where:** `MADMySQL/Source/MADMySQLInsert.m:110-126`
@@ -1116,6 +1038,7 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 - `The fetch corrected a column's type from its first row`
 - A backslash in a MySQL literal is an escape character, so ANSI quoting alone is wrong
 - `MADMySQLUpdate -execute` raises an out-of-bounds string exception instead of its own error
+- `MADDatabaseMySQL -closeConnection:` and `MADMySQLConnection -dealloc` both `mysql_close` the handle
 
 ## MADTds
 
