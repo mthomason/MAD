@@ -7,20 +7,22 @@
 # before changing ios_app_version/ios_build, publish published_* to the new
 # tag, then run: python3 -I scripts/dev/versions.py docs
 #
-# Candidate numbers: 0.7.1 for stabilization, 0.8.0 for composition.
+# 0.8.0 ships composition reports (macOS and Windows); the engine moves to 9.1.
 schema: "1"
-next_release: "0.7.1"
-next_tag: "v0.7.1"
+next_release: "0.8.0"
+next_tag: "v0.8.0"
 published_release: "0.7.0"
 published_tag: "v0.7.0"
-macos_app_version: "0.7.1"
+macos_app_version: "0.8.0"
 macos_build: "4433"
-windows_app_version: "0.7.1"
+windows_app_version: "0.8.0"
 windows_build: "4433"
 ios_app_version: "9.0"
 ios_build: "4433"
-engine_version: "9.0"
+engine_version: "9.1"
 engine_revision: "r4433"
+published_engine_version: "9.0"
+published_engine_revision: "r4433"
 container_major: "1"
 container_minor: "0"
 store_revision: "2"

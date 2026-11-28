@@ -84,9 +84,16 @@ def _short_release(value):
 
 def docs_projection(manifest):
 	tag = manifest["published_tag"]
+	# The docs site describes the published download.  When the manifest carries
+	# the published engine values separately (the next build is ahead of the last
+	# release), project those; otherwise the current engine is the published one.
+	engine_version = manifest.get("published_engine_version",
+								  manifest["engine_version"])
+	engine_revision = manifest.get("published_engine_revision",
+								   manifest["engine_revision"])
 	return {
-		"engine_version": manifest["engine_version"],
-		"engine_revision": manifest["engine_revision"],
+		"engine_version": engine_version,
+		"engine_revision": engine_revision,
 		"macos_app_version": _short_release(manifest["published_release"]),
 		"windows_app_version": _short_release(manifest["published_release"]),
 		"ios_app_status": "between releases; returns early 2027",
