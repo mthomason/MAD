@@ -391,6 +391,14 @@ Status key:
   `hasObjects` collection, causing the element to appear in both sections (or remain in
   its old section after deletion) until the caller explicitly removes it from
   `oldRow.hasObjects` via `-removeHasObjectsObject:`.
+- **Design context (2026-11-28):** the "an element must live in a section" rule is a
+  drag-and-drop / UI invariant, not a reason for the store to keep two. The workaround
+  exists because a dropped-outside element must go somewhere rather than disappear; the
+  store should still maintain one inverse correctly. Fix the store method to unlink the
+  old target on replace and clear (to-one and to-many), while the drop handler keeps
+  enforcing "somewhere" -- snap back to the old section or the nearest valid target until
+  a new one is chosen. That preserves the behaviour the workaround was written for and
+  removes the duplicate membership.
 
 ### `RptqDocumentSection -addDocumentObject:withDropPoint:managedObjectContext:` writes `rect.origin` and leaves `dropPoint` at `(0, 0)`
 - **Status:** Quirk / defect (found during the macOS Report Designer implementation)
@@ -722,6 +730,14 @@ Status key:
   least one file is tracked (an empty list filters to nothing and survives).
   `-setFileCoordinator:` is called by the app's file-location manager when the
   storage setting changes; an empty list may be why this has not been seen.
+- **Reachability (2026-11-28):** unreachable in the shipping build today.
+  `+[MADFilesController isCloudDesired]` returns `NO`
+  (`MADFilesController.m:96`), so `+isCloudReadilyAvailable` is always `NO`; every
+  in-tree `-configureFilesController:storageOptionChangeHandler:` call passes
+  `accountChanged = NO` (`MADFileLocationManager.m`), and the setter is only sent on
+  `YES`. The populated-list crash is reached only by a direct caller of the public
+  setter. It becomes live again when cloud is re-enabled or a caller swaps
+  coordinators. Priority: latent, not P1.
 - **Pinned by:** `MADFilesControllerTests`
   `-testSettingANewCoordinatorStopsTheOldOneAndStartsTheNewOne`, which can only
   exercise the empty case — the populated case terminates the test process. The
@@ -846,6 +862,13 @@ Status key:
   the factory does for any short-lived caller — is enough.  The coordinator is
   normally retained by `MADFilesController` for the life of the browser, which
   hides it.
+- **Reachability (2026-11-28):** unreachable in the shipping build today.
+  `+isCloudDesired` returns `NO`, and `MADFileCoordinator` builds a cloud
+  coordinator only for `MADAppStorageCloud` (`MADFileCoordinator.m:54,74`). No
+  in-tree path selects cloud storage now: the storage prompt is gated on cloud
+  availability, and a persisted Cloud option is demoted to `NotSet` before the
+  controller is configured. Only the tests that construct a coordinator directly
+  reach the SIGSEGV. Priority: latent, not P1.
 - **Fix sketch:** `if (sself == nil) return;`, or capture `self` strongly in the
   init block (the block is a one-shot assignment; there is no cycle to keep).
 - **Pinned by:** the crash report above.  `MADCloudFileCoordinatorTests`,
@@ -1026,6 +1049,11 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   path (`MADOperationCreateDocumentImportSchema.m:246,293`) is the only caller that
   closes and then releases. Recorded during the connector rewrite so the next reader does
   not mistake the arrangement for one that was checked.
+- **Fix sketch (2026-11-28):** make the close idempotent rather than remove either
+  call. Have `-closeConnection:` NULL the connection's handle after `mysql_close`, and
+  guard both `-closeConnection:` and `-dealloc` on a non-NULL handle. That keeps the
+  import path's explicit close and the common dealloc-only path, and needs no rebuild
+  of the MySQL client -- it is Objective-C ownership bookkeeping at two sites.
 - **Test:** none -- the path needs the app and a live server.
 
 ### `MADMySQLInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
