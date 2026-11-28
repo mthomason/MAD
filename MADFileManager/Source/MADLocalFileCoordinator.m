@@ -30,13 +30,13 @@
 @property (nonatomic, copy)   void (^firstQueryUpdateHandler)(void);
 @property (nonatomic, copy)     NSString *fileGroup;
 @property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
+@property (nonatomic, copy, nullable) NSURL *documentsDirectoryOverride;
 
 @end
 
 @implementation MADLocalFileCoordinator
 
 @synthesize delegate = _delegate;
-@dynamic documentsDirectory;
 
 #pragma mark - Initialization
 
@@ -115,8 +115,8 @@
 					*removes = @[URL],
 					*updates = @[];
 			[delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
-														   removedURLs: updates
-														   updatedURLs: removes];
+														   removedURLs: removes
+														   updatedURLs: updates];
 		}
 		
 	}];
@@ -215,8 +215,17 @@
 }
 
 - (NSURL *)documentsDirectory {
-	NSURL *url = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
-	return url;
+	if (_documentsDirectoryOverride != nil) {
+		return _documentsDirectoryOverride;
+	}
+	return [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+}
+
+// The protocol promises a writable property.  The local coordinator normally
+// derives the directory from its App Group, so a set value is an override; the
+// getter above falls back to the derived directory when none is set.
+- (void)setDocumentsDirectory:(NSURL *)documentsDirectory {
+	self.documentsDirectoryOverride = documentsDirectory.copy;
 }
 
 #pragma mark - Convenience

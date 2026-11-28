@@ -15,8 +15,6 @@
 //      and never used; inserts always land in finder order.
 //    - +getFileStorageLocationsForUbiquityIdentifier:... hands the Data
 //      directory back as `documents` and the Documents directory back as `data`.
-//    - -fileCoordinatorDidFailRenamingFileAtURL: gates the renaming callback on
-//      the delegate implementing the *removing* callback.
 //    - -setFileCoordinator: raises NSUnknownKeyException on the delegate queue
 //      when anything is tracked (URLs passed as metadata), so the swap is only
 //      covered for the empty case.
@@ -167,8 +165,8 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 
 @end
 
-// Implements only the renaming failure callback: with this delegate the
-// controller silently drops a renaming failure (see the class comment).
+// Implements only the renaming failure callback: the controller must send the
+// renaming failure to this delegate, not gate it on the removing callback.
 @interface MADRenamingOnlyFilesControllerDelegate : NSObject <MADFilesControllerDelegate>
 
 @property (nonatomic, assign) NSUInteger failureCount;
@@ -493,11 +491,9 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 	XCTAssertEqual(self.delegate.failureCount, (NSUInteger)4);
 }
 
-- (void)testRenamingFailureIsGatedOnTheRemovingCallback {
-	// docs/project/registers/BUGS.md: -fileCoordinatorDidFailRenamingFileAtURL: checks
-	// respondsToSelector: for the *removing* callback before sending the
-	// renaming one, so a delegate that implements only the renaming callback
-	// never hears about a rename failure.
+- (void)testRenamingFailureReachesTheRenamingCallback {
+	// A delegate that implements only the renaming callback hears about a
+	// rename failure; the check must name the same selector it sends.
 	MADFilesController *controller = [self controller];
 	MADRenamingOnlyFilesControllerDelegate *delegate = [[MADRenamingOnlyFilesControllerDelegate alloc] init];
 	controller.delegate = delegate;
@@ -508,7 +504,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 	[controller fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
 	[self waitForTheDelegateQueue];
 
-	XCTAssertEqual(delegate.failureCount, (NSUInteger)0);
+	XCTAssertEqual(delegate.failureCount, (NSUInteger)1);
 }
 
 #pragma mark - Swapping coordinators

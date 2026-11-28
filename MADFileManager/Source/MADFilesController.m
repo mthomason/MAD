@@ -415,8 +415,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		if (!sself) return;
 		id <MADFilesControllerDelegate> delegate = sself.delegate;
 		MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
-		SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
-		if ([delegate respondsToSelector:didFailRemovingFile]) {
+		SEL didFailRenamingFile = @selector(filesController:didFailRenamingFileInfo:withError:);
+		if ([delegate respondsToSelector:didFailRenamingFile]) {
 			[delegate filesController:sself didFailRenamingFileInfo:fileInfo withError:error];
 		}
 	}];
