@@ -71,8 +71,10 @@ function Get-ManifestValue([string]$Key) {
 }
 
 if (-not $Version) { $Version = Get-ManifestValue "windows_app_version" }
+$BuildNumber = ((& git -C $RepoRoot rev-list --count HEAD 2>$null | Out-String).Trim())
+if ($BuildNumber -notmatch '^\d+$') { $BuildNumber = "0" }
 if (-not $EngineVersion) {
-    $EngineVersion = "$(Get-ManifestValue 'engine_version') ($(Get-ManifestValue 'engine_revision'))"
+    $EngineVersion = "$(Get-ManifestValue 'engine_version') (r$BuildNumber)"
 }
 
 # mad.exe links these runtime DLLs directly or through gnustep-base, measured
@@ -195,9 +197,10 @@ function Write-BuildInfo([string]$Path) {
 
     $info = [ordered]@{
         MADAppVersion          = $Version
-        MADAppBuild            = (Get-ManifestValue "windows_build")
+        MADAppBuild            = $BuildNumber
+        MADBuildNumber         = $BuildNumber
         MADEngineVersion       = (Get-ManifestValue "engine_version")
-        MADEngineRevision      = (Get-ManifestValue "engine_revision")
+        MADEngineRevision      = "r$BuildNumber"
         MADSourceCommit        = $commit
         MADSourceCommitShort   = $short
         MADSourceDirty         = $dirty
@@ -237,8 +240,8 @@ $expectedCommit = (& git -C $RepoRoot rev-parse HEAD 2>$null | Out-String).Trim(
 if ($engineInfo.engineVersion -ne (Get-ManifestValue "engine_version")) {
     throw "the staged engine reports version '$($engineInfo.engineVersion)', expected '$(Get-ManifestValue 'engine_version')'"
 }
-if ($engineInfo.engineRevision -ne (Get-ManifestValue "engine_revision")) {
-    throw "the staged engine reports revision '$($engineInfo.engineRevision)', expected '$(Get-ManifestValue 'engine_revision')'"
+if ($engineInfo.engineRevision -ne "r$BuildNumber") {
+    throw "the staged engine reports revision '$($engineInfo.engineRevision)', expected 'r$BuildNumber'"
 }
 if ($engineInfo.sourceCommit -ne $expectedCommit) {
     throw "the staged engine was built from '$($engineInfo.sourceCommit)', not '$expectedCommit'"

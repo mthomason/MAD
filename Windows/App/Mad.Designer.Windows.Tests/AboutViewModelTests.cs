@@ -37,17 +37,17 @@ public sealed class AboutViewModelTests
     [Fact]
     public void About_UsesTheEngineIdentityItWasGiven()
     {
-        var engine = new EngineInfo(1, "9.0", "r4433", "abc", "abc12345", false,
+        var engine = new EngineInfo(1, "9.1", "r5151", "abc", "abc12345", false,
             new[] { "engine-info" });
-        var build = new BuildInfo("0.7.1", "4433", "9.0", "r4433", "abc", "abc12345", false);
+        var build = new BuildInfo("0.8.0", "5151", "9.1", "r5151", "abc", "abc12345", false);
 
         var about = new AboutViewModel(build, engine);
 
-        Assert.Contains("v9.0", about.EngineVersion);
-        Assert.Contains("r4433", about.EngineVersion);
+        Assert.Contains("v9.1", about.EngineVersion);
+        Assert.Contains("r5151", about.EngineVersion);
         Assert.Contains("abc12345", about.EngineVersion);
-        Assert.Contains("0.7.1", about.ApplicationVersion);
-        Assert.Contains("4433", about.ApplicationVersion);
+        Assert.Contains("0.8.0", about.ApplicationVersion);
+        Assert.Contains("5151", about.ApplicationVersion);
     }
 
     [Fact]

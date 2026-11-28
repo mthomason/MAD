@@ -1502,6 +1502,10 @@ try {
 	$dirty = "false"
 }
 
+$buildNumber = "0"
+$counted = (& git -C $RepoRoot rev-list --count HEAD 2>$null | Out-String).Trim()
+if ($LASTEXITCODE -eq 0 -and $counted -match '^\d+$') { $buildNumber = $counted }
+
 $dirtyXml = if ($dirty -eq "true") { "<true/>" } else { "<false/>" }
 $buildDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 $containerFormat = "$(Get-ManifestValue 'container_major').$(Get-ManifestValue 'container_minor')"
@@ -1513,11 +1517,13 @@ $identity = @"
 	<key>MADAppVersion</key>
 	<string>$(Get-ManifestValue 'windows_app_version')</string>
 	<key>MADAppBuild</key>
-	<string>$(Get-ManifestValue 'windows_build')</string>
+	<string>$buildNumber</string>
+	<key>MADBuildNumber</key>
+	<string>$buildNumber</string>
 	<key>MADEngineVersion</key>
 	<string>$(Get-ManifestValue 'engine_version')</string>
 	<key>MADEngineRevision</key>
-	<string>$(Get-ManifestValue 'engine_revision')</string>
+	<string>r$buildNumber</string>
 	<key>MADSourceCommit</key>
 	<string>$commit</string>
 	<key>MADSourceCommitShort</key>
