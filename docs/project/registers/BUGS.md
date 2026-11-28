@@ -162,7 +162,7 @@ Status key:
   testExecuteWithAMissingKeyFinishesWithoutError`.
 
 ### `MADOperationDeleteFile`'s dependency scan is order-dependent and can coordinate a nil URL
-- **Status:** Confirmed (latent)
+- **Status:** Confirmed (nil-URL path fixed; order-dependent scan remains)
 - **Where:** `MAD/Source/MADOperationDeleteFile.m:34-60`
 - **Behavior:** Two separate hazards in the same loop:
   1. The scan `break`s as soon as it sees a `MADOperationCreateDocumentProtocol`
@@ -175,14 +175,22 @@ Status key:
      `MADFileUtilities -removeFileAtURL:completion:`, which passes it to
      `NSFileAccessIntent`/`NSFileCoordinator` -- a likely invalid-argument crash.
 - **Why it matters:** The order-dependent path is unreachable deterministically, and
-  the nil-URL path crashes rather than failing the operation.  Fixing means splitting
-  the loop (collect all three) and guarding the URL.
+  the nil-URL path crashed rather than failing the operation.  The nil URL is now
+  guarded; splitting the scan loop remains open.
+- **Fix (2026-11-28):** `MADFileUtilities -removeFileAtURL:completion:` checks the URL
+  before entering `NSFileCoordinator`: a nil or missing URL answers an
+  `NSCocoaErrorDomain`/`NSFileNoSuchFileError` error without coordinating.  That removes
+  the nil-URL hazard and fixes the macOS-runner hang where the coordinator never called
+  back for a missing file (`MADOperationDeleteFileTests
+  testExecuteWithFailingResultsOnAMissingFileFinishesWithAnError`).  The order-dependent
+  scan in the operation itself is unchanged.
 - **Test:** `MADOperationDeleteFileTests` pins the three deterministic paths
   (`testExecuteWithFailingResultsDeletesTheFile`,
   `testExecuteWithSuccessfulResultsLeavesTheFile`,
-  `testExecuteWithOnlyADocumentDependencyDoesNotDelete`); the order-dependent
-  combination and the nil-URL path are deliberately not exercised -- the first cannot
-  be pinned, the second would take the test process down.
+  `testExecuteWithOnlyADocumentDependencyDoesNotDelete`), and
+  `MADFileUtilitiesTests testRemoveMissingFileReportsAnError` /
+  `testRemoveNilFileReportsAnError` pin the guard on both Apple and Linux.  The
+  order-dependent combination still cannot be pinned.
 
 ### `MADOperationDocumentCloseDocument` treats "no document" as a successful close
 - **Status:** Quirk (hazard -- documented, not changed)

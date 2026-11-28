@@ -91,4 +91,32 @@
 	_directory = nil;
 }
 
+- (void)testRemoveMissingFileReportsAnError {
+	// A missing file never reaches the file coordinator's accessor; the helper
+	// must answer the error rather than leave the completion uncalled.
+	NSURL *url = [_directory URLByAppendingPathComponent:@"missing.mad"];
+	XCTestExpectation *expectation = [self expectationWithDescription:@"remove missing file"];
+
+	[MADFileUtilities removeFileAtURL:url completion:^(NSError *error) {
+		XCTAssertNotNil(error);
+		XCTAssertEqualObjects(error.domain, NSCocoaErrorDomain);
+		XCTAssertEqual(error.code, NSFileNoSuchFileError);
+		[expectation fulfill];
+	}];
+
+	[self waitForExpectations:@[expectation] timeout:5.0];
+}
+
+- (void)testRemoveNilFileReportsAnError {
+	XCTestExpectation *expectation = [self expectationWithDescription:@"remove nil file"];
+
+	[MADFileUtilities removeFileAtURL:nil completion:^(NSError *error) {
+		XCTAssertNotNil(error);
+		XCTAssertEqualObjects(error.domain, NSCocoaErrorDomain);
+		[expectation fulfill];
+	}];
+
+	[self waitForExpectations:@[expectation] timeout:5.0];
+}
+
 @end
