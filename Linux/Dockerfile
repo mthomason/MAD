@@ -62,12 +62,26 @@ RUN bash /opt/madlinux/lib/libraries.sh --build
 
 FROM toolchain AS build
 
+# The context excludes .git (it is 683 MB), so `git` cannot supply the identity
+# in here.  The host build passes the commit, the commit count, and the dirty
+# flag instead; the defaults keep a hand-run `docker build` honest rather than
+# inventing a source commit.
+ARG MAD_SOURCE_COMMIT=unknown
+ARG MAD_BUILD_NUMBER=0
+ARG MAD_SOURCE_DIRTY=true
+
 WORKDIR /src
 COPY . /src
 RUN bash Linux/build.sh --in-image build
 # The CMake install rule puts the binary at a stable path (/usr/local/bin/mad),
 # so the runtime stage does not reach into the build tree.
 RUN cmake --install /src/Linux/build
+# `mad version` reads MADBuildInfo.plist beside the executable (MADCLIBuildInfo),
+# so generate it after the install, where the runtime stage copies the binary.
+RUN bash /src/scripts/dev/build-info.sh --format plist \
+		--output /usr/local/bin/MADBuildInfo.plist \
+		--commit "$MAD_SOURCE_COMMIT" --build-number "$MAD_BUILD_NUMBER" \
+		--dirty "$MAD_SOURCE_DIRTY"
 CMD ["bash", "Linux/build.sh", "--in-image", "test"]
 
 # ---------------------------------------------------------------------------
@@ -117,6 +131,9 @@ COPY --from=toolchain /usr/local/share/GNUstep /usr/local/share/GNUstep
 COPY --from=toolchain /usr/local/share/mad /usr/local/share/mad
 
 COPY --from=build /usr/local/bin/mad /usr/local/bin/mad
+# The generated identity `mad version` reports; without it the release image
+# answers null for the engine version, revision, and source commit.
+COPY --from=build /usr/local/bin/MADBuildInfo.plist /usr/local/bin/MADBuildInfo.plist
 
 # A Sqlite3 document stores a bare database name, and the engine resolves it
 # against the per-user Application Support directory -- $HOME/GNUstep/Library/

@@ -41,6 +41,22 @@ MODE=all
 REBUILD=0
 PLATFORM="${MAD_LINUX_PLATFORM:-}"
 
+build_identity_args=()
+
+set_build_identity_args() { # the Docker context has no .git; pass the identity in
+	local commit count dirty
+	commit="$(git -C "${REPO_ROOT}" rev-parse HEAD 2>/dev/null || echo unknown)"
+	count="$(git -C "${REPO_ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)"
+	if [[ -n "$(git -C "${REPO_ROOT}" status --porcelain 2>/dev/null || true)" ]]; then
+		dirty=true
+	else
+		dirty=false
+	fi
+	build_identity_args=(--build-arg "MAD_SOURCE_COMMIT=${commit}"
+		--build-arg "MAD_BUILD_NUMBER=${count}"
+		--build-arg "MAD_SOURCE_DIRTY=${dirty}")
+}
+
 usage() { # -> prints the header comment
 	sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
 }
@@ -63,11 +79,13 @@ docker_bin() { # -> echoes the docker command to use
 build_image() { # build the build-stage image
 	local db args=()
 	db="$(docker_bin)"
+	set_build_identity_args
 	# --target build is required: the runtime stage is the Dockerfile's last
 	# stage, so without it the default target would be the CLI deliverable.
 	args=(build -f "${LINUX_DIR}/Dockerfile" --target build)
 	if [[ "${REBUILD}" == "1" ]]; then args+=(--no-cache); fi
 	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
+	args+=("${build_identity_args[@]}")
 	log "build ${IMAGE} (build stage)"
 	( cd "${REPO_ROOT}" && "${db}" "${args[@]}" -t "${IMAGE}" . )
 }
@@ -85,9 +103,11 @@ build_toolchain_image() { # build the toolchain-stage image only
 build_runtime_image() { # build the runtime stage: the `mad` deliverable
 	local db args=()
 	db="$(docker_bin)"
+	set_build_identity_args
 	args=(build -f "${LINUX_DIR}/Dockerfile" --target runtime)
 	if [[ "${REBUILD}" == "1" ]]; then args+=(--no-cache); fi
 	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
+	args+=("${build_identity_args[@]}")
 	log "build ${RUNTIME_IMAGE} (runtime stage)"
 	( cd "${REPO_ROOT}" && "${db}" "${args[@]}" -t "${RUNTIME_IMAGE}" . )
 }

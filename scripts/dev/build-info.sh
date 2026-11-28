@@ -6,11 +6,14 @@
 #  Usage:
 #    build-info.sh --output PATH [--format plist|json] [--manifest PATH]
 #                  [--app-version V] [--app-build N]
+#                  [--commit SHA] [--build-number N] [--dirty true|false]
 #
 #  The app version comes from Versions.yml.  The build number is the git commit
-#  count at build time; MADEngineRevision is that number as rNNNN.  The output is
-#  a build product: it is never a tracked plist, and the script writes nothing
-#  except the requested file.  Read it with MADCLIBuildInfo(), AppDelegate
+#  count at build time; MADEngineRevision is that number as rNNNN.  A build with
+#  no .git (the Linux image's Docker context) passes --commit, --build-number,
+#  and --dirty instead, so the identity still names the source it came from.  The
+#  output is a build product: it is never a tracked plist, and the script writes
+#  nothing except the requested file.  Read it with MADCLIBuildInfo(), AppDelegate
 #  +buildInfoForBundle:, or Windows BuildInfo.
 
 set -euo pipefail
@@ -24,6 +27,9 @@ output=""
 format="plist"
 app_version=""
 app_build=""
+commit_override=""
+build_number_override=""
+dirty_override=""
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
@@ -32,6 +38,9 @@ while [[ $# -gt 0 ]]; do
 		--manifest)			manifest="$2"; shift 2 ;;
 		--app-version)		app_version="$2"; shift 2 ;;
 		--app-build)		app_build="$2"; shift 2 ;;
+		--commit)			commit_override="$2"; shift 2 ;;
+		--build-number)		build_number_override="$2"; shift 2 ;;
+		--dirty)			dirty_override="$2"; shift 2 ;;
 		-h|--help)			usage; exit 0 ;;
 		*) echo "build-info.sh: unknown option $1" >&2; exit 2 ;;
 	esac
@@ -64,24 +73,44 @@ container_format="$(value container_major).$(value container_minor)"
 store_revision="$(value store_revision)"
 protocol_version="$(value serve_protocol_version)"
 
-build_number="$(git -C "$manifest_root" rev-list --count HEAD 2>/dev/null || echo 0)"
-if ! [[ "$build_number" =~ ^[0-9]+$ ]]; then
-	build_number=0
+if [[ -n "$build_number_override" ]]; then
+	if ! [[ "$build_number_override" =~ ^[0-9]+$ ]]; then
+		echo "build-info.sh: --build-number must be a non-negative integer" >&2
+		exit 2
+	fi
+	build_number="$build_number_override"
+else
+	build_number="$(git -C "$manifest_root" rev-list --count HEAD 2>/dev/null || echo 0)"
+	if ! [[ "$build_number" =~ ^[0-9]+$ ]]; then
+		build_number=0
+	fi
 fi
 engine_revision="r${build_number}"
 app_build="${app_build:-${build_number}}"
 
-commit="$(git -C "$manifest_root" rev-parse HEAD 2>/dev/null || echo unknown)"
-if [[ "$commit" == "unknown" ]]; then
+if [[ -n "$commit_override" ]]; then
+	commit="$commit_override"
+else
+	commit="$(git -C "$manifest_root" rev-parse HEAD 2>/dev/null || echo unknown)"
+fi
+if [[ -z "$commit" || "$commit" == "unknown" ]]; then
+	commit="unknown"
 	short="unknown"
-	dirty="false"
 else
 	short="${commit:0:8}"
-	if [[ -n "$(git -C "$manifest_root" status --porcelain 2>/dev/null || true)" ]]; then
-		dirty="true"
-	else
-		dirty="false"
-	fi
+fi
+
+if [[ -n "$dirty_override" ]]; then
+	case "$dirty_override" in
+		true|false) dirty="$dirty_override" ;;
+		*) echo "build-info.sh: --dirty must be true or false" >&2; exit 2 ;;
+	esac
+elif [[ "$commit" == "unknown" ]]; then
+	dirty="false"
+elif [[ -n "$(git -C "$manifest_root" status --porcelain 2>/dev/null || true)" ]]; then
+	dirty="true"
+else
+	dirty="false"
 fi
 
 build_date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
