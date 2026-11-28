@@ -2125,9 +2125,9 @@ int main(int argc, const char * argv[]) {
 		[aboutWC.window layoutIfNeeded];
 
 		if (![aboutWC.titleLabel.stringValue isEqualToString:@"MAD Designer"] ||
-			![aboutWC.versionLabel.stringValue containsString:@"v9.0"] ||
+			![aboutWC.versionLabel.stringValue containsString:@"v9.1"] ||
 			![aboutWC.versionLabel.stringValue containsString:@"r4433"] ||
-			![aboutWC.applicationVersionLabel.stringValue containsString:@"v0.7"] ||
+			![aboutWC.applicationVersionLabel.stringValue containsString:@"v0.8"] ||
 			[aboutWC.versionLabel.stringValue isEqualToString:aboutWC.applicationVersionLabel.stringValue] ||
 			![aboutWC.copyrightLabel.stringValue containsString:@"Copyright © 2012–2026 Michael Thomason"] ||
 			![aboutWC.licenseSummaryLabel.stringValue containsString:@"Licensed under the MIT License"] ||
