@@ -870,7 +870,7 @@ entrada do Windows no `README.md` chegaram com a versão 0.7 não assinada (2026
 a página está presente nos seis idiomas sob o contrato de documentação
 (`docs/project/localization/LOCALIZATION.md`). O workflow de verificação do Windows
 (`.github/workflows/windows.yml`) testa as suítes .NET contra o
-ativo de engine `mad-windows-x64.zip` anexado ao `v0.7.0`;
+ativo de engine `mad-windows-x64.zip` anexado ao `v0.8.0`;
 `Windows/package.ps1` monta tanto esse ativo quanto o zip de versão do aplicativo.
 
 ## Bancos de dados de teste

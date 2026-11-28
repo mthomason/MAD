@@ -845,7 +845,7 @@ Apple 应用链接 GNUstep 运行时。公开的 `docs/windows.md` 和
 `README.md` 的 Windows 条目随 0.7 未签名发布（2026-11-21）落地；
 该页面在文档契约（`docs/project/localization/LOCALIZATION.md`）下以全部六种语言存在。Windows 验证工作流
 （`.github/workflows/windows.yml`）针对附加到
-`v0.7.0` 的 `mad-windows-x64.zip` 引擎资产测试 .NET 套件；
+`v0.8.0` 的 `mad-windows-x64.zip` 引擎资产测试 .NET 套件；
 `Windows/package.ps1` 组装该资产和应用发布 zip。
 
 ## 测试数据库

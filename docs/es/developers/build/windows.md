@@ -873,7 +873,7 @@ entrada de Windows del `README.md` aterrizaron con la versión sin firmar 0.7 (2
 la página está presente en los seis idiomas bajo el contrato de documentación
 (`docs/project/localization/LOCALIZATION.md`). El flujo de trabajo de verificación de Windows
 (`.github/workflows/windows.yml`) prueba las suites .NET contra el
-activo de motor `mad-windows-x64.zip` adjunto a `v0.7.0`;
+activo de motor `mad-windows-x64.zip` adjunto a `v0.8.0`;
 `Windows/package.ps1` ensambla tanto ese activo como el zip de versión de la aplicación.
 
 ## Bases de datos de prueba
