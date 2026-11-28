@@ -16,11 +16,9 @@
 //  create, so the fixture creates it.  Cleanup walks the directory by path
 //  (the coordinator's own URL listing is what -refresh exercises).
 //
-//  Two live defects are pinned as the Xcode suite pins them:
-//    - -removeFileAtURL: reports the removed URL in the *updatedURLs* box and
-//      leaves removedURLs empty (the local arrays are handed over swapped).
-//    - -documentsDirectory is @dynamic with only a getter, so the protocol's
-//      setter raises.
+//  Two former defects are now pinned as corrected:
+//    - -removeFileAtURL: reports the deleted URL in removedURLs, not updatedURLs.
+//    - -documentsDirectory accepts the protocol's setter and returns the override.
 //
 //  Two GNUstep divergences were found here and fixed, each of which had left
 //  its tests as needs:
@@ -199,16 +197,18 @@ static void testInitTargetsTheGroupDocumentsDirectory(void) {
 	MADCoordinatorEndTest();
 }
 
-static void testDocumentsDirectoryHasNoSetter(void) {
+static void testDocumentsDirectorySetterIsHonored(void) {
 	MADCoordinatorBeginTest();
-	// The protocol declares documentsDirectory readwrite, but the class
-	// declares it @dynamic and only -documentsDirectory is implemented.
+	// The protocol declares documentsDirectory readwrite; a value set through it
+	// is returned by the getter instead of the per-user Documents fallback.
 	MADLocalFileCoordinator *coordinator = MADCoordinator();
+	NSURL *override = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					   URLByAppendingPathComponent:@"override" isDirectory:YES];
 
-	MAD_PASS(![coordinator respondsToSelector:@selector(setDocumentsDirectory:)],
-			 "there is no setter");
-	MAD_THROWS_NAMED([coordinator setDocumentsDirectory:coordinator.documentsDirectory],
-					 NSInvalidArgumentException, "setting documentsDirectory raises");
+	MAD_PASS([coordinator respondsToSelector:@selector(setDocumentsDirectory:)],
+			 "there is a setter");
+	coordinator.documentsDirectory = override;
+	MAD_PASS_EQUAL(coordinator.documentsDirectory, override, "the getter returns the override");
 
 	MADCoordinatorEndTest();
 }
@@ -345,7 +345,7 @@ static void testRefreshIsSilentWhenTheLastMatchingFileIsGone(void) {
 
 #pragma mark - remove / duplicate / rename
 
-static void testRemoveReportsTheURLAsUpdatedNotRemoved(void) {
+static void testRemoveReportsTheURLAsRemoved(void) {
 	MADCoordinatorBeginTest();
 	MADLocalFileCoordinator *coordinator = MADCoordinator();
 	MADRecordingFileCoordinatorDelegate *delegate = [[MADRecordingFileCoordinatorDelegate alloc] init];
@@ -357,10 +357,9 @@ static void testRemoveReportsTheURLAsUpdatedNotRemoved(void) {
 	[coordinator removeFileAtURL:URL];
 	MAD_PASS([delegate waitForRecordWithTimeout:5.0], "the remove is reported");
 
-	// The success branch hands the arrays over swapped.  The file is deleted,
-	// but the delegate is told the URL was updated.
-	MAD_PASS_EQUAL(delegate.lastUpdatedURLs, @[URL], "the URL is reported as updated");
-	MAD_PASS_EQUAL(delegate.lastRemovedURLs, @[], "nothing is reported as removed");
+	// The success branch reports the deleted URL in removedURLs, not updatedURLs.
+	MAD_PASS_EQUAL(delegate.lastRemovedURLs, @[URL], "the URL is reported as removed");
+	MAD_PASS_EQUAL(delegate.lastUpdatedURLs, @[], "nothing is reported as updated");
 	MAD_PASS_EQUAL(delegate.lastInsertedURLs, @[], "nothing is inserted");
 	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath:(URL.path ?: @"")], "the file is gone");
 
@@ -429,14 +428,14 @@ static void testRenameReportsTheOldURLRemovedAndTheNewURLInserted(void) {
 
 MAD_TEST_MAIN("MADLocalFileCoordinatorTests",
 	MAD_TEST(testInitTargetsTheGroupDocumentsDirectory),
-	MAD_TEST(testDocumentsDirectoryHasNoSetter),
+	MAD_TEST(testDocumentsDirectorySetterIsHonored),
 	MAD_TEST(testDebugQuickLookObjectListsTheGroupAndContents),
 	MAD_TEST(testAnEmptyNameCannotBeCreated),
 	MAD_TEST(testAFreshNameCanBeCreatedAndAnExistingOneCannot),
 	MAD_TEST(testRefreshReportsANewFileAsInsertedAndRunsTheFirstQueryHandler),
 	MAD_TEST(testRefreshReportsARemovedFileWhenFilesRemain),
 	MAD_TEST(testRefreshIsSilentWhenTheLastMatchingFileIsGone),
-	MAD_TEST(testRemoveReportsTheURLAsUpdatedNotRemoved),
+	MAD_TEST(testRemoveReportsTheURLAsRemoved),
 	MAD_TEST(testRemoveOfAMissingFileReportsAFailure),
 	MAD_TEST(testDuplicateReportsTheCopyAsInserted),
 	MAD_TEST(testRenameReportsTheOldURLRemovedAndTheNewURLInserted));
