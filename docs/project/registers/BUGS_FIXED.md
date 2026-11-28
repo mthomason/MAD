@@ -1693,6 +1693,31 @@ reference to "BUGS.md, the X entry" still lands.
   array, which makes the path deterministic offline.  The non-empty path is pinned by
   `BDHostTests testLocalhostResolvesToLoopback`.
 
+## MADCocoaExtensions
+
+### `MADColorEverydayApps` header colors bypass the 8-bit-to-unit conversion
+- **Status:** Fixed (2026-11-28, commit `f35d7c4c6`)
+- **Where:** `MADCocoaExtensions/Source/UIColor+EverydayApps.m:30`
+  (`-newColorHeaderColor`) and `:40` (`-blueHeaderSecondaryColor`)
+- **Behavior:** Every other palette member builds its color through
+  `newColorWitColors` / `newColorWithColorsAlpha`, which divide the 8-bit triple by
+  255.  The light-mode branches of these two dynamic colors instead call
+  `+[UIColor colorWithRed:green:blue:alpha:]` with the raw 8-bit numbers
+  (2, 108, 182 and 13, 158, 215).  That initializer expects 0-1; the components are
+  stored as given -- an extended-range sRGB color -- so the intended blue is not
+  what the color carries, and at draw time Core Animation clamps the out-of-range
+  components to white.
+- **Why it matters:** In light mode the header tint renders as a 20%-alpha white
+  veil instead of the blue.  `blueHeaderSecondaryColor` has the same arithmetic
+  but an alpha of 0, so it is invisible either way.  The fix is dividing by 255,
+  as every sibling does.
+- **Fix (2026-11-28):** both UIKit light-mode branches divide by `MADF255`, as the
+  macOS branches and the rest of the palette already did.
+- **Test:** `MADColorEverydayAppsTests testHeaderColorLightModeUsesTheIntendedComponents`
+  and `testBlueHeaderSecondaryLightModeUsesTheIntendedComponents`, which pin
+  2/108/182 and 13/158/215 at unit scale; every other palette member is pinned
+  the same way.
+
 ## MADFileManager
 
 ### `MADMetaData -fileSystemFileCreationDate` / `-fileSystemContentChangeDate` return `NSData` not `NSDate`
@@ -1775,6 +1800,59 @@ reference to "BUGS.md, the X entry" still lands.
   executed), and with the fix the test also asserts the monitor really was released, so
   a fix that leaked the owner would fail too.  (The stop-and-drain in the other tests
   is no longer load-bearing; it is left as it was.)
+
+### `MADLocalFileCoordinator -removeFileAtURL:` reports the removal as an update
+- **Status:** Fixed (2026-11-28, commit `f35d7c4c6`)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:112-119`
+- **Behavior:** The success branch builds `removes = @[URL]` and then calls
+  `fileCoordinatorDidUpdateContentsWithInsertedURLs: removedURLs:updates
+  updatedURLs:removes` — the `removes` and `updates` arrays are swapped. The
+  delegate is told the file was *updated*, and `removedURLs` stays empty. The
+  file is deleted either way.
+- **Why it matters:** `MADFilesController` trusts the buckets: a removal reported
+  as an update looks up the still-tracked entry and rewrites it in place
+  (`.m:530-549`) instead of untracking it, so a file deleted through the
+  coordinator stays in the browser list until a refresh notices a file-system
+  difference. The same swapped call exists in
+  `MADCloudFileCoordinator -createURLWithName:` (`.m:214-221`), where both arrays
+  are empty and the inversion is inert.
+- **Fix (2026-11-28):** the success branch passes `removedURLs:removes` and
+  `updatedURLs:@[]`.  The cloud coordinator's identical call has both arrays empty,
+  so it is left as is.
+- **Test:** `MADLocalFileCoordinatorTests -testRemoveReportsTheURLAsRemoved`.
+
+### `MADLocalFileCoordinator -documentsDirectory` has no setter
+- **Status:** Fixed (2026-11-28, commit `f35d7c4c6`)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:38` (`@dynamic`)
+  against `MADFileCoordinatorProtocol.h:18-19` (`readwrite, copy`)
+- **Behavior:** The class declares the property `@dynamic` and implements only
+  `-documentsDirectory` (`.m:206-209`). The setter the protocol promises is never
+  provided, so `-setDocumentsDirectory:` raises `NSInvalidArgumentException`
+  ("unrecognized selector") at the call site.
+- **Why it matters:** The protocol is the only contract a caller sees; code that
+  holds an `id <MADFileCoordinatorProtocol>` is entitled to write the property and
+  will crash instead. `MADFilesController` only reads it today, and the app's
+  writes go through the reader-side accessors, which is why it has not surfaced.
+- **Fix (2026-11-28):** the class stores a `documentsDirectoryOverride`; the setter
+  assigns it, and the getter returns it when set and the App Group directory otherwise.
+- **Test:** `MADLocalFileCoordinatorTests -testDocumentsDirectorySetterIsHonored`
+  (`-respondsToSelector:` plus the round trip).
+
+### `MADFilesController` gates the renaming failure on the removing callback
+- **Status:** Fixed (2026-11-28, commit `f35d7c4c6`)
+- **Where:** `MADFileManager/Source/MADFilesController.m:405-416`
+- **Behavior:** `-fileCoordinatorDidFailRenamingFileAtURL:withError:` puts
+  `@selector(filesController:didFailRemovingFileInfo:withError:)` in the
+  `respondsToSelector:` check but sends
+  `filesController:didFailRenamingFileInfo:withError:`. A delegate that implements
+  only the renaming callback — the natural choice — never hears about a rename
+  failure; one that implements only the removing callback gets the renaming
+  failure anyway.
+- **Why it matters:** A failed rename is silent for the expected delegate shape.
+- **Fix (2026-11-28):** the `respondsToSelector:` check now names
+  `@selector(filesController:didFailRenamingFileInfo:withError:)`, the selector it sends.
+- **Test:** `MADFilesControllerTests
+  -testRenamingFailureReachesTheRenamingCallback`.
 
 ## MADExplorer
 
@@ -2968,6 +3046,24 @@ reference to "BUGS.md, the X entry" still lands.
   load-bearing `dbclose` are untouched.
 - **Test:** `MADTdsClientLiveTests -testFailingStatementReturnsNo` now asserts both the
   `NO` and the propagated error domain; the full suite is 76 tests with the live server.
+
+### `SYBDATETIME4` counts its days from the wrong epoch
+- **Status:** Fixed (2026-11-28, commit `0dac8027f`)
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:444`
+  (`janFirst1900Components`, read at `:1310`)
+- **Behavior:** the variable is named for 1990 and its components are 1900-01-00,
+  but `DBDATETIME4.days` counts from **1900-01-01**, and day 0 must therefore be
+  1900-01-01 too. Building the base as 1900-01-**00** (i.e. 1899-12-31) makes
+  every `SMALLDATETIME` land one day early.
+- **Why it matters:** `SMALLDATETIME` columns are off by a day.
+- **Fix (2026-11-28):** the base is now 1900-01-01 (`janFirst1900Components`), so
+  day 0 is the first day; the variable is named for the year it holds.
+- **Observation (2026-11-28):** the live test also showed the time-of-day is built in
+  the runner's local timezone (12:34 became 17:34 in UTC), unlike the classic
+  DATETIME path, which carries the server's timezone.  That is a separate
+  convention, not changed here.
+- **Test:** `MADTdsClientLiveTests testSelectSmallDateTimeKeepsItsDay` — before the
+  fix it read 2020-02-28 for a 2020-02-29 value; after, 2020-02-29.
 
 ## MAD Designer (app)
 
