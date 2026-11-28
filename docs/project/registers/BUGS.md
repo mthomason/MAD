@@ -1377,6 +1377,39 @@ bundle's header search path.
 - Query group, link, and predicate lists load every row in the store
 - The choose-field list used to fetch a single field; it now fetches all of them
 
+## Mac (AppKit application)
+
+### The macOS smoke suite can overlap a composed refresh with the next one
+- **Status:** Open (intermittent; test and UI)
+- **Where:** `Mac/Tests/MADMacSmokeTest.m:77` (`MADSmokeRefreshComposed`); the
+  source- and root-filtered checks are `:3038` and `:3053`. The unguarded action is
+  `Mac/Source/MADMacViewerViewController.m:778` (`-refreshReportAction:`) through
+  `:749` (`-performRefreshWithSuccessHandler:`).
+- **Behavior:** the helper returns when the result table reaches the expected row count,
+  not when the asynchronous refresh finishes. The next mutation and refresh can then run
+  while the previous source connection is still closing, and the second refresh fails with
+  the generic "Could not refresh report data" error after the SQLite busy timeout. Seen in
+  roughly one in four macOS smoke runs, locally and on CI, at the source-filtered (exit
+  212) or root-filtered (exit 213) step; a rerun passes. The Viewer's Refresh button is not
+  disabled while a refresh is in flight, so a rapid double-refresh can reach the same path.
+- **Why it matters:** a flaky release gate, and a transient refresh error for a user who
+  presses Refresh again too quickly. It does not corrupt the document.
+- **Test:** `./Mac/build.sh --smoke-test`, the authored-composition block.
+
+### `MADDocumentTests` can time out opening a document on the macOS runner
+- **Status:** Open (intermittent, CI)
+- **Where:** `MAD/MADTests/MADDocumentTests.m:545`
+  (`-testOpenAndCloseMoveThroughTheUIDocumentStateMachine`).
+- **Behavior:** the 20-second asynchronous wait for the "open" expectation expires on the
+  hosted macOS runner (observed on 2026-11-28, with the test reporting after 114 s), failing
+  the MAD suite with exit 65. The same test passes on the release commit and on reruns; the
+  failure is in UIDocument/file-coordination timing, not in the document code path the test
+  exercises.
+- **Why it matters:** it is an advisory macOS gate only (the required checks are Linux and
+  DCO), but it makes a green master look red.
+- **Test:** the `MAD` scheme's `MADDocumentTests`; the macOS verification workflow's
+  "Run the MAD suite" step.
+
 ## Linux build
 
 ### GNUstep's `-enumeratorAtURL:…` yields URLs with the containing directory stripped
